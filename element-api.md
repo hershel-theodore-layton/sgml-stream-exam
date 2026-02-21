@@ -20,7 +20,7 @@ _Converted to Markdown by an LLM_
 | `Node.nodeType` | `Missing` | Yes | Returns an unsigned short representing the type of the node (e.g., ELEMENT_NODE = 1). |
 | `Node.nodeValue` | `Missing` | No | Returns / Sets the value of the current node. |
 | `Node.parentElement` | `See Also` | Yes | _`Node.parentNode` does the same thing, since the parent of a non-element is always an element. This was done by making doctype the parent of doctype._ |
-| `Node.parentNode` | `Missing` | Yes | Returns a Node that is the parent of this node, or null if it has no parent. |
+| `Node.parentNode` | `Implemented` | Yes | _Implemented with `->getParent($document)`. Requires an explicit document to prevent circular object references._ |
 | `Node.previousSibling` | `Missing` | Yes | Returns a Node representing the previous node in the tree, or null if there isn't such node. |
 | `Node.textContent` | `Missing` | No | Returns / Sets the textual content of an element and all its descendants. |
 

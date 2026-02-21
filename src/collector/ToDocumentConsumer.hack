@@ -39,12 +39,22 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   private _Private\Node $rootNode;
   private string $documentText = '';
   private _Private\ParserState $parserState = _Private\ParserState::DATA_STATE;
+  private int $nodeId = 1;
 
   public function __construct(
     private keyset<string> $void_elements = static::STANDARD_VOID_ELEMENTS,
-  )[] {
-    $this->rootNode = new _Private\Node(0, _Private\Node::DOCTYPE_NAME, dict[]);
-    $this->openElements = new _Private\Stack(vec[$this->rootNode]);
+  )[write_props] {
+    $root_node = new _Private\Node(
+      0, // Start index
+      Str\length(static::DOCTYPE), // End index
+      _Private\Node::DOCTYPE_NAME,
+      dict[],
+      0, // Node id
+      0, // Parent node id
+    );
+
+    $this->openElements = new _Private\Stack(vec[$root_node]);
+    $this->rootNode = $root_node;
   }
 
   public async function consumeAsync(string $bytes)[defaults]: Awaitable<void> {
@@ -62,7 +72,6 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
 
       // We exit early, because the constructor already created this document.
       $this->documentText .= $bytes;
-      $this->rootNode->setEndIndex($this->getTextIndex());
       return;
     }
 
@@ -108,8 +117,18 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
     return Str\length($this->documentText);
   }
 
-  private function pushOpenElement(_Private\Node $node)[write_props]: void {
-    $this->openElements->peek()->append($node);
+  private function pushOpenElement(
+    _Private\Node $node,
+    string $bytes,
+  )[write_props]: void {
+    $this->documentText .= $bytes;
+    $parent = $this->openElements->peek();
+
+    $node->setNodeId($this->nodeId);
+    $this->nodeId++;
+
+    $node->setParentNodeId($parent->getNodeId());
+    $parent->append($node);
     $this->openElements->push($node);
   }
 
@@ -121,13 +140,8 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
     switch ($this->parserState) {
       case _Private\ParserState::DATA_STATE:
         if (Str\starts_with($bytes, '<!--')) {
-          $comment = new _Private\Node(
-            $this->getTextIndex(),
-            _Private\Node::COMMENT_NAME,
-            dict[],
-          );
-          $this->documentText .= $bytes;
-          $this->pushOpenElement($comment);
+          $comment = _Private\Node::createComment($this->getTextIndex());
+          $this->pushOpenElement($comment, $bytes);
           $this->parserState = _Private\ParserState::COMMENT_STATE;
           return;
         }
@@ -152,14 +166,9 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
           return;
         }
 
-        $node = new _Private\Node(
-          $this->getTextIndex(),
-          _Private\Node::TXTNODE_NAME,
-          dict[],
-        );
-        $this->openElements->peek()->append($node);
-        $this->documentText .= $bytes;
-        $node->setEndIndex($this->getTextIndex());
+        $node = _Private\Node::createTextNode($this->getTextIndex());
+        $this->pushOpenElement($node, $bytes);
+        $this->popOpenElement();
         return;
 
       case _Private\ParserState::COMMENT_STATE:
@@ -189,9 +198,12 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
       }
     } while ($rest !== '');
 
-    $node = new _Private\Node($this->getTextIndex(), $tag_name, $attributes);
-    $this->documentText .= $bytes;
-    $this->pushOpenElement($node);
+    $node = _Private\Node::createElement(
+      $this->getTextIndex(),
+      $tag_name,
+      $attributes,
+    );
+    $this->pushOpenElement($node, $bytes);
 
     if (C\contains_key($this->void_elements, $tag_name)) {
       $this->popOpenElement();

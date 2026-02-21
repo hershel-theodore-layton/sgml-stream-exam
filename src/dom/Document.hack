@@ -4,7 +4,28 @@ namespace HTL\SGMLStreamExam;
 use namespace HH\Lib\Str;
 
 final class Document {
-  public function __construct(private Node $rootNode, private string $text)[] {}
+  private vec<Node> $nodesById;
+
+  public function __construct(private Node $rootNode, private string $text)[] {
+    $this->nodesById = vec($this->rootNode->traverse());
+
+    foreach ($this->nodesById as $i => $e) {
+      invariant(
+        $e->getNodeId() === $i,
+        'Invalid tree order, expected %d, got %d',
+        $i,
+        $e->getNodeId(),
+      );
+    }
+  }
+
+  public function getElementById(string $id)[]: ?Node {
+    return $this->rootNode->getElementById($id);
+  }
+
+  public function getElementsByClassname(string $classname)[]: vec<Node> {
+    return $this->rootNode->getElementsByClassname($classname);
+  }
 
   public function getRootElement()[]: Node {
     return $this->rootNode;

@@ -5,10 +5,6 @@ use namespace HH\Lib\{C, Vec};
 use namespace HTL\SGMLStreamExam;
 
 final class Node implements SGMLStreamExam\Node {
-  const string COMMENT_NAME = '!COMMENT';
-  const string DOCTYPE_NAME = '!DOCTYPE';
-  const string TXTNODE_NAME = '!TXTNODE';
-
   private vec<Node> $children = vec[];
 
   public function __construct(

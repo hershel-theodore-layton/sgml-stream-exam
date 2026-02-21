@@ -2,6 +2,10 @@
 namespace HTL\SGMLStreamExam;
 
 interface Node {
+  const string COMMENT_NAME = '!COMMENT';
+  const string DOCTYPE_NAME = '!DOCTYPE';
+  const string TXTNODE_NAME = '!TXTNODE';
+
   const type UnitTestDump = shape(
     'outerHTML' => string,
     'name' => string,

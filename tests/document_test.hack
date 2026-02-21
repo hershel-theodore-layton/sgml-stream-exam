@@ -30,7 +30,7 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
             'children' => vec[dict[
               'outerHTML' => '<div></div>',
               'name' => 'div',
-              'attributes' => dict['' => ''],
+              'attributes' => dict[],
               'children' => vec[],
             ]],
           ],
@@ -56,7 +56,6 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
               'name' => 'div',
               'attributes' => dict[
                 'autocorrect' => 'on',
-                '' => '',
                 'autofocus' => '',
                 'class' => 'big',
                 'hidden' => '',
@@ -116,14 +115,13 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
               'outerHTML' =>
                 '<div><input name="name" placeholder="Enter your name..."></div>',
               'name' => 'div',
-              'attributes' => dict['' => ''],
+              'attributes' => dict[],
               'children' => vec[dict[
                 'outerHTML' =>
                   '<input name="name" placeholder="Enter your name...">',
                 'name' => 'input',
                 'attributes' => dict[
                   'name' => 'name',
-                  '' => '',
                   'placeholder' => 'Enter your name...',
                 ],
                 'children' => vec[],
@@ -160,7 +158,7 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
             'children' => vec[dict[
               'outerHTML' => '<div></div>',
               'name' => 'div',
-              'attributes' => dict['' => ''],
+              'attributes' => dict[],
               'children' => vec[dict[
                 'outerHTML' => '',
                 'name' => '!TXTNODE',
@@ -179,7 +177,7 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
             'children' => vec[dict[
               'outerHTML' => '<div></div>',
               'name' => 'div',
-              'attributes' => dict['' => ''],
+              'attributes' => dict[],
               'children' => vec[],
             ]],
           ],
@@ -198,7 +196,7 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
             'children' => vec[dict[
               'outerHTML' => '<div>one<div id="two"></div>four</div>',
               'name' => 'div',
-              'attributes' => dict['' => ''],
+              'attributes' => dict[],
               'children' => vec[
                 dict[
                   'outerHTML' => 'one',

@@ -186,9 +186,18 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
     list($tag_name, $rest) = _Private\consume_until_space_exclusive($rest);
     $attributes = dict[];
 
-    do {
+    for (; ; ) {
       list($attribute_name, $end_char, $rest) =
         _Private\consume_until_equals_or_space_inclusive($rest);
+
+      if ($attribute_name === '') {
+        if ($end_char !== ' ' || $rest !== '') {
+          throw
+            new UnexpectedHTMLException('Unable to parse attribute: '.$bytes);
+        }
+
+        break;
+      }
 
       if ($end_char === '=') {
         list($value, $rest) = _Private\consume_attribute_value($rest);
@@ -196,7 +205,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
       } else if ($end_char === ' ') {
         $attributes[$attribute_name] = '';
       }
-    } while ($rest !== '');
+    }
 
     $node = _Private\Node::createElement(
       $this->getTextIndex(),

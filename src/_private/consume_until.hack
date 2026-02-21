@@ -48,6 +48,6 @@ function consume_attribute_value(string $bytes)[defaults]: (string, string) {
 
   return tuple(
     \htmlspecialchars_decode(Str\slice($bytes, 1, $end - 1)),
-    Str\slice($bytes, $end + 1),
+    Str\slice($bytes, Math\minva($end + 2, Str\length($bytes))),
   );
 }

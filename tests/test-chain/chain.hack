@@ -7,5 +7,6 @@ async function tests_async(
   TestChain\ChainController<\HTL\TestChain\Chain> $controller
 )[defaults]: Awaitable<TestChain\ChainController<\HTL\TestChain\Chain>> {
   return $controller
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\document_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\piecewise_stream_tests<>);
 }

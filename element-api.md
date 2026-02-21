@@ -16,7 +16,7 @@ _Converted to Markdown by an LLM_
 | `Node.firstChild` | `Implemented` | Yes | _Implemented with `->getFirstChild()` and `->getFirstChildx()`._ |
 | `Node.lastChild` | `Implemented` | Yes | _Implemented with `->getLastChild()` and `->getLastChildx()`._ |
 | `Node.nextSibling` | `Missing` | Yes | Returns a Node representing the next node in the tree, or null if there isn't such node. |
-| `Node.nodeName` | `Missing` | Yes | Returns a string containing the name of the Node. |
+| `Node.nodeName` | `See Also` | Yes | _`Element.tagName`, which implemented with `->getName()`._ |
 | `Node.nodeType` | `Missing` | Yes | Returns an unsigned short representing the type of the node (e.g., ELEMENT_NODE = 1). |
 | `Node.nodeValue` | `Missing` | No | Returns / Sets the value of the current node. |
 | `Node.parentElement` | `See Also` | Yes | _`Node.parentNode` does the same thing, since the parent of a non-element is always an element. This was done by making doctype the parent of doctype._ |
@@ -52,7 +52,7 @@ _Converted to Markdown by an LLM_
 | `Element.nextElementSibling` | `Missing` | Yes | An Element, the element immediately following the given one in the tree, or null if there's no sibling node. |
 | `Element.outerHTML` | `Implemented` | No | _Implemented with `->getOuterHTML($document)`. Requires an explicit document for memory consumption reasons._ |
 | `Element.previousElementSibling` | `Missing` | Yes | An Element, the element immediately preceding the given one in the tree, or null if there is no sibling element. |
-| `Element.tagName` | `Implemented` | Yes | _Implemented with `->getName()` which returns the case-sensitive tagName or the special Node::..._NAME constants._ |
+| `Element.tagName` | `Implemented` | Yes | _Implemented with `->getName()` which returns the case-sensitive tagName or the special Node::...\_NAME constants._ |
 
 ## Element Prototype: Instance Methods
 

@@ -5,3 +5,4 @@ tests/ export-ignore
 .dockerignore export-ignore
 docker-compose.yml export-ignore
 Dockerfile export-ignore
+element-api.md export-ignore

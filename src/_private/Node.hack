@@ -48,15 +48,17 @@ final class Node implements SGMLStreamExam\Node {
     return $this->children;
   }
 
+  public function getClassName()[]: ?string {
+    return $this->getAttribute('class');
+  }
+
   public function getElementById(string $id)[]: ?Node {
-    return C\find($this->traverse(), $x ==> $x->getAttribute('id') === $id);
+    return C\find($this->traverse(), $x ==> $x->getId() === $id);
   }
 
   public function getElementsByClassname(string $classname)[]: vec<Node> {
-    return Vec\filter(
-      $this->traverse(),
-      $x ==> $x->getAttribute('class') === $classname,
-    );
+    return
+      Vec\filter($this->traverse(), $x ==> $x->getClassName() === $classname);
   }
 
   public function getFirstChild()[]: ?Node {
@@ -70,6 +72,10 @@ final class Node implements SGMLStreamExam\Node {
       'May not call getFirstChildx on a Node with zero children.',
     );
     return $first_child;
+  }
+
+  public function getId()[]: ?string {
+    return $this->getAttribute('id');
   }
 
   public function getLastChild()[]: ?Node {

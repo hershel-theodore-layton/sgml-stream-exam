@@ -14,8 +14,10 @@ final xhp class input extends SGMLStream\RootElement {
     string class,
     SGMLStreamInterfaces\BooleanAttribute hidden,
     string id,
+    string name,
     string placeholder,
-    int tabindex;
+    int tabindex,
+    string value;
 
   const string TAG_NAME = 'input';
 }

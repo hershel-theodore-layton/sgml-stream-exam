@@ -32,7 +32,7 @@ function consume_until_equals_or_space_inclusive(
   );
 }
 
-function consume_attribute_value(string $bytes)[]: (string, string) {
+function consume_attribute_value(string $bytes)[defaults]: (string, string) {
   if ($bytes[0] !== '"') {
     throw new SGMLStreamExam\UnexpectedHTMLException(
       Str\format('Expected double quoted attribute, got: %s', $bytes),
@@ -46,5 +46,8 @@ function consume_attribute_value(string $bytes)[]: (string, string) {
     );
   }
 
-  return tuple(Str\slice($bytes, 1, $end - 1), Str\slice($bytes, $end + 1));
+  return tuple(
+    \htmlspecialchars_decode(Str\slice($bytes, 1, $end - 1)),
+    Str\slice($bytes, $end + 1),
+  );
 }

@@ -117,7 +117,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
     $this->openElements->pop()->setEndIndex($this->getTextIndex());
   }
 
-  private function parseHtml(string $bytes)[write_props]: void {
+  private function parseHtml(string $bytes)[defaults]: void {
     switch ($this->parserState) {
       case _Private\ParserState::DATA_STATE:
         if (Str\starts_with($bytes, '<!--')) {
@@ -171,7 +171,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
     }
   }
 
-  private function parseOpeningTag(string $bytes)[write_props]: void {
+  private function parseOpeningTag(string $bytes)[defaults]: void {
     $rest = Str\strip_prefix($bytes, '<') |> Str\strip_suffix($$, '>');
 
     list($tag_name, $rest) = _Private\consume_until_space_exclusive($rest);

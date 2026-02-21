@@ -141,7 +141,7 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
               'outerHTML' =>
                 '<div id="I &lt;3 &quot;U&quot; :)">I &lt;3 &quot;U&quot; :)</div>',
               'name' => 'div',
-              'attributes' => dict['id' => 'I &lt;3 &quot;U&quot; :)'],
+              'attributes' => dict['id' => 'I <3 "U" :)'],
               'children' => vec[dict[
                 'outerHTML' => 'I &lt;3 &quot;U&quot; :)',
                 'name' => '!TXTNODE',

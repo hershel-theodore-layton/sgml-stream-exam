@@ -27,6 +27,10 @@ final class Document {
     return $this->rootNode->getElementsByClassname($classname);
   }
 
+  public function getNodeByIdx(int $node_id)[]: Node {
+    return $this->nodesById[$node_id];
+  }
+
   public function getRootElement()[]: Node {
     return $this->rootNode;
   }

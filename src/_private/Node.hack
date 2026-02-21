@@ -59,6 +59,32 @@ final class Node implements SGMLStreamExam\Node {
     );
   }
 
+  public function getFirstChild()[]: ?Node {
+    return C\first($this->children);
+  }
+
+  public function getFirstChildx()[]: Node {
+    $first_child = $this->getFirstChild();
+    invariant(
+      $first_child is nonnull,
+      'May not call getFirstChildx on a Node with zero children.',
+    );
+    return $first_child;
+  }
+
+  public function getLastChild()[]: ?Node {
+    return C\last($this->children);
+  }
+
+  public function getLastChildx()[]: Node {
+    $last_child = $this->getLastChild();
+    invariant(
+      $last_child is nonnull,
+      'May not call getLastChildx on a Node with zero children.',
+    );
+    return $last_child;
+  }
+
   public function getName()[]: string {
     return $this->name;
   }

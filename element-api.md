@@ -12,9 +12,9 @@ _Converted to Markdown by an LLM_
 
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |
-| `Node.childNodes` | `See Also` | Yes | _`Element.children`, implemented with `->getChildren()`_ |
-| `Node.firstChild` | `Missing` | Yes | Returns a Node representing the first direct child node of the node, or null if the node has no child. |
-| `Node.lastChild` | `Missing` | Yes | Returns a Node representing the last direct child node of the node, or null if the node has no child. |
+| `Node.childNodes` | `See Also` | Yes | _`Element.children`, implemented with `->getChildren().`_ |
+| `Node.firstChild` | `Implemented` | Yes | _Implemented with `->getFirstChild()` and `->getFirstChildx()`._ |
+| `Node.lastChild` | `Implemented` | Yes | _Implemented with `->getLastChild()` and `->getLastChildx()`._ |
 | `Node.nextSibling` | `Missing` | Yes | Returns a Node representing the next node in the tree, or null if there isn't such node. |
 | `Node.nodeName` | `Missing` | Yes | Returns a string containing the name of the Node. |
 | `Node.nodeType` | `Missing` | Yes | Returns an unsigned short representing the type of the node (e.g., ELEMENT_NODE = 1). |

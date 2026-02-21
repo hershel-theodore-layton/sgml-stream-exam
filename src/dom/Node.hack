@@ -19,6 +19,10 @@ interface Node {
   public function getChildren()[]: vec<Node>;
   public function getElementById(string $id)[]: ?Node;
   public function getElementsByClassname(string $classname)[]: vec<Node>;
+  public function getFirstChild()[]: ?Node;
+  public function getFirstChildx()[]: Node;
+  public function getLastChild()[]: ?Node;
+  public function getLastChildx()[]: Node;
   public function getName()[]: string;
   public function getNodeId()[]: int;
   public function getOuterHTML(Document $document)[]: string;

@@ -10,11 +10,31 @@ function query_test(TestChain\Chain $chain)[]: TestChain\Chain {
   return $chain->group(__FUNCTION__)
     ->testWith3ParamsAsync(
       'getElementById',
-      async () ==> vec[
-        tuple(
+      async () ==> dict[
+        'can_find' => tuple(
           <doctype>
             <div>
               <div id="somethingelse"></div>
+              <div id="here"></div>
+            </div>
+          </doctype>,
+          'here',
+          true,
+        ),
+        'cannot_find' => tuple(
+          <doctype>
+            <div>
+              <div id="somethingelse"></div>
+              <div id="here"></div>
+            </div>
+          </doctype>,
+          'notfound',
+          false,
+        ),
+        'two_valid_results' => tuple(
+          <doctype>
+            <div>
+              <div id="here"></div>
               <div id="here"></div>
             </div>
           </doctype>,
@@ -28,7 +48,7 @@ function query_test(TestChain\Chain $chain)[]: TestChain\Chain {
         if ($should_find) {
           expect($element)->toBeNonnull();
           $element as nonnull;
-          expect($element->getAttribute('id'))->toEqual($id);
+          expect($element->getId())->toEqual($id);
           expect($element->getElementById($id))->toEqual($element);
         } else {
           expect($element)->toBeNull();
@@ -37,8 +57,8 @@ function query_test(TestChain\Chain $chain)[]: TestChain\Chain {
     )
     ->testWith3ParamsAsync(
       'getElementsByClassname',
-      async () ==> vec[
-        tuple(
+      async () ==> dict[
+        'can_find' => tuple(
           <doctype>
             <div class="b">
               <div class="a"></div>
@@ -48,6 +68,16 @@ function query_test(TestChain\Chain $chain)[]: TestChain\Chain {
           'b',
           2,
         ),
+        'cannot_find' => tuple(
+          <doctype>
+            <div class="b">
+              <div class="a"></div>
+              <div class="b"></div>
+            </div>
+          </doctype>,
+          'c',
+          0,
+        ),
       ],
       async ($element, $classname, $count)[defaults] ==> {
         $doc = await render_to_document_async($element);
@@ -55,7 +85,8 @@ function query_test(TestChain\Chain $chain)[]: TestChain\Chain {
 
         expect(C\count($elements))->toEqual($count);
         foreach ($elements as $e) {
-          expect($e->getAttribute('class'))->toEqual($classname);
+          expect($e->getClassName())->toEqual($classname);
+          expect($e->getElementsByClassname($classname))->toContainElement($e);
         }
       },
     )

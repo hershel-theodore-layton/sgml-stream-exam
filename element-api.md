@@ -42,8 +42,8 @@ _Converted to Markdown by an LLM_
 | `Element.attributes` | `Implemented` | Yes | _Implemented as `->getAttributes()`_ |
 | `Element.childElementCount` | `Missing` | Yes | Returns the number of child elements of this element. |
 | `Element.children` | `Implemented` | Yes | _Implemented as `->getChildren()`_ |
-| `Element.classList` | `Missing` | Yes | Returns a DOMTokenList containing the list of class attributes. |
-| `Element.className` | `Implemented` | No | _Implemented with `->getClassName().`_ |
+| `Element.classList` | `Implemented` | Yes | _Implemented as `->getClassList()`._ |
+| `Element.className` | `Implemented` | No | _Implemented with `->getClassName()`._ |
 | `Element.firstElementChild` | `Missing` | Yes | Returns the first child element of this element. |
 | `Element.id` | `Missing` | No | _Implemented with `->getId().`_ |
 | `Element.innerHTML` | `Missing` | No | A string representing the markup of the element's content. |

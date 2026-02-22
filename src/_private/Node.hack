@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam\_Private;
 
-use namespace HH\Lib\{C, Vec};
+use namespace HH\Lib\{C, Keyset, Regex, Vec};
 use namespace HTL\SGMLStreamExam;
 
 final class Node implements SGMLStreamExam\Node {
@@ -48,6 +48,11 @@ final class Node implements SGMLStreamExam\Node {
     return $this->children;
   }
 
+  public function getClassList()[]: keyset<string> {
+    return Regex\split($this->getClassName(), re'/\s+/')
+      |> Keyset\filter($$, $x ==> $x !== '');
+  }
+
   public function getClassName()[]: string {
     return $this->getAttribute('class') ?? '';
   }
@@ -66,9 +71,11 @@ final class Node implements SGMLStreamExam\Node {
     return $element;
   }
 
-  public function getElementsByClassname(string $classname)[]: vec<Node> {
-    return
-      Vec\filter($this->traverse(), $x ==> $x->getClassName() === $classname);
+  public function getElementsByClassName(string $class_name)[]: vec<Node> {
+    return Vec\filter(
+      $this->traverseDescendants(),
+      $x ==> C\contains_key($x->getClassList(), $class_name),
+    );
   }
 
   public function getFirstChild()[]: ?Node {
@@ -134,6 +141,14 @@ final class Node implements SGMLStreamExam\Node {
   public function traverse()[]: Traversable<Node> {
     yield $this;
 
+    foreach ($this->children as $child) {
+      foreach ($child->traverse() as $yield_from) {
+        yield $yield_from;
+      }
+    }
+  }
+
+  public function traverseDescendants()[]: Traversable<Node> {
     foreach ($this->children as $child) {
       foreach ($child->traverse() as $yield_from) {
         yield $yield_from;

@@ -5,7 +5,7 @@ use namespace HTL\TestChain;
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
-function get_classname_test(TestChain\Chain $chain)[]: TestChain\Chain {
+function get_class_name_test(TestChain\Chain $chain)[]: TestChain\Chain {
   return $chain->group(__FUNCTION__)
     ->testWith2ParamsAsync(
       'getClassName',
@@ -41,12 +41,12 @@ function get_classname_test(TestChain\Chain $chain)[]: TestChain\Chain {
           '   spaced-class   ',
         ),
       ],
-      async ($element, $expected_classname)[defaults] ==> {
+      async ($element, $expected_class_name)[defaults] ==> {
         $doc = await render_to_document_async($element);
         $elem = $doc->getElementByIdx('elem');
 
-        $actual_classname = $elem->getClassName();
-        expect($actual_classname)->toEqual($expected_classname);
+        $actual_class_name = $elem->getClassName();
+        expect($actual_class_name)->toEqual($expected_class_name);
       },
     );
 }

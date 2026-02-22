@@ -27,8 +27,8 @@ final class Document {
     return $this->rootNode->getElementByIdx($id);
   }
 
-  public function getElementsByClassname(string $classname)[]: vec<Node> {
-    return $this->rootNode->getElementsByClassname($classname);
+  public function getElementsByClassName(string $class_name)[]: vec<Node> {
+    return $this->rootNode->getElementsByClassName($class_name);
   }
 
   public function getNodeByIdx(int $node_id)[]: Node {

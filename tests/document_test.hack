@@ -39,11 +39,11 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
           <doctype>
             <div
               autocorrect="on"
-              autofocus={SET}
               class="big"
               hidden={SET}
               id="1234"
               tabindex={-1}
+              autofocus={SET}
             />
           </doctype>,
           dict[
@@ -52,15 +52,15 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
             'attributes' => dict[],
             'children' => vec[dict[
               'outerHTML' =>
-                '<div autocorrect="on" autofocus class="big" hidden id="1234" tabindex="-1"></div>',
+                '<div autocorrect="on" class="big" hidden id="1234" tabindex="-1" autofocus></div>',
               'name' => 'div',
               'attributes' => dict[
                 'autocorrect' => 'on',
-                'autofocus' => '',
                 'class' => 'big',
                 'hidden' => '',
                 'id' => '1234',
                 'tabindex' => '-1',
+                'autofocus' => '',
               ],
               'children' => vec[],
             ]],

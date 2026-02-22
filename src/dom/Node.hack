@@ -29,9 +29,11 @@ interface Node {
   public function getLastChildx()[]: Node;
   public function getId()[]: string;
   public function getName()[]: string;
+  public function getNextSibling(Document $document)[]: ?Node;
   public function getNodeId()[]: int;
   public function getOuterHTML(Document $document)[]: string;
   public function getParent(Document $document)[]: Node;
+  public function getPreviousSibling(Document $document)[]: ?Node;
   public function getSiblingsAndSelf(Document $document)[]: vec<Node>;
   public function isElement()[]: bool;
   public function traverse()[]: Traversable<Node>;

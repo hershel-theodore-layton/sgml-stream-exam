@@ -15,13 +15,13 @@ _Converted to Markdown by an LLM_
 | `Node.childNodes` | `See Also` | Yes | _`Element.children`, implemented with `->getChildren().`_ |
 | `Node.firstChild` | `Implemented` | Yes | _Implemented with `->getFirstChild()` and `->getFirstChildx()`._ |
 | `Node.lastChild` | `Implemented` | Yes | _Implemented with `->getLastChild()` and `->getLastChildx()`._ |
-| `Node.nextSibling` | `Missing` | Yes | Returns a Node representing the next node in the tree, or null if there isn't such node. |
+| `Node.nextSibling` | `Missing` | Yes | _Implemented with `->getNextSibling()`_ |
 | `Node.nodeName` | `See Also` | Yes | _`Element.tagName`, which implemented with `->getName()`._ |
 | `Node.nodeType` | `Missing` | Yes | Returns an unsigned short representing the type of the node (e.g., ELEMENT_NODE = 1). |
 | `Node.nodeValue` | `Missing` | No | Returns / Sets the value of the current node. |
 | `Node.parentElement` | `See Also` | Yes | _`Node.parentNode` does the same thing, since the parent of a non-element is always an element. This was done by making doctype the parent of doctype._ |
 | `Node.parentNode` | `Implemented` | Yes | _Implemented with `->getParent($document)`. Requires an explicit document to prevent circular object references._ |
-| `Node.previousSibling` | `Missing` | Yes | Returns a Node representing the previous node in the tree, or null if there isn't such node. |
+| `Node.previousSibling` | `Implemented` | Yes | _Implemented with `->getPreviousSibling()`_ |
 | `Node.textContent` | `Missing` | No | Returns / Sets the textual content of an element and all its descendants. |
 
 ## Node Prototype: Instance Methods

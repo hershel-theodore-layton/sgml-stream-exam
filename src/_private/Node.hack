@@ -124,6 +124,13 @@ final class Node implements SGMLStreamExam\Node {
     return $this->name;
   }
 
+  public function getNextSibling(
+    SGMLStreamExam\Document $document,
+  )[]: ?SGMLStreamExam\Node {
+    $generation = $this->getSiblingsAndSelf($document);
+    return $generation[index_ofx($generation, $this) + 1] ?? null;
+  }
+
   public function getNodeId()[]: int {
     return $this->nodeId;
   }
@@ -136,6 +143,13 @@ final class Node implements SGMLStreamExam\Node {
     SGMLStreamExam\Document $document,
   )[]: SGMLStreamExam\Node {
     return $document->getNodeByIdx($this->parentNodeId);
+  }
+
+  public function getPreviousSibling(
+    SGMLStreamExam\Document $document,
+  )[]: ?SGMLStreamExam\Node {
+    $generation = $this->getSiblingsAndSelf($document);
+    return $generation[index_ofx($generation, $this) - 1] ?? null;
   }
 
   public function getSiblingsAndSelf(

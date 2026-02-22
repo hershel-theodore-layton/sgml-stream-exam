@@ -1,8 +1,9 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam\Tests;
 
+use namespace HH\Lib\Str;
 use namespace HTL\TestChain;
-use function HTL\Expect\expect;
+use function HTL\Expect\{expect, expect_invoked};
 
 <<TestChain\Discover>>
 function get_element_by_id_test(TestChain\Chain $chain)[]: TestChain\Chain {
@@ -44,13 +45,18 @@ function get_element_by_id_test(TestChain\Chain $chain)[]: TestChain\Chain {
       async ($element, $id, $should_find)[defaults] ==> {
         $doc = await render_to_document_async($element);
         $element = $doc->getElementById($id);
+
         if ($should_find) {
-          expect($element)->toBeNonnull();
-          $element as nonnull;
+          $element = expect($element)->toBeNonnull()->getValue();
+          expect($doc->getElementByIdx($id))->toEqual($element);
           expect($element->getId())->toEqual($id);
-          expect($element->getElementById($id))->toEqual($element);
+          expect($element->getElementById($id))->toBeNull();
         } else {
           expect($element)->toBeNull();
+          expect_invoked(() ==> $doc->getElementByIdx($id))
+            ->toHaveThrown<InvariantException>(
+              Str\format('Element with the id "%s" was not found.', $id),
+            );
         }
       },
     );

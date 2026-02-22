@@ -58,7 +58,7 @@ final class Node implements SGMLStreamExam\Node {
   }
 
   public function getElementById(string $id)[]: ?Node {
-    return C\find($this->traverse(), $x ==> $x->getId() === $id);
+    return C\find($this->traverseDescendants(), $x ==> $x->getId() === $id);
   }
 
   public function getElementByIdx(string $id)[]: Node {

@@ -3,7 +3,7 @@ namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HH\Lib\C;
 use namespace HTL\TestChain;
-use function HTL\Expect\{expect, expect_invoked};
+use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
 function get_outer_html_test(TestChain\Chain $chain)[]: TestChain\Chain {

@@ -16,6 +16,7 @@ interface Node {
 
   public function getAttribute(string $name)[]: ?string;
   public function getAttributes()[]: dict<string, string>;
+  public function getChildElementCount()[]: int;
   public function getChildren()[]: vec<Node>;
   public function getClassList()[]: keyset<string>;
   public function getClassName()[]: string;

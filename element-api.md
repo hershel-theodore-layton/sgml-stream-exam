@@ -40,7 +40,7 @@ _Converted to Markdown by an LLM_
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |
 | `Element.attributes` | `Implemented` | Yes | _Implemented as `->getAttributes()`_ |
-| `Element.childElementCount` | `Missing` | Yes | Returns the number of child elements of this element. |
+| `Element.childElementCount` | `Implemented` | Yes | _Implemented with `->getChildElementCount()`._ |
 | `Element.children` | `Implemented` | Yes | _Implemented as `->getChildren()`_ |
 | `Element.classList` | `Implemented` | Yes | _Implemented as `->getClassList()`._ |
 | `Element.className` | `Implemented` | No | _Implemented with `->getClassName()`._ |

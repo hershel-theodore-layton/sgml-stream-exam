@@ -44,6 +44,18 @@ final class Node implements SGMLStreamExam\Node {
     return $this->attributes;
   }
 
+  public function getChildElementCount()[]: int {
+    $count = 0;
+
+    foreach ($this->children as $child) {
+      if ($child->isElement()) {
+        $count++;
+      }
+    }
+
+    return $count;
+  }
+
   public function getChildren()[]: vec<Node> {
     return $this->children;
   }

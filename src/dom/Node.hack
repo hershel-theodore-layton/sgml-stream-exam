@@ -31,6 +31,7 @@ interface Node {
   public function getNodeId()[]: int;
   public function getOuterHTML(Document $document)[]: string;
   public function getParent(Document $document)[]: Node;
+  public function isElement()[]: bool;
   public function traverse()[]: Traversable<Node>;
   public function toUnitTestDump(Document $document)[]: this::UnitTestDump;
 }

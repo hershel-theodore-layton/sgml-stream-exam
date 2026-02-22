@@ -126,6 +126,13 @@ final class Node implements SGMLStreamExam\Node {
     return $document->getNodeByIdx($this->parentNodeId);
   }
 
+  public function isElement()[]: bool {
+    return $this->name
+      |> $$ !== static::COMMENT_NAME &&
+        $$ !== static::DOCTYPE_NAME &&
+        $$ !== static::TXTNODE_NAME;
+  }
+
   public function setEndIndex(int $end_index)[write_props]: void {
     $this->endIndex = $end_index;
   }

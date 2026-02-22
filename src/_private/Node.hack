@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam\_Private;
 
-use namespace HH\Lib\{C, Keyset, Regex, Vec};
+use namespace HH\Lib\{C, Keyset, Regex, Str, Vec};
 use namespace HTL\SGMLStreamExam;
 
 final class Node implements SGMLStreamExam\Node {
@@ -105,6 +105,11 @@ final class Node implements SGMLStreamExam\Node {
 
   public function getId()[]: string {
     return $this->getAttribute('id') ?? '';
+  }
+
+  public function getInnerHTML(SGMLStreamExam\Document $document)[]: string {
+    return Vec\map($this->children, $c ==> $c->getOuterHTML($document))
+      |> Str\join($$, '');
   }
 
   public function getLastChild()[]: ?Node {

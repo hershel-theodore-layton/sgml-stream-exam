@@ -28,6 +28,7 @@ interface Node {
   public function getLastChild()[]: ?Node;
   public function getLastChildx()[]: Node;
   public function getId()[]: string;
+  public function getInnerHTML(Document $document)[]: string;
   public function getName()[]: string;
   public function getNextSibling(Document $document)[]: ?Node;
   public function getNodeId()[]: int;

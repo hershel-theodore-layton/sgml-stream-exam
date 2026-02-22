@@ -46,7 +46,7 @@ _Converted to Markdown by an LLM_
 | `Element.className` | `Implemented` | No | _Implemented with `->getClassName()`._ |
 | `Element.firstElementChild` | `Missing` | Yes | Returns the first child element of this element. |
 | `Element.id` | `Missing` | No | _Implemented with `->getId().`_ |
-| `Element.innerHTML` | `Missing` | No | A string representing the markup of the element's content. |
+| `Element.innerHTML` | `Implemented` | No | _Implemented at `->getInnerHTML($document)`._ |
 | `Element.lastElementChild` | `Missing` | Yes | Returns the last child element of this element. |
 | `Element.localName` | `See also` | Yes | _`Node.tagName` which is implemented with `->getName()`._ |
 | `Element.nextElementSibling` | `Missing` | Yes | An Element, the element immediately following the given one in the tree, or null if there's no sibling node. |

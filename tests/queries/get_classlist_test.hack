@@ -2,7 +2,6 @@
 namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
-use namespace HH\Lib\C;
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>

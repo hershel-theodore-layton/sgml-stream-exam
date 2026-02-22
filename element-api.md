@@ -45,7 +45,7 @@ _Converted to Markdown by an LLM_
 | `Element.classList` | `Implemented` | Yes | _Implemented as `->getClassList()`._ |
 | `Element.className` | `Implemented` | No | _Implemented with `->getClassName()`._ |
 | `Element.firstElementChild` | `Missing` | Yes | Returns the first child element of this element. |
-| `Element.id` | `Missing` | No | _Implemented with `->getId().`_ |
+| `Element.id` | `Implemented` | No | _Implemented with `->getId().`_ |
 | `Element.innerHTML` | `Implemented` | No | _Implemented at `->getInnerHTML($document)`._ |
 | `Element.lastElementChild` | `Missing` | Yes | Returns the last child element of this element. |
 | `Element.localName` | `See also` | Yes | _`Node.tagName` which is implemented with `->getName()`._ |

@@ -138,6 +138,16 @@ final class Node implements SGMLStreamExam\Node {
     return $document->getNodeByIdx($this->parentNodeId);
   }
 
+  public function getSiblingsAndSelf(
+    SGMLStreamExam\Document $document,
+  )[]: vec<SGMLStreamExam\Node> {
+    if ($this->name === Node::DOCTYPE_NAME) {
+      return vec[$this];
+    }
+
+    return $this->getParent($document)->getChildren();
+  }
+
   public function isElement()[]: bool {
     return $this->name
       |> $$ !== static::COMMENT_NAME &&

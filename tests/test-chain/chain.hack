@@ -22,6 +22,7 @@ async function tests_async(
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_node_id_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_outer_html_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_parent_test<>)
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_siblings_and_self_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\is_element_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\piecewise_stream_tests<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\traverse_test<>);

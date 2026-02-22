@@ -56,6 +56,16 @@ final class Node implements SGMLStreamExam\Node {
     return C\find($this->traverse(), $x ==> $x->getId() === $id);
   }
 
+  public function getElementByIdx(string $id)[]: Node {
+    $element = $this->getElementById($id);
+    invariant(
+      $element is nonnull,
+      'Element with the id "%s" was not found.',
+      $id,
+    );
+    return $element;
+  }
+
   public function getElementsByClassname(string $classname)[]: vec<Node> {
     return
       Vec\filter($this->traverse(), $x ==> $x->getClassName() === $classname);

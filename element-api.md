@@ -62,6 +62,7 @@ _Converted to Markdown by an LLM_
 | `Element.getAttribute()` | `Missing` | Yes | Retrieves the value of the named attribute from the current node and returns it as a string. |
 | `Element.getAttributeNames()` | `Missing` | Yes | Returns an array of attribute names from the current element. |
 | `Element.getAttributeNode()` | `Missing` | Yes | Retrieves the node representation of the named attribute from the current node and returns it as an Attr. |
+| `Element.getElementById()` | `Implemented` | Yes | _Implemented with `->getElementById($id)` and `->getElementByidx($id)`._ |
 | `Element.getElementsByClassName()` | `Missing` | Yes | Returns a live HTMLCollection that contains all descendants of the current element that possess the list of classes given in the parameter. |
 | `Element.getElementsByTagName()` | `Missing` | Yes | Returns a live HTMLCollection containing all descendant elements, of a particular tag name, from the current element. |
 | `Element.hasAttribute()` | `Missing` | Yes | Returns a boolean value indicating if the element has the specified attribute or not. |

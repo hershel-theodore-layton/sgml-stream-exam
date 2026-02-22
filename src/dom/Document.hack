@@ -23,6 +23,10 @@ final class Document {
     return $this->rootNode->getElementById($id);
   }
 
+  public function getElementByIdx(string $id)[]: Node {
+    return $this->rootNode->getElementByIdx($id);
+  }
+
   public function getElementsByClassname(string $classname)[]: vec<Node> {
     return $this->rootNode->getElementsByClassname($classname);
   }

@@ -170,6 +170,19 @@ final class Node implements SGMLStreamExam\Node {
     }
   }
 
+  public function getNodeValue(SGMLStreamExam\Document $document)[]: ?string {
+    switch ($this->getNodeType()) {
+      case static::TEXT_NODE:
+        return $this->getOuterHTML($document);
+      case static::COMMENT_NODE:
+        return $this->getOuterHTML($document)
+          |> Str\strip_prefix($$, '<!--')
+          |> Str\strip_suffix($$, '-->');
+      default:
+        return null;
+    }
+  }
+
   public function getOuterHTML(SGMLStreamExam\Document $document)[]: string {
     return $document->sliceTextRange($this->startIndex, $this->endIndex);
   }

@@ -38,6 +38,7 @@ interface Node {
   public function getNextSibling(Document $document)[]: ?Node;
   public function getNodeId()[]: int;
   public function getNodeType()[]: int;
+  public function getNodeValue(Document $document)[]: ?string;
   public function getOuterHTML(Document $document)[]: string;
   public function getParent(Document $document)[]: Node;
   public function getPreviousSibling(Document $document)[]: ?Node;

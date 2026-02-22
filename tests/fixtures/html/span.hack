@@ -3,8 +3,8 @@ namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\SGMLStream;
 
-final xhp class div extends HtmlAttributes {
+final xhp class span extends HtmlAttributes {
   use SGMLStream\ElementWithOpenAndCloseTags;
 
-  const string TAG_NAME = 'div';
+  const string TAG_NAME = 'span';
 }

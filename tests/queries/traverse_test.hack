@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam\Tests;
 
-use namespace HH\Lib\{C, Vec};
+use namespace HH\Lib\C;
 use namespace HTL\{SGMLStreamExam, TestChain};
 use function HTL\Expect\expect;
 

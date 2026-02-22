@@ -22,7 +22,7 @@ _Converted to Markdown by an LLM_
 | `Node.parentElement` | `See Also` | Yes | _`Node.parentNode` does the same thing, since the parent of a non-element is always an element. This was done by making doctype the parent of doctype._ |
 | `Node.parentNode` | `Implemented` | Yes | _Implemented with `->getParent($document)`. Requires an explicit document to prevent circular object references._ |
 | `Node.previousSibling` | `Implemented` | Yes | _Implemented with `->getPreviousSibling()`_ |
-| `Node.textContent` | `Missing` | No | Returns / Sets the textual content of an element and all its descendants. |
+| `Node.textContent` | `Implemented` | No | _Implemented as `->getTextContent()`_ |
 
 ## Node Prototype: Instance Methods
 
@@ -76,7 +76,6 @@ _Converted to Markdown by an LLM_
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |
 | `HTMLElement.dataset` | `Missing` | Yes | Returns a DOMStringMap with which script can read and write the element's custom data attributes (data-*). |
-| `HTMLElement.outerText` | `Missing` | No | Represents the rendered text content of a node and its descendants. As a getter, it is the same as HTMLElement.innerText (it represents the rendered text content of an element and its descendants). As a setter, it replaces the selected node and its contents with the given value, converting any line breaks into `` `<br>` `` elements. |
 
 # Intentionally Not Implemented
 
@@ -208,6 +207,7 @@ _Converted to Markdown by an LLM_
 | `HTMLElement.offsetParent` | `Not Implemented` | Yes | _CSS._ |
 | `HTMLElement.offsetTop` | `Not Implemented` | Yes | _CSS._ |
 | `HTMLElement.offsetWidth` | `Not Implemented` | Yes | _CSS._ |
+| `HTMLElement.outerText` | `Not Implemented` | No | _CSS._ |
 
 ## Require a user
 

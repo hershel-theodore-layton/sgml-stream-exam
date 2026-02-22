@@ -37,6 +37,10 @@ interface Node {
   public function getParent(Document $document)[]: Node;
   public function getPreviousSibling(Document $document)[]: ?Node;
   public function getSiblingsAndSelf(Document $document)[]: vec<Node>;
+  /**
+   * Careful, the xhp preprocessor does tricks with whitespace.
+   */
+  public function getTextContent(Document $document)[]: string;
   public function isElement()[]: bool;
   public function traverse()[]: Traversable<Node>;
   public function toUnitTestDump(Document $document)[]: this::UnitTestDump;

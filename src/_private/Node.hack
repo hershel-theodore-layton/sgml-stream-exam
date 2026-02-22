@@ -184,6 +184,13 @@ final class Node implements SGMLStreamExam\Node {
     return $this->getParent($document)->getChildren();
   }
 
+  public function getTextContent(SGMLStreamExam\Document $document)[]: string {
+    return
+      Vec\filter($this->traverse(), $x ==> $x->getName() === Node::TXTNODE_NAME)
+      |> Vec\map($$, $x ==> $x->getOuterHTML($document))
+      |> Str\join($$, '');
+  }
+
   public function isElement()[]: bool {
     return $this->name
       |> $$ !== static::COMMENT_NAME &&

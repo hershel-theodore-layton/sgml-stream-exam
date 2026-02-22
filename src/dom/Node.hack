@@ -5,6 +5,10 @@ interface Node {
   const string COMMENT_NAME = '!COMMENT';
   const string DOCTYPE_NAME = '!DOCTYPE';
   const string TXTNODE_NAME = '!TXTNODE';
+  const int ELEMENT_NODE = 1;
+  const int TEXT_NODE = 3;
+  const int COMMENT_NODE = 8;
+  const int DOCTYPE_NODE = 10;
 
   const type UnitTestDump = shape(
     'outerHTML' => string,
@@ -33,6 +37,7 @@ interface Node {
   public function getName()[]: string;
   public function getNextSibling(Document $document)[]: ?Node;
   public function getNodeId()[]: int;
+  public function getNodeType()[]: int;
   public function getOuterHTML(Document $document)[]: string;
   public function getParent(Document $document)[]: Node;
   public function getPreviousSibling(Document $document)[]: ?Node;

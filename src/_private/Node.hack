@@ -157,6 +157,19 @@ final class Node implements SGMLStreamExam\Node {
     return $this->nodeId;
   }
 
+  public function getNodeType()[]: int {
+    switch ($this->name) {
+      case static::COMMENT_NAME:
+        return static::COMMENT_NODE;
+      case static::DOCTYPE_NAME:
+        return static::DOCTYPE_NODE;
+      case static::TXTNODE_NAME:
+        return static::TEXT_NODE;
+      default:
+        return static::ELEMENT_NODE;
+    }
+  }
+
   public function getOuterHTML(SGMLStreamExam\Document $document)[]: string {
     return $document->sliceTextRange($this->startIndex, $this->endIndex);
   }
@@ -185,17 +198,16 @@ final class Node implements SGMLStreamExam\Node {
   }
 
   public function getTextContent(SGMLStreamExam\Document $document)[]: string {
-    return
-      Vec\filter($this->traverse(), $x ==> $x->getName() === Node::TXTNODE_NAME)
+    return Vec\filter(
+      $this->traverse(),
+      $x ==> $x->getNodeType() === static::TEXT_NODE,
+    )
       |> Vec\map($$, $x ==> $x->getOuterHTML($document))
       |> Str\join($$, '');
   }
 
   public function isElement()[]: bool {
-    return $this->name
-      |> $$ !== static::COMMENT_NAME &&
-        $$ !== static::DOCTYPE_NAME &&
-        $$ !== static::TXTNODE_NAME;
+    return $this->getNodeType() === static::ELEMENT_NODE;
   }
 
   public function setEndIndex(int $end_index)[write_props]: void {

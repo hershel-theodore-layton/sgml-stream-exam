@@ -23,6 +23,7 @@ async function tests_async(
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_name_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_next_and_previous_sibling_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_node_id_test<>)
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_node_type_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_outer_html_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_parent_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_siblings_and_self_test<>)

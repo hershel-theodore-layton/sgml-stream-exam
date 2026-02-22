@@ -17,7 +17,7 @@ _Converted to Markdown by an LLM_
 | `Node.lastChild` | `Implemented` | Yes | _Implemented with `->getLastChild()` and `->getLastChildx()`._ |
 | `Node.nextSibling` | `Missing` | Yes | _Implemented with `->getNextSibling()`_ |
 | `Node.nodeName` | `See Also` | Yes | _`Element.tagName`, which implemented with `->getName()`._ |
-| `Node.nodeType` | `Missing` | Yes | Returns an unsigned short representing the type of the node (e.g., ELEMENT_NODE = 1). |
+| `Node.nodeType` | `Implemented` | Yes | _Implemented as `->getNodeType()`_ |
 | `Node.nodeValue` | `Missing` | No | Returns / Sets the value of the current node. |
 | `Node.parentElement` | `See Also` | Yes | _`Node.parentNode` does the same thing, since the parent of a non-element is always an element. This was done by making doctype the parent of doctype._ |
 | `Node.parentNode` | `Implemented` | Yes | _Implemented with `->getParent($document)`. Requires an explicit document to prevent circular object references._ |

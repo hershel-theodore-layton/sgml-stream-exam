@@ -11,7 +11,7 @@ async function tests_async(
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_attribute_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_attributes_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_children_test<>)
-    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_class_name_test<>)
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_classname_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_element_by_id_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_elements_by_classname_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_first_and_last_child_test<>)

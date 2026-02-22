@@ -48,8 +48,8 @@ final class Node implements SGMLStreamExam\Node {
     return $this->children;
   }
 
-  public function getClassName()[]: ?string {
-    return $this->getAttribute('class');
+  public function getClassName()[]: string {
+    return $this->getAttribute('class') ?? '';
   }
 
   public function getElementById(string $id)[]: ?Node {
@@ -84,8 +84,8 @@ final class Node implements SGMLStreamExam\Node {
     return $first_child;
   }
 
-  public function getId()[]: ?string {
-    return $this->getAttribute('id');
+  public function getId()[]: string {
+    return $this->getAttribute('id') ?? '';
   }
 
   public function getLastChild()[]: ?Node {

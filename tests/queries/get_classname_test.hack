@@ -5,7 +5,7 @@ use namespace HTL\TestChain;
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
-function get_class_name_test(TestChain\Chain $chain)[]: TestChain\Chain {
+function get_classname_test(TestChain\Chain $chain)[]: TestChain\Chain {
   return $chain->group(__FUNCTION__)
     ->testWith2ParamsAsync(
       'getClassName',
@@ -22,11 +22,11 @@ function get_class_name_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
           'btn btn-primary btn-large',
         ),
-        'returns_null_for_element_without_class' => tuple(
+        'returns_empty_string_for_element_without_class' => tuple(
           <doctype>
             <div id="elem"></div>
           </doctype>,
-          null,
+          '',
         ),
         'returns_null_for_element_with_empty_class' => tuple(
           <doctype>

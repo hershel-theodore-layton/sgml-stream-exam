@@ -17,7 +17,7 @@ interface Node {
   public function getAttribute(string $name)[]: ?string;
   public function getAttributes()[]: dict<string, string>;
   public function getChildren()[]: vec<Node>;
-  public function getClassName()[]: ?string;
+  public function getClassName()[]: string;
   public function getElementById(string $id)[]: ?Node;
   public function getElementByIdx(string $id)[]: Node;
   public function getElementsByClassname(string $classname)[]: vec<Node>;
@@ -25,7 +25,7 @@ interface Node {
   public function getFirstChildx()[]: Node;
   public function getLastChild()[]: ?Node;
   public function getLastChildx()[]: Node;
-  public function getId()[]: ?string;
+  public function getId()[]: string;
   public function getName()[]: string;
   public function getNodeId()[]: int;
   public function getOuterHTML(Document $document)[]: string;

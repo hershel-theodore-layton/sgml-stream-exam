@@ -14,7 +14,8 @@ final xhp class div extends SGMLStream\RootElement {
     string class,
     SGMLStreamInterfaces\BooleanAttribute hidden,
     string id,
-    int tabindex;
+    int tabindex,
+    string title;
 
   const string TAG_NAME = 'div';
 }

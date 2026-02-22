@@ -36,6 +36,23 @@ final class Node implements SGMLStreamExam\Node {
     $this->children[] = $node;
   }
 
+  public function getAncestors(
+    SGMLStreamExam\Document $document,
+  )[]: vec<SGMLStreamExam\Node> {
+    $prev = $this;
+    $out = vec[];
+
+    for (; ; ) {
+      $next = $prev->getParent($document);
+      if ($prev === $next) {
+        return $out;
+      }
+
+      $out[] = $next;
+      $prev = $next;
+    }
+  }
+
   public function getAttribute(string $name)[]: ?string {
     return $this->attributes[$name] ?? null;
   }

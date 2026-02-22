@@ -8,6 +8,8 @@ async function tests_async(
 )[defaults]: Awaitable<TestChain\ChainController<\HTL\TestChain\Chain>> {
   return $controller
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\document_test<>)
-    ->addTestGroup(\HTL\SGMLStreamExam\Tests\piecewise_stream_tests<>)
-    ->addTestGroup(\HTL\SGMLStreamExam\Tests\query_test<>);
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_element_by_id_test<>)
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_elements_by_classname_test<>)
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_parent_test<>)
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\piecewise_stream_tests<>);
 }

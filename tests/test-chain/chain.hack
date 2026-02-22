@@ -7,6 +7,7 @@ async function tests_async(
   TestChain\ChainController<\HTL\TestChain\Chain> $controller
 )[defaults]: Awaitable<TestChain\ChainController<\HTL\TestChain\Chain>> {
   return $controller
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\contains_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\document_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_ancestors_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_attribute_test<>)

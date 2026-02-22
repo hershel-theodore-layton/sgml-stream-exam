@@ -29,8 +29,7 @@ _Converted to Markdown by an LLM_
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |
 | `Node.compareDocumentPosition()` | `Missing` | Yes | Compares the position of the current node against another node in any other document. |
-| `Node.contains()` | `Missing` | Yes | Returns true or false value indicating whether or not a node is a descendant of the calling node. |
-| `Node.getRootNode()` | `Missing` | Yes | Returns the context object's root which optionally includes the shadow root if it is available. |
+| `Node.contains()` | `Implemented` | Yes | _Implemented as `->contains($other)`._ |
 | `Node.hasChildNodes()` | `Missing` | Yes | Returns a boolean value indicating whether or not the element has any child nodes. |
 | `Node.isEqualNode()` | `Missing` | Yes | Returns a boolean value which indicates whether or not two nodes are of the same type and all their defining data points match. |
 | `Node.isSameNode()` | `See Also` | Yes | _The operator `===`_ |
@@ -163,6 +162,7 @@ _Converted to Markdown by an LLM_
 
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |
+| `Node.getRootNode()` | `Not Implemented` | Yes | _Requires Shadow DOM._ |
 | `Element.assignedSlot` | `Not Implemented` | Yes | _Requires Shadow DOM._ |
 | `Element.attachShadow()` | `Not Implemented` | No | _Requires Shadow DOM._ |
 | `Element.part` | `Not Implemented` | No | _Requires Shadow DOM._ |

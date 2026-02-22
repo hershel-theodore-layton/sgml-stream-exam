@@ -18,6 +18,7 @@ interface Node {
     /*_*/
   );
 
+  public function contains(Node $other)[]: bool;
   public function getAncestors(Document $document)[]: vec<Node>;
   public function getAttribute(string $name)[]: ?string;
   public function getAttributes()[]: dict<string, string>;

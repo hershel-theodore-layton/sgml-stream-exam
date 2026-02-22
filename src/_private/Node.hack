@@ -36,6 +36,16 @@ final class Node implements SGMLStreamExam\Node {
     $this->children[] = $node;
   }
 
+  public function contains(SGMLStreamExam\Node $other)[]: bool {
+    foreach ($this->traverse() as $el) {
+      if ($el === $other) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public function getAncestors(
     SGMLStreamExam\Document $document,
   )[]: vec<SGMLStreamExam\Node> {

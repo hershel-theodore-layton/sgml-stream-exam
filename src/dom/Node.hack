@@ -19,7 +19,7 @@ interface Node {
   );
 
   public function contains(Node $other)[]: bool;
-  public function getAncestors(Document $document)[]: vec<Node>;
+  public function getAncestors(Document__ $document)[]: vec<Node>;
   public function getAttribute(string $name)[]: ?string;
   public function getAttributes()[]: dict<string, string>;
   public function getChildElementCount()[]: int;
@@ -34,21 +34,21 @@ interface Node {
   public function getLastChild()[]: ?Node;
   public function getLastChildx()[]: Node;
   public function getId()[]: string;
-  public function getInnerHTML(Document $document)[]: string;
+  public function getInnerHTML(Document__ $document)[]: string;
   public function getName()[]: string;
-  public function getNextSibling(Document $document)[]: ?Node;
+  public function getNextSibling(Document__ $document)[]: ?Node;
   public function getNodeId()[]: int;
   public function getNodeType()[]: int;
-  public function getNodeValue(Document $document)[]: ?string;
-  public function getOuterHTML(Document $document)[]: string;
-  public function getParent(Document $document)[]: Node;
-  public function getPreviousSibling(Document $document)[]: ?Node;
-  public function getSiblingsAndSelf(Document $document)[]: vec<Node>;
+  public function getNodeValue(Document__ $document)[]: ?string;
+  public function getOuterHTML(Document__ $document)[]: string;
+  public function getParent(Document__ $document)[]: Node;
+  public function getPreviousSibling(Document__ $document)[]: ?Node;
+  public function getSiblingsAndSelf(Document__ $document)[]: vec<Node>;
   /**
    * Careful, the xhp preprocessor does tricks with whitespace.
    */
-  public function getTextContent(Document $document)[]: string;
+  public function getTextContent(Document__ $document)[]: string;
   public function isElement()[]: bool;
   public function traverse()[]: Traversable<Node>;
-  public function toUnitTestDump(Document $document)[]: this::UnitTestDump;
+  public function toUnitTestDump(Document__ $document)[]: this::UnitTestDump;
 }

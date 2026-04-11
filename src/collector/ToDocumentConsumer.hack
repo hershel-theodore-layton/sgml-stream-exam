@@ -34,9 +34,9 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
 
   const string DOCTYPE = '<!DOCTYPE html>';
 
-  private _Private\Stack<_Private\Node> $openElements;
+  private _Private\Stack<_Private\Node__> $openElements;
   private bool $isComplete = false;
-  private _Private\Node $rootNode;
+  private _Private\Node__ $rootNode;
   private string $documentText = '';
   private _Private\ParserState $parserState = _Private\ParserState::DATA_STATE;
   private int $nodeId = 1;
@@ -44,10 +44,10 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   public function __construct(
     private keyset<string> $void_elements = static::STANDARD_VOID_ELEMENTS,
   )[write_props] {
-    $root_node = new _Private\Node(
+    $root_node = new _Private\Node__(
       0, // Start index
       Str\length(static::DOCTYPE), // End index
-      _Private\Node::DOCTYPE_NAME,
+      _Private\Node__::DOCTYPE_NAME,
       dict[],
       0, // Node id
       0, // Parent node id
@@ -109,8 +109,12 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
     $this->isComplete = true;
   }
 
-  public function toDocument()[]: Document {
-    return new Document($this->rootNode, $this->documentText);
+  public function toDocument()[]: nothing {
+    throw new \Exception('Not implemented');
+  }
+
+  public function toDocument__()[]: Document__ {
+    return new Document__($this->rootNode, $this->documentText);
   }
 
   private function getTextIndex()[]: int {
@@ -118,7 +122,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   }
 
   private function pushOpenElement(
-    _Private\Node $node,
+    _Private\Node__ $node,
     string $bytes,
   )[write_props]: void {
     $this->documentText .= $bytes;
@@ -140,7 +144,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
     switch ($this->parserState) {
       case _Private\ParserState::DATA_STATE:
         if (Str\starts_with($bytes, '<!--')) {
-          $comment = _Private\Node::createComment($this->getTextIndex());
+          $comment = _Private\Node__::createComment($this->getTextIndex());
           $this->pushOpenElement($comment, $bytes);
           $this->parserState = _Private\ParserState::COMMENT_STATE;
           return;
@@ -166,7 +170,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
           return;
         }
 
-        $node = _Private\Node::createTextNode($this->getTextIndex());
+        $node = _Private\Node__::createTextNode($this->getTextIndex());
         $this->pushOpenElement($node, $bytes);
         $this->popOpenElement();
         return;
@@ -207,7 +211,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
       }
     }
 
-    $node = _Private\Node::createElement(
+    $node = _Private\Node__::createElement(
       $this->getTextIndex(),
       $tag_name,
       $attributes,

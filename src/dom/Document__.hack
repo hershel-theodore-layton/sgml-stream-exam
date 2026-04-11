@@ -3,7 +3,7 @@ namespace HTL\SGMLStreamExam;
 
 use namespace HH\Lib\Str;
 
-final class Document {
+final class Document__ {
   private vec<Node> $nodesById;
 
   public function __construct(private Node $rootNode, private string $text)[] {

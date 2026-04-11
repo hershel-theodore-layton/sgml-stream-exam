@@ -5,7 +5,7 @@ use namespace HTL\{SGMLStream, SGMLStreamExam, SGMLStreamInterfaces};
 
 async function render_to_document_async(
   SGMLStreamInterfaces\Streamable $streamable,
-)[defaults]: Awaitable<SGMLStreamExam\Document> {
+)[defaults]: Awaitable<SGMLStreamExam\Document__> {
   $renderer = new SGMLStream\ConcurrentReusableRenderer();
   $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
 
@@ -18,5 +18,5 @@ async function render_to_document_async(
     FlowFake::createEmpty(),
   );
 
-  return $consumer->toDocument();
+  return $consumer->toDocument__();
 }

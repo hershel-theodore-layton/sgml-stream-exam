@@ -4,8 +4,8 @@ namespace HTL\SGMLStreamExam\_Private;
 use namespace HH\Lib\{C, Keyset, Regex, Str, Vec};
 use namespace HTL\SGMLStreamExam;
 
-final class Node implements SGMLStreamExam\Node {
-  private vec<Node> $children = vec[];
+final class Node__ implements SGMLStreamExam\Node {
+  private vec<Node__> $children = vec[];
 
   public function __construct(
     private int $startIndex,
@@ -32,7 +32,7 @@ final class Node implements SGMLStreamExam\Node {
     return new static($start_index, -1, static::TXTNODE_NAME, dict[], -1, -1);
   }
 
-  public function append(Node $node)[write_props]: void {
+  public function append(Node__ $node)[write_props]: void {
     $this->children[] = $node;
   }
 
@@ -47,7 +47,7 @@ final class Node implements SGMLStreamExam\Node {
   }
 
   public function getAncestors(
-    SGMLStreamExam\Document $document,
+    SGMLStreamExam\Document__ $document,
   )[]: vec<SGMLStreamExam\Node> {
     $prev = $this;
     $out = vec[];
@@ -83,7 +83,7 @@ final class Node implements SGMLStreamExam\Node {
     return $count;
   }
 
-  public function getChildren()[]: vec<Node> {
+  public function getChildren()[]: vec<Node__> {
     return $this->children;
   }
 
@@ -96,11 +96,11 @@ final class Node implements SGMLStreamExam\Node {
     return $this->getAttribute('class') ?? '';
   }
 
-  public function getElementById(string $id)[]: ?Node {
+  public function getElementById(string $id)[]: ?Node__ {
     return C\find($this->traverseDescendants(), $x ==> $x->getId() === $id);
   }
 
-  public function getElementByIdx(string $id)[]: Node {
+  public function getElementByIdx(string $id)[]: Node__ {
     $element = $this->getElementById($id);
     invariant(
       $element is nonnull,
@@ -110,18 +110,18 @@ final class Node implements SGMLStreamExam\Node {
     return $element;
   }
 
-  public function getElementsByClassName(string $class_name)[]: vec<Node> {
+  public function getElementsByClassName(string $class_name)[]: vec<Node__> {
     return Vec\filter(
       $this->traverseDescendants(),
       $x ==> C\contains_key($x->getClassList(), $class_name),
     );
   }
 
-  public function getFirstChild()[]: ?Node {
+  public function getFirstChild()[]: ?Node__ {
     return C\first($this->children);
   }
 
-  public function getFirstChildx()[]: Node {
+  public function getFirstChildx()[]: Node__ {
     $first_child = $this->getFirstChild();
     invariant(
       $first_child is nonnull,
@@ -134,16 +134,16 @@ final class Node implements SGMLStreamExam\Node {
     return $this->getAttribute('id') ?? '';
   }
 
-  public function getInnerHTML(SGMLStreamExam\Document $document)[]: string {
+  public function getInnerHTML(SGMLStreamExam\Document__ $document)[]: string {
     return Vec\map($this->children, $c ==> $c->getOuterHTML($document))
       |> Str\join($$, '');
   }
 
-  public function getLastChild()[]: ?Node {
+  public function getLastChild()[]: ?Node__ {
     return C\last($this->children);
   }
 
-  public function getLastChildx()[]: Node {
+  public function getLastChildx()[]: Node__ {
     $last_child = $this->getLastChild();
     invariant(
       $last_child is nonnull,
@@ -157,7 +157,7 @@ final class Node implements SGMLStreamExam\Node {
   }
 
   public function getNextSibling(
-    SGMLStreamExam\Document $document,
+    SGMLStreamExam\Document__ $document,
   )[]: ?SGMLStreamExam\Node {
     $generation = $this->getSiblingsAndSelf($document);
     return $generation[index_ofx($generation, $this) + 1] ?? null;
@@ -180,7 +180,7 @@ final class Node implements SGMLStreamExam\Node {
     }
   }
 
-  public function getNodeValue(SGMLStreamExam\Document $document)[]: ?string {
+  public function getNodeValue(SGMLStreamExam\Document__ $document)[]: ?string {
     switch ($this->getNodeType()) {
       case static::TEXT_NODE:
         return $this->getOuterHTML($document);
@@ -193,34 +193,36 @@ final class Node implements SGMLStreamExam\Node {
     }
   }
 
-  public function getOuterHTML(SGMLStreamExam\Document $document)[]: string {
+  public function getOuterHTML(SGMLStreamExam\Document__ $document)[]: string {
     return $document->sliceTextRange($this->startIndex, $this->endIndex);
   }
 
   public function getParent(
-    SGMLStreamExam\Document $document,
+    SGMLStreamExam\Document__ $document,
   )[]: SGMLStreamExam\Node {
     return $document->getNodeByIdx($this->parentNodeId);
   }
 
   public function getPreviousSibling(
-    SGMLStreamExam\Document $document,
+    SGMLStreamExam\Document__ $document,
   )[]: ?SGMLStreamExam\Node {
     $generation = $this->getSiblingsAndSelf($document);
     return $generation[index_ofx($generation, $this) - 1] ?? null;
   }
 
   public function getSiblingsAndSelf(
-    SGMLStreamExam\Document $document,
+    SGMLStreamExam\Document__ $document,
   )[]: vec<SGMLStreamExam\Node> {
-    if ($this->name === Node::DOCTYPE_NAME) {
+    if ($this->name === Node__::DOCTYPE_NAME) {
       return vec[$this];
     }
 
     return $this->getParent($document)->getChildren();
   }
 
-  public function getTextContent(SGMLStreamExam\Document $document)[]: string {
+  public function getTextContent(
+    SGMLStreamExam\Document__ $document,
+  )[]: string {
     return Vec\filter(
       $this->traverse(),
       $x ==> $x->getNodeType() === static::TEXT_NODE,
@@ -245,7 +247,7 @@ final class Node implements SGMLStreamExam\Node {
     $this->parentNodeId = $node_id;
   }
 
-  public function traverse()[]: Traversable<Node> {
+  public function traverse()[]: Traversable<Node__> {
     yield $this;
 
     foreach ($this->children as $child) {
@@ -255,7 +257,7 @@ final class Node implements SGMLStreamExam\Node {
     }
   }
 
-  public function traverseDescendants()[]: Traversable<Node> {
+  public function traverseDescendants()[]: Traversable<Node__> {
     foreach ($this->children as $child) {
       foreach ($child->traverse() as $yield_from) {
         yield $yield_from;
@@ -264,7 +266,7 @@ final class Node implements SGMLStreamExam\Node {
   }
 
   public function toUnitTestDump(
-    SGMLStreamExam\Document $document,
+    SGMLStreamExam\Document__ $document,
   )[]: this::UnitTestDump {
     return shape(
       'outerHTML' => $this->getOuterHTML($document),

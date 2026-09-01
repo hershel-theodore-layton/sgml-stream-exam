@@ -60,7 +60,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   public async function consumeAsync(string $bytes)[defaults]: Awaitable<void> {
     if ($this->documentText === '') {
       if ($bytes !== '<!DOCTYPE html>') {
-        throw new NotAnHTML5DocumentException(
+        throw new \HTL\SGMLStreamExam\NotAnHTML5DocumentException(
           Str\format(
             'This consumer excepts HTML5 documents, which start with %s, got: %s',
             static::DOCTYPE,
@@ -187,24 +187,30 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   private function parseOpeningTag(string $bytes)[defaults]: void {
     $rest = Str\strip_prefix($bytes, '<') |> Str\strip_suffix($$, '>');
 
-    list($tag_name, $rest) = _Private\consume_until_space_exclusive($rest);
+    list($tag_name, $rest) =
+      \HTL\SGMLStreamExam\_Private\consume_until_space_exclusive($rest);
     $attributes = dict[];
 
     for (; ; ) {
       list($attribute_name, $end_char, $rest) =
-        _Private\consume_until_equals_or_space_inclusive($rest);
+        \HTL\SGMLStreamExam\_Private\consume_until_equals_or_space_inclusive(
+          $rest,
+        );
 
       if ($attribute_name === '') {
         if ($end_char !== ' ' || $rest !== '') {
           throw
-            new UnexpectedHTMLException('Unable to parse attribute: '.$bytes);
+            new \HTL\SGMLStreamExam\UnexpectedHTMLException(
+              'Unable to parse attribute: '.$bytes,
+            );
         }
 
         break;
       }
 
       if ($end_char === '=') {
-        list($value, $rest) = _Private\consume_attribute_value($rest);
+        list($value, $rest) =
+          \HTL\SGMLStreamExam\_Private\consume_attribute_value($rest);
         $attributes[$attribute_name] = $value;
       } else if ($end_char === ' ') {
         $attributes[$attribute_name] = '';
@@ -227,7 +233,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
     $expected_tag = '</'.$this->openElements->peek()->getName().'>';
 
     if ($bytes !== $expected_tag) {
-      throw new UnexpectedHTMLException(Str\format(
+      throw new \HTL\SGMLStreamExam\UnexpectedHTMLException(Str\format(
         'Unexpected closing tag: %s, got: %s',
         $expected_tag,
         $bytes,

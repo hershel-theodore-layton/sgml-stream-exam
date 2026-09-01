@@ -1,8 +1,8 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\_Private;
+namespace HTL\SGMLStreamExam\_Private;
 
 use namespace HH\Lib\{Math, Str};
-use namespace HTL\SGMLStreamExam__;
+use namespace HTL\SGMLStreamExam;
 
 function consume_until_space_exclusive(string $bytes)[]: (string, string) {
   $space = Str\search($bytes, ' ');
@@ -34,14 +34,14 @@ function consume_until_equals_or_space_inclusive(
 
 function consume_attribute_value(string $bytes)[defaults]: (string, string) {
   if ($bytes[0] !== '"') {
-    throw new SGMLStreamExam__\UnexpectedHTMLException(
+    throw new SGMLStreamExam\UnexpectedHTMLException(
       Str\format('Expected double quoted attribute, got: %s', $bytes),
     );
   }
   $end = Str\search($bytes, '"', 1);
 
   if ($end is null) {
-    throw new SGMLStreamExam__\UnexpectedHTMLException(
+    throw new SGMLStreamExam\UnexpectedHTMLException(
       Str\format('Expected double quoted attribute, got: %s', $bytes),
     );
   }

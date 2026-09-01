@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam\_Private;
+namespace HTL\SGMLStreamExam__\_Private;
 
 /**
  * Behaves like C\find($vec, $x ==> $x === $target);

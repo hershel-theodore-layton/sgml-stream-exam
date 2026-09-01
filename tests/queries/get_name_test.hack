@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam\Tests;
+namespace HTL\SGMLStreamExam__\Tests;
 
-use namespace HTL\{SGMLStreamExam, TestChain};
+use namespace HTL\{SGMLStreamExam__, TestChain};
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
@@ -49,7 +49,7 @@ function get_name_test(TestChain\Chain $chain)[]: TestChain\Chain {
         );
 
         $root = $doc->getRootElement();
-        expect($root->getName())->toEqual(SGMLStreamExam\Node::DOCTYPE_NAME);
+        expect($root->getName())->toEqual(SGMLStreamExam__\Node::DOCTYPE_NAME);
       },
     )
     ->testAsync(
@@ -65,7 +65,7 @@ function get_name_test(TestChain\Chain $chain)[]: TestChain\Chain {
         $text_child = $parent->getFirstChildx();
 
         expect($text_child->getName())
-          ->toEqual(SGMLStreamExam\Node::TXTNODE_NAME);
+          ->toEqual(SGMLStreamExam__\Node::TXTNODE_NAME);
       },
     );
 }

@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam\_Private;
+namespace HTL\SGMLStreamExam__\_Private;
 
 use namespace HTL\SGMLStreamInterfaces;
 

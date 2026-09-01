@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam\Tests;
+namespace HTL\SGMLStreamExam__\Tests;
 
-use namespace HTL\{SGMLStreamExam, TestChain};
+use namespace HTL\{SGMLStreamExam__, TestChain};
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
@@ -65,7 +65,7 @@ function get_node_value_test(TestChain\Chain $chain)[]: TestChain\Chain {
         $text_node = $parent->getFirstChildx();
 
         expect($text_node->getName())->toEqual(
-          SGMLStreamExam\Node::TXTNODE_NAME,
+          SGMLStreamExam__\Node::TXTNODE_NAME,
         );
         expect($text_node->getNodeValue($doc))->toEqual('Hello, world!');
       },
@@ -123,7 +123,7 @@ function get_node_value_test(TestChain\Chain $chain)[]: TestChain\Chain {
         // Middle child is the " between " text node
         $text_node = $children[1];
         expect($text_node->getName())->toEqual(
-          SGMLStreamExam\Node::TXTNODE_NAME,
+          SGMLStreamExam__\Node::TXTNODE_NAME,
         );
         expect($text_node->getNodeValue($doc))
           ->toEqual($text_node->getOuterHTML($doc));

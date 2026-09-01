@@ -1,10 +1,10 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam\_Private;
+namespace HTL\SGMLStreamExam__\_Private;
 
 use namespace HH\Lib\{C, Keyset, Regex, Str, Vec};
-use namespace HTL\SGMLStreamExam;
+use namespace HTL\SGMLStreamExam__;
 
-final class Node__ implements SGMLStreamExam\Node {
+final class Node__ implements SGMLStreamExam__\Node {
   private vec<Node__> $children = vec[];
 
   public function __construct(
@@ -36,7 +36,7 @@ final class Node__ implements SGMLStreamExam\Node {
     $this->children[] = $node;
   }
 
-  public function contains(SGMLStreamExam\Node $other)[]: bool {
+  public function contains(SGMLStreamExam__\Node $other)[]: bool {
     foreach ($this->traverse() as $el) {
       if ($el === $other) {
         return true;
@@ -47,8 +47,8 @@ final class Node__ implements SGMLStreamExam\Node {
   }
 
   public function getAncestors(
-    SGMLStreamExam\Document__ $document,
-  )[]: vec<SGMLStreamExam\Node> {
+    SGMLStreamExam__\Document__ $document,
+  )[]: vec<SGMLStreamExam__\Node> {
     $prev = $this;
     $out = vec[];
 
@@ -134,7 +134,9 @@ final class Node__ implements SGMLStreamExam\Node {
     return $this->getAttribute('id') ?? '';
   }
 
-  public function getInnerHTML(SGMLStreamExam\Document__ $document)[]: string {
+  public function getInnerHTML(
+    SGMLStreamExam__\Document__ $document,
+  )[]: string {
     return Vec\map($this->children, $c ==> $c->getOuterHTML($document))
       |> Str\join($$, '');
   }
@@ -157,8 +159,8 @@ final class Node__ implements SGMLStreamExam\Node {
   }
 
   public function getNextSibling(
-    SGMLStreamExam\Document__ $document,
-  )[]: ?SGMLStreamExam\Node {
+    SGMLStreamExam__\Document__ $document,
+  )[]: ?SGMLStreamExam__\Node {
     $generation = $this->getSiblingsAndSelf($document);
     return $generation[index_ofx($generation, $this) + 1] ?? null;
   }
@@ -180,7 +182,9 @@ final class Node__ implements SGMLStreamExam\Node {
     }
   }
 
-  public function getNodeValue(SGMLStreamExam\Document__ $document)[]: ?string {
+  public function getNodeValue(
+    SGMLStreamExam__\Document__ $document,
+  )[]: ?string {
     switch ($this->getNodeType()) {
       case static::TEXT_NODE:
         return $this->getOuterHTML($document);
@@ -193,26 +197,28 @@ final class Node__ implements SGMLStreamExam\Node {
     }
   }
 
-  public function getOuterHTML(SGMLStreamExam\Document__ $document)[]: string {
+  public function getOuterHTML(
+    SGMLStreamExam__\Document__ $document,
+  )[]: string {
     return $document->sliceTextRange($this->startIndex, $this->endIndex);
   }
 
   public function getParent(
-    SGMLStreamExam\Document__ $document,
-  )[]: SGMLStreamExam\Node {
+    SGMLStreamExam__\Document__ $document,
+  )[]: SGMLStreamExam__\Node {
     return $document->getNodeByIdx($this->parentNodeId);
   }
 
   public function getPreviousSibling(
-    SGMLStreamExam\Document__ $document,
-  )[]: ?SGMLStreamExam\Node {
+    SGMLStreamExam__\Document__ $document,
+  )[]: ?SGMLStreamExam__\Node {
     $generation = $this->getSiblingsAndSelf($document);
     return $generation[index_ofx($generation, $this) - 1] ?? null;
   }
 
   public function getSiblingsAndSelf(
-    SGMLStreamExam\Document__ $document,
-  )[]: vec<SGMLStreamExam\Node> {
+    SGMLStreamExam__\Document__ $document,
+  )[]: vec<SGMLStreamExam__\Node> {
     if ($this->name === Node__::DOCTYPE_NAME) {
       return vec[$this];
     }
@@ -221,7 +227,7 @@ final class Node__ implements SGMLStreamExam\Node {
   }
 
   public function getTextContent(
-    SGMLStreamExam\Document__ $document,
+    SGMLStreamExam__\Document__ $document,
   )[]: string {
     return Vec\filter(
       $this->traverse(),
@@ -266,7 +272,7 @@ final class Node__ implements SGMLStreamExam\Node {
   }
 
   public function toUnitTestDump(
-    SGMLStreamExam\Document__ $document,
+    SGMLStreamExam__\Document__ $document,
   )[]: this::UnitTestDump {
     return shape(
       'outerHTML' => $this->getOuterHTML($document),

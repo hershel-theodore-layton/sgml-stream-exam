@@ -1,8 +1,8 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam\Tests;
+namespace HTL\SGMLStreamExam__\Tests;
 
 use namespace HH\Lib\Vec;
-use namespace HTL\{SGMLStreamExam, TestChain};
+use namespace HTL\{SGMLStreamExam__, TestChain};
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
@@ -84,11 +84,14 @@ function get_siblings_and_self_test(TestChain\Chain $chain)[]: TestChain\Chain {
         );
 
         $doctype = $doc->getRootElement();
-        expect($doctype->getName())->toEqual(SGMLStreamExam\Node::DOCTYPE_NAME);
+        expect($doctype->getName())->toEqual(
+          SGMLStreamExam__\Node::DOCTYPE_NAME,
+        );
+
 
         $siblings_and_self = $doctype->getSiblingsAndSelf($doc);
         expect(Vec\map($siblings_and_self, $n ==> $n->getName()))
-          ->toEqual(vec[SGMLStreamExam\Node::DOCTYPE_NAME]);
+          ->toEqual(vec[SGMLStreamExam__\Node::DOCTYPE_NAME]);
       },
     );
 }

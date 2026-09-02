@@ -50,6 +50,11 @@ final class Node {
     return $this->attributes['class'] ?? '';
   }
 
+  public function getChildElementCount(Document $doc)[]: int {
+    return
+      _Private\C\count_if($this->getChildren($doc), $c ==> $c->isElement());
+  }
+
   public function getDescendants(Document $doc)[]: vec<Node> {
     return $doc->getDescendants($this->id);
   }
@@ -133,8 +138,8 @@ final class Node {
   }
 
   public function isElement()[]: bool {
-    return $this->tagName !== static::COMMENT &&
-      $this->tagName !== static::TXTNODE;
+    return
+      $this->tagName !== static::COMMENT && $this->tagName !== static::TXTNODE;
   }
 
   public function setEndByteRange(int $end_byte_range)[write_props]: void {

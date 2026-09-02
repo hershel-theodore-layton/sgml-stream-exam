@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
 use function HTL\Expect\expect;
@@ -51,9 +51,10 @@ function get_child_element_count_test(
       ],
       async ($xhp, $expected)[defaults] ==> {
         $doc = await render_to_document_async($xhp);
-        $parent = $doc->getElementByIdx('parent');
+        $root = $doc->getCurrentNode();
+        $parent = $root->getElementByIdx($doc, 'parent');
 
-        expect($parent->getChildElementCount())->toEqual($expected);
+        expect($parent->getChildElementCount($doc))->toEqual($expected);
       },
     );
 }

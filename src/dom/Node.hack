@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam;
 
-use namespace HH\Lib\{Keyset, Regex};
+use namespace HH\Lib\{Keyset, Regex, Str, Vec};
 
 final class Node {
   const string COMMENT = '!COMMENT';
@@ -62,6 +62,12 @@ final class Node {
 
   public function getId()[]: string {
     return $this->attributes['id'] ?? '';
+  }
+
+  public function getInnerHTML(Document $doc)[]: string {
+    return $this->getChildren($doc)
+      |> Vec\map($$, $c ==> $c->getOuterHTML($doc))
+      |> Str\join($$, '');
   }
 
   public function getNodeId()[]: NodeId {

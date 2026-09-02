@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
 use function HTL\Expect\expect;
@@ -41,8 +41,9 @@ function get_inner_html_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($xhp, $expected_inner_html)[defaults] ==> {
         $doc = await render_to_document_async($xhp);
+        $root = $doc->getCurrentNode();
 
-        $node = $doc->getElementByIdx('parent');
+        $node = $root->getElementByIdx($doc, 'parent');
         expect($node->getInnerHTML($doc))->toEqual($expected_inner_html);
       },
     );

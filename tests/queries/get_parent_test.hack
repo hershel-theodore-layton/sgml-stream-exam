@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
 use function HTL\Expect\expect;
@@ -19,11 +19,11 @@ function get_parent_test(TestChain\Chain $chain)[]: TestChain\Chain {
         </doctype>,
       );
 
-      $doctype = $doc->getRootElement();
-      expect($doctype->getParent($doc))->toEqual($doctype);
+      $root = $doc->getCurrentNode();
+      expect($root->getParent($doc))->toEqual($root);
 
-      foreach ($doctype->traverse() as $node) {
-        foreach ($node->getChildren() as $child) {
+      foreach ($root->getDescendants($doc) as $node) {
+        foreach ($node->getChildren($doc) as $child) {
           expect($child->getParent($doc))->toEqual($node);
         }
       }

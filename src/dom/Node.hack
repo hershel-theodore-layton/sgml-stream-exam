@@ -22,7 +22,7 @@ final class Node {
     $self = $this;
 
     do {
-      $self = $self->getParentx($doc);
+      $self = $self->getParent($doc);
       $ancestors[] = $self;
     } while ($self->getTagName() !== Node::DOCTYPE);
 
@@ -50,6 +50,10 @@ final class Node {
     return $this->attributes['class'] ?? '';
   }
 
+  public function getDescendants(Document $doc)[]: vec<Node> {
+    return $doc->getDescendants($this->id);
+  }
+
   public function getElementById(Document $doc, string $id)[]: ?Node {
     // Special case, `<div></div>`'s id is `""`, but getElementById("") should
     // not return this element. 
@@ -57,7 +61,7 @@ final class Node {
       return null;
     }
 
-    foreach ($doc->getDescendants($this->id) as $desc) {
+    foreach ($this->getDescendants($doc) as $desc) {
       if ($desc->getId() === $id) {
         return $desc;
       }
@@ -94,7 +98,7 @@ final class Node {
     return $doc->sliceBytes($this->startByteRange, $this->endByteRange);
   }
 
-  public function getParentx(Document $doc)[]: Node {
+  public function getParent(Document $doc)[]: Node {
     return $doc->getByNodeIdx($this->parentId);
   }
 

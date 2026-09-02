@@ -64,7 +64,7 @@ final class Document {
     $this->ensureMutable(__METHOD__);
     $current = $this->current;
     $current->setEndByteRange(Str\length($this->documentText));
-    $this->current = $current->getParentx($this);
+    $this->current = $current->getParent($this);
   }
 
   public function freeze()[write_props]: void {

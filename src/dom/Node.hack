@@ -27,6 +27,10 @@ final class Node {
     return $doc->getChildren($this->id);
   }
 
+  public function getClassName()[]: string {
+    return $this->attributes['class'] ?? '';
+  }
+
   public function getElementById(Document $doc, string $id)[]: ?Node {
     // Special case, `<div></div>`'s id is `""`, but getElementById("") should
     // not return this element. 

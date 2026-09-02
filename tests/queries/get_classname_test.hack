@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
 use function HTL\Expect\expect;
@@ -43,7 +43,9 @@ function get_class_name_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($element, $expected_class_name)[defaults] ==> {
         $doc = await render_to_document_async($element);
-        $elem = $doc->getElementByIdx('elem');
+        $root = $doc->getCurrentNode();
+
+        $elem = $root->getElementByIdx($doc, 'elem');
 
         $actual_class_name = $elem->getClassName();
         expect($actual_class_name)->toEqual($expected_class_name);

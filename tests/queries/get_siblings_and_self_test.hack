@@ -1,8 +1,8 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HH\Lib\Vec;
-use namespace HTL\{SGMLStreamExam__, TestChain};
+use namespace HTL\{SGMLStreamExam, TestChain};
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
@@ -22,7 +22,7 @@ function get_siblings_and_self_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $b = $doc->getElementByIdx('b');
+        $b = $doc->getCurrentNode()->getElementByIdx($doc, 'b');
         $siblings_and_self = $b->getSiblingsAndSelf($doc);
 
         expect(Vec\map($siblings_and_self, $n ==> $n->getId()))
@@ -44,8 +44,8 @@ function get_siblings_and_self_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $parent = $doc->getElementByIdx('parent');
-        $children = $parent->getChildren();
+        $parent = $doc->getCurrentNode()->getElementByIdx($doc, 'parent');
+        $children = $parent->getChildren($doc);
 
         expect(Vec\map($children, $c ==> $c->getOuterHTML($doc)))->toEqual(vec[
           ' First ',
@@ -67,7 +67,7 @@ function get_siblings_and_self_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $only = $doc->getElementByIdx('only');
+        $only = $doc->getCurrentNode()->getElementByIdx($doc, 'only');
         $siblings_and_self = $only->getSiblingsAndSelf($doc);
 
         expect(Vec\map($siblings_and_self, $n ==> $n->getId()))
@@ -83,15 +83,14 @@ function get_siblings_and_self_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $doctype = $doc->getRootElement();
+        $doctype = $doc->getCurrentNode();
         expect($doctype->getName())->toEqual(
-          SGMLStreamExam__\Node::DOCTYPE_NAME,
+          SGMLStreamExam\Node::DOCTYPE,
         );
-
 
         $siblings_and_self = $doctype->getSiblingsAndSelf($doc);
         expect(Vec\map($siblings_and_self, $n ==> $n->getName()))
-          ->toEqual(vec[SGMLStreamExam__\Node::DOCTYPE_NAME]);
+          ->toEqual(vec[SGMLStreamExam\Node::DOCTYPE]);
       },
     );
 }

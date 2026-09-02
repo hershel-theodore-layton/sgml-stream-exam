@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
-use namespace HTL\{SGMLStreamExam__, TestChain};
+use namespace HTL\{SGMLStreamExam, TestChain};
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
@@ -34,7 +34,7 @@ function get_node_value_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($xhp, $elem_id)[defaults] ==> {
         $doc = await render_to_document_async($xhp);
-        $elem = $doc->getElementByIdx($elem_id);
+        $elem = $doc->getCurrentNode()->getElementByIdx($doc, $elem_id);
 
         expect($elem->getNodeValue($doc))->toBeNull();
       },
@@ -48,7 +48,7 @@ function get_node_value_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $doctype = $doc->getRootElement();
+        $doctype = $doc->getCurrentNode();
         expect($doctype->getNodeValue($doc))->toBeNull();
       },
     )
@@ -61,11 +61,11 @@ function get_node_value_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $parent = $doc->getElementByIdx('parent');
-        $text_node = $parent->getFirstChildx();
+        $parent = $doc->getCurrentNode()->getElementByIdx($doc, 'parent');
+        $text_node = $parent->getFirstChildx($doc);
 
         expect($text_node->getName())->toEqual(
-          SGMLStreamExam__\Node::TXTNODE_NAME,
+          SGMLStreamExam\Node::TXTNODE,
         );
         expect($text_node->getNodeValue($doc))->toEqual('Hello, world!');
       },
@@ -81,8 +81,8 @@ function get_node_value_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $parent = $doc->getElementByIdx('parent');
-        expect($parent->getFirstChildx()->getNodeValue($doc))
+        $parent = $doc->getCurrentNode()->getElementByIdx($doc, 'parent');
+        expect($parent->getFirstChildx($doc)->getNodeValue($doc))
           ->toEqual('  padded  ');
       },
     )
@@ -97,8 +97,8 @@ function get_node_value_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $doctype = $doc->getRootElement();
-        $comm = $doctype->getFirstChildx();
+        $doctype = $doc->getCurrentNode();
+        $comm = $doctype->getFirstChildx($doc);
 
         $value = expect($comm->getNodeValue($doc))->toBeNonnull()->getValue();
         expect($value)->toEqual('[if IE 8]> Some text... <![endif]');
@@ -117,13 +117,13 @@ function get_node_value_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $parent = $doc->getElementByIdx('parent');
-        $children = $parent->getChildren();
+        $parent = $doc->getCurrentNode()->getElementByIdx($doc, 'parent');
+        $children = $parent->getChildren($doc);
 
         // Middle child is the " between " text node
         $text_node = $children[1];
         expect($text_node->getName())->toEqual(
-          SGMLStreamExam__\Node::TXTNODE_NAME,
+          SGMLStreamExam\Node::TXTNODE,
         );
         expect($text_node->getNodeValue($doc))
           ->toEqual($text_node->getOuterHTML($doc));

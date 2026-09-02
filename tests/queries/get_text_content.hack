@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
 use function HTL\Expect\expect;
@@ -71,7 +71,7 @@ function get_text_content_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($xhp, $expected)[defaults] ==> {
         $doc = await render_to_document_async($xhp);
-        $node = $doc->getElementByIdx('node');
+        $node = $doc->getCurrentNode()->getElementByIdx($doc, 'node');
 
         expect($node->getTextContent($doc))->toEqual($expected);
       },
@@ -85,8 +85,8 @@ function get_text_content_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $parent = $doc->getElementByIdx('parent');
-        $text_node = $parent->getFirstChildx();
+        $parent = $doc->getCurrentNode()->getElementByIdx($doc, 'parent');
+        $text_node = $parent->getFirstChildx($doc);
 
         expect($text_node->getTextContent($doc))->toEqual(' some text ');
       },
@@ -101,7 +101,7 @@ function get_text_content_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $doctype = $doc->getRootElement();
+        $doctype = $doc->getCurrentNode();
         expect($doctype->getTextContent($doc))->toEqual('HelloWorld');
       },
     );

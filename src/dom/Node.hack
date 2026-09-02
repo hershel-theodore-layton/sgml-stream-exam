@@ -45,6 +45,12 @@ final class Node {
     return $doc->getChildren($this->id);
   }
 
+  public function contains(Node $other)[]: bool {
+    return $this->startByteRange <= $other->startByteRange &&
+      $this->endByteRange >= $other->endByteRange ||
+      $this->tagName === Node::DOCTYPE;
+  }
+
   public function getClassList()[]: keyset<string> {
     return Regex\split($this->getClassName(), re'/\s+/')
       |> Keyset\filter($$, $c ==> $c !== '');
@@ -141,6 +147,34 @@ final class Node {
     return $this->id;
   }
 
+  public function getNodeValue(Document $doc)[]: ?string {
+    if ($this->tagName === self::TXTNODE) {
+      return $this->getOuterHTML($doc);
+    }
+    if ($this->tagName === self::COMMENT) {
+      return Str\strip_prefix($this->getOuterHTML($doc), '<!--')
+        |> Str\strip_suffix($$, '-->');
+    }
+    return null;
+  }
+
+  public function getTextContent(Document $doc)[]: string {
+    if ($this->tagName === self::TXTNODE) {
+      return $this->getOuterHTML($doc);
+    }
+    if ($this->tagName === self::COMMENT) {
+      return $this->getNodeValue($doc) ?? '';
+    }
+
+    $text = '';
+    foreach ($this->getChildren($doc) as $child) {
+      if ($child->getName() !== self::COMMENT) {
+        $text .= $child->getTextContent($doc);
+      }
+    }
+    return $text;
+  }
+
   public function getName()[]: string {
     return $this->tagName;
   }
@@ -173,6 +207,33 @@ final class Node {
       'May not call getLastChildx on a Node with zero children.',
     );
     return $last;
+  }
+
+  public function getPreviousSibling(Document $doc)[]: ?Node {
+    $siblings = $this->getSiblingsAndSelf($doc);
+    foreach ($siblings as $i => $sibling) {
+      if ($sibling->getNodeId() === $this->id) {
+        return $siblings[$i - 1] ?? null;
+      }
+    }
+    return null;
+  }
+
+  public function getNextSibling(Document $doc)[]: ?Node {
+    $siblings = $this->getSiblingsAndSelf($doc);
+    foreach ($siblings as $i => $sibling) {
+      if ($sibling->getNodeId() === $this->id) {
+        return $siblings[$i + 1] ?? null;
+      }
+    }
+    return null;
+  }
+
+  public function getSiblingsAndSelf(Document $doc)[]: vec<Node> {
+    if ($this->getParent($doc)->getNodeId() === $this->id) {
+      return vec[$this];
+    }
+    return $this->getParent($doc)->getChildren($doc);
   }
 
   public function getParent(Document $doc)[]: Node {

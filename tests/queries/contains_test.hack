@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HH\Lib\{C, Vec};
 use namespace HTL\TestChain;
@@ -89,8 +89,8 @@ function contains_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($xhp, $subject_id, $other_id)[defaults] ==> {
         $doc = await render_to_document_async($xhp);
-        $subject = $doc->getElementByIdx($subject_id);
-        $other = $doc->getElementByIdx($other_id);
+        $subject = $doc->getCurrentNode()->getElementByIdx($doc, $subject_id);
+        $other = $doc->getCurrentNode()->getElementByIdx($doc, $other_id);
 
         $ancestor_ids =
           Vec\map($other->getAncestors($doc), $a ==> $a->getNodeId());
@@ -115,9 +115,9 @@ function contains_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $doctype = $doc->getRootElement();
+        $doctype = $doc->getCurrentNode();
 
-        foreach ($doctype->traverse() as $node) {
+        foreach ($doctype->getDescendantsAndSelf($doc) as $node) {
           expect($doctype->contains($node))->toBeTrue();
         }
       },
@@ -136,10 +136,11 @@ function contains_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $left = $doc->getElementByIdx('left');
-        $right = $doc->getElementByIdx('right');
-        $left_child = $doc->getElementByIdx('left_child');
-        $right_child = $doc->getElementByIdx('right_child');
+        $root = $doc->getCurrentNode();
+        $left = $root->getElementByIdx($doc, 'left');
+        $right = $root->getElementByIdx($doc, 'right');
+        $left_child = $root->getElementByIdx($doc, 'left_child');
+        $right_child = $root->getElementByIdx($doc, 'right_child');
 
         expect($left->contains($right))->toBeFalse();
         expect($left->contains($right_child))->toBeFalse();
@@ -159,9 +160,9 @@ function contains_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $root = $doc->getRootElement();
+        $root = $doc->getCurrentNode();
 
-        foreach ($root->traverse() as $node) {
+        foreach ($root->getDescendantsAndSelf($doc) as $node) {
           expect($node->contains($node))->toBeTrue();
         }
       },
@@ -181,7 +182,7 @@ function contains_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $target = $doc->getElementByIdx('target');
+        $target = $doc->getCurrentNode()->getElementByIdx($doc, 'target');
 
         foreach ($target->getAncestors($doc) as $ancestor) {
           expect($target->contains($ancestor))->toBeFalse();

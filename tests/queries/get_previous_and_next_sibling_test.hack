@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
 use function HTL\Expect\expect;
@@ -81,7 +81,7 @@ function get_next_and_previous_sibling_test(
         $expected_next,
       )[defaults] ==> {
         $doc = await render_to_document_async($xhp);
-        $subject = $doc->getElementByIdx($subject_id);
+        $subject = $doc->getCurrentNode()->getElementByIdx($doc, $subject_id);
 
         $prev = $subject->getPreviousSibling($doc)?->getOuterHTML($doc);
         $next = $subject->getNextSibling($doc)?->getOuterHTML($doc);

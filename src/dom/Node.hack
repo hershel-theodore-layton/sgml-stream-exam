@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam;
 
-use namespace HH\Lib\{Keyset, Regex, Str, Vec};
+use namespace HH\Lib\{C, Keyset, Regex, Str, Vec};
 
 final class Node {
   const string COMMENT = '!COMMENT';
@@ -80,6 +80,19 @@ final class Node {
     return $ret;
   }
 
+  public function getFirstChild(Document $doc)[]: ?Node {
+    return $this->getChildren($doc) |> C\first($$);
+  }
+
+  public function getFirstChildx(Document $doc)[]: Node {
+    $first = $this->getFirstChild($doc);
+    invariant(
+      $first is nonnull,
+      'May not call getFirstChildx on a Node with zero children.',
+    );
+    return $first;
+  }
+
   public function getId()[]: string {
     return $this->attributes['id'] ?? '';
   }
@@ -100,6 +113,19 @@ final class Node {
 
   public function getOuterHTML(Document $doc)[]: string {
     return $doc->sliceBytes($this->startByteRange, $this->endByteRange);
+  }
+
+  public function getLastChild(Document $doc)[]: ?Node {
+    return $this->getChildren($doc) |> C\last($$);
+  }
+
+  public function getLastChildx(Document $doc)[]: Node {
+    $last = $this->getLastChild($doc);
+    invariant(
+      $last is nonnull,
+      'May not call getLastChildx on a Node with zero children.',
+    );
+    return $last;
   }
 
   public function getParent(Document $doc)[]: Node {

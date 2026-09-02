@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
 use function HTL\Expect\{expect, expect_invoked};
@@ -19,13 +19,14 @@ function get_first_and_last_child_test(
           </div>
         </doctype>,
       );
+      $root = $doc->getCurrentNode();
 
-      $parent = $doc->getElementByIdx('parent');
-      $first_child = $parent->getFirstChild();
+      $parent = $root->getElementByIdx($doc, 'parent');
+      $first_child = $parent->getFirstChild($doc);
 
       $first_child = expect($first_child)->toBeNonnull()->getValue();
       expect($first_child->getId())->toEqual('first');
-      expect($parent->getFirstChildx())->toEqual($parent->getFirstChild());
+      expect($parent->getFirstChildx($doc))->toEqual($parent->getFirstChild($doc));
     })
     ->testAsync(
       'getFirstChild returns null for element with no children',
@@ -35,10 +36,11 @@ function get_first_and_last_child_test(
             <div id="empty"></div>
           </doctype>,
         );
+        $root = $doc->getCurrentNode();
 
-        $empty = $doc->getElementByIdx('empty');
-        expect($empty->getFirstChild())->toBeNull();
-        expect_invoked(() ==> $empty->getFirstChildx())
+        $empty = $root->getElementByIdx($doc, 'empty');
+        expect($empty->getFirstChild($doc))->toBeNull();
+        expect_invoked(() ==> $empty->getFirstChildx($doc))
           ->toHaveThrown<InvariantException>(
             'May not call getFirstChildx on a Node with zero children.',
           );
@@ -55,9 +57,10 @@ function get_first_and_last_child_test(
             </div>
           </doctype>,
         );
+        $root = $doc->getCurrentNode();
 
-        $parent = $doc->getElementByIdx('parent');
-        $first_child = $parent->getFirstChild();
+        $parent = $root->getElementByIdx($doc, 'parent');
+        $first_child = $parent->getFirstChild($doc);
 
         $first_child = expect($first_child)->toBeNonnull()->getValue();
         expect($first_child->getOuterHTML($doc))->toEqual(' Some text ');
@@ -73,13 +76,14 @@ function get_first_and_last_child_test(
           </div>
         </doctype>,
       );
+      $root = $doc->getCurrentNode();
 
-      $parent = $doc->getElementByIdx('parent');
-      $last_child = $parent->getLastChild();
+      $parent = $root->getElementByIdx($doc, 'parent');
+      $last_child = $parent->getLastChild($doc);
 
       $last_child = expect($last_child)->toBeNonnull()->getValue();
       expect($last_child->getId())->toEqual('last');
-      expect($parent->getLastChildx())->toEqual($parent->getLastChild());
+      expect($parent->getLastChildx($doc))->toEqual($parent->getLastChild($doc));
     })
     ->testAsync(
       'getLastChild returns null for element with no children',
@@ -89,10 +93,11 @@ function get_first_and_last_child_test(
             <div id="empty"></div>
           </doctype>,
         );
+        $root = $doc->getCurrentNode();
 
-        $empty = $doc->getElementByIdx('empty');
-        expect($empty->getLastChild())->toBeNull();
-        expect_invoked(() ==> $empty->getLastChildx())
+        $empty = $root->getElementByIdx($doc, 'empty');
+        expect($empty->getLastChild($doc))->toBeNull();
+        expect_invoked(() ==> $empty->getLastChildx($doc))
           ->toHaveThrown<InvariantException>(
             'May not call getLastChildx on a Node with zero children.',
           );
@@ -109,9 +114,10 @@ function get_first_and_last_child_test(
             </div>
           </doctype>,
         );
+        $root = $doc->getCurrentNode();
 
-        $parent = $doc->getElementByIdx('parent');
-        $last_child = $parent->getLastChild();
+        $parent = $root->getElementByIdx($doc, 'parent');
+        $last_child = $parent->getLastChild($doc);
 
         $last_child = expect($last_child)->toBeNonnull()->getValue();
         expect($last_child->getOuterHTML($doc))->toEqual(' Some text ');

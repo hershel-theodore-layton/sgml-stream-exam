@@ -9,7 +9,7 @@ function node_to_unit_test_dump(
   SGMLStreamExam\Node $node,
 )[]: dict<string, mixed> {
   return dict[
-    'outerHTML' => $node->getOuterHtml($doc),
+    'outerHTML' => $node->getOuterHTML($doc),
     'name' => $node->getTagName(),
     'attributes' => $node->getAttributes(),
     'children' => Vec\map(

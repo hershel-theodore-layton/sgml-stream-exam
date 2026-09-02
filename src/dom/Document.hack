@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam;
 
-use namespace HH\Lib\{C, Str};
+use namespace HH\Lib\{C, Str, Vec};
 
 /**
  * The pleasant to use methods can be found on Node. You can get a reference to
@@ -18,6 +18,7 @@ final class Document {
   private string $documentText = '<!DOCTYPE html>';
   private vec<Node> $nodes;
   private dict<NodeId, vec<Node>> $children = dict[];
+  private bool $frozen = false;
 
   public function __construct()[] {
     $node = new Node(
@@ -41,7 +42,7 @@ final class Document {
   )[write_props]: void {
     $this->ensureMutable(__METHOD__);
 
-    $parent_id = $this->current->getId();
+    $parent_id = $this->current->getNodeId();
 
     $node = new Node(
       node_id_from_int(C\count($this->nodes)),
@@ -66,8 +67,13 @@ final class Document {
     $this->current = $current->getParentx($this);
   }
 
-  public function getByIdx(NodeId $id)[]: Node {
-    return $this->nodes[node_id_to_int($id)];
+  public function freeze()[write_props]: void {
+    $this->ensureMutable(__METHOD__);
+    $this->frozen = true;
+  }
+
+  public function getByNodeIdx(NodeId $node_id)[]: Node {
+    return $this->nodes[node_id_to_int($node_id)];
   }
 
   public function getCurrentNode()[]: Node {
@@ -76,6 +82,14 @@ final class Document {
 
   public function getChildren(NodeId $node_id)[]: vec<Node> {
     return $this->children[$node_id] ?? vec[];
+  }
+
+  public function getDescendants(NodeId $node_id)[]: vec<Node> {
+    $start = node_id_to_int($node_id) + 1;
+    return $this->getLastDescendantId($node_id)
+      |> $$ is null
+        ? vec[]
+        : Vec\slice($this->nodes, $start, node_id_to_int($$) - $start + 1);
   }
 
   public function sliceBytes(int $start, int $end)[]: string {
@@ -89,9 +103,20 @@ final class Document {
 
   private function ensureMutable(string $method)[]: void {
     invariant(
-      $this->current->getId() !== 0 || C\count($this->nodes) === 1,
+      !$this->frozen,
       'You may not invoke %s on a completed document.',
       $method,
     );
+  }
+
+  private function getLastDescendantId(NodeId $node_id)[]: ?NodeId {
+    $next_id = $node_id;
+
+    do {
+      $last_id = $next_id;
+      $next_id = C\last($this->children[$last_id] ?? vec[])?->getNodeId();
+    } while ($next_id is nonnull);
+
+    return $next_id !== $last_id ? $last_id : null;
   }
 }

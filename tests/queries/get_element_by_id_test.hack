@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HH\Lib\Str;
 use namespace HTL\TestChain;
@@ -44,16 +44,17 @@ function get_element_by_id_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($element, $id, $should_find)[defaults] ==> {
         $doc = await render_to_document_async($element);
-        $element = $doc->getElementById($id);
+        $root = $doc->getCurrentNode();
+        $element = $root->getElementById($doc, $id);
 
         if ($should_find) {
           $element = expect($element)->toBeNonnull()->getValue();
-          expect($doc->getElementByIdx($id))->toEqual($element);
+          expect($root->getElementByIdx($doc, $id))->toEqual($element);
           expect($element->getId())->toEqual($id);
-          expect($element->getElementById($id))->toBeNull();
+          expect($element->getElementById($doc, $id))->toBeNull();
         } else {
           expect($element)->toBeNull();
-          expect_invoked(() ==> $doc->getElementByIdx($id))
+          expect_invoked(() ==> $root->getElementByIdx($doc, $id))
             ->toHaveThrown<InvariantException>(
               Str\format('Element with the id "%s" was not found.', $id),
             );
@@ -74,22 +75,24 @@ function get_element_by_id_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $left = $doc->getElementByIdx('left');
-        $right = $doc->getElementByIdx('right');
+        $root = $doc->getCurrentNode();
 
-        $left_child = $left->getElementById('left_child');
+        $left = $root->getElementByIdx($doc, 'left');
+        $right = $root->getElementByIdx($doc, 'right');
+
+        $left_child = $left->getElementById($doc, 'left_child');
         $left_child = expect($left_child)->toBeNonnull()->getValue();
         expect($left_child->getId())->toEqual('left_child');
 
-        $right_child = $right->getElementById('right_child');
+        $right_child = $right->getElementById($doc, 'right_child');
         $right_child = expect($right_child)->toBeNonnull()->getValue();
         expect($right_child->getId())->toEqual('right_child');
 
-        expect($left->getElementById('right_child'))->toBeNull();
-        expect($right->getElementById('left_child'))->toBeNull();
+        expect($left->getElementById($doc, 'right_child'))->toBeNull();
+        expect($right->getElementById($doc, 'left_child'))->toBeNull();
 
-        expect($left->getElementById('left'))->toBeNull();
-        expect($right->getElementById('right'))->toBeNull();
+        expect($left->getElementById($doc, 'left'))->toBeNull();
+        expect($right->getElementById($doc, 'right'))->toBeNull();
       },
     )
     ->testAsync(
@@ -104,8 +107,12 @@ function get_element_by_id_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $dup = $doc->getElementByIdx('dup');
-        expect($dup->getOuterHTML($doc))->toEqual('<span id="dup">First</span>');
+        $root = $doc->getCurrentNode();
+
+        $dup = $root->getElementByIdx($doc, 'dup');
+        expect($dup->getOuterHTML($doc))->toEqual(
+          '<span id="dup">First</span>',
+        );
       },
     );
 }

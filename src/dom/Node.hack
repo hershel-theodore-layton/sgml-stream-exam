@@ -15,6 +15,10 @@ final class Node {
     private int $endByteRange = -1,
   )[] {}
 
+  public function getAttribute(string $attr)[]: ?string {
+    return $this->attributes[$attr] ?? null;
+  }
+
   public function getAttributes()[]: dict<string, string> {
     return $this->attributes;
   }
@@ -23,7 +27,33 @@ final class Node {
     return $doc->getChildren($this->id);
   }
 
-  public function getId()[]: NodeId {
+  public function getElementById(Document $doc, string $id)[]: ?Node {
+    // Special case, `<div></div>`'s id is `""`, but getElementById("") should
+    // not return this element. 
+    if ($id === '') {
+      return null;
+    }
+
+    foreach ($doc->getDescendants($this->id) as $desc) {
+      if ($desc->getId() === $id) {
+        return $desc;
+      }
+    }
+
+    return null;
+  }
+
+  public function getElementByIdx(Document $doc, string $id)[]: Node {
+    $ret = $this->getElementById($doc, $id);
+    invariant($ret is nonnull, 'Element with the id "%s" was not found.', $id);
+    return $ret;
+  }
+
+  public function getId()[]: string {
+    return $this->attributes['id'] ?? '';
+  }
+
+  public function getNodeId()[]: NodeId {
     return $this->id;
   }
 
@@ -31,12 +61,12 @@ final class Node {
     return $this->tagName;
   }
 
-  public function getOuterHtml(Document $doc)[]: string {
+  public function getOuterHTML(Document $doc)[]: string {
     return $doc->sliceBytes($this->startByteRange, $this->endByteRange);
   }
 
   public function getParentx(Document $document)[]: Node {
-    return $document->getByIdx($this->parentId);
+    return $document->getByNodeIdx($this->parentId);
   }
 
   public function setEndByteRange(int $end_byte_range)[write_props]: void {

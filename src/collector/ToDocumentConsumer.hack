@@ -35,7 +35,6 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   const string DOCTYPE = '<!DOCTYPE html>';
 
   private bool $inComment = false;
-  private bool $isComplete = false;
   private bool $isFirstNode = true;
 
   private Document $document;
@@ -91,7 +90,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   public async function flushAsync()[defaults]: Awaitable<void> {}
   public async function theDocumentIsCompleteAsync(
   )[defaults]: Awaitable<void> {
-    $this->isComplete = true;
+    $this->document->freeze();
   }
 
   public function toDocument()[]: Document {

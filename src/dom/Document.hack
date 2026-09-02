@@ -23,8 +23,10 @@ final class Document {
     $node = new Node(
       node_id_from_int(0),
       node_id_from_int(0),
-      Node::DOCUMENT_ROOT,
+      Node::DOCTYPE,
+      dict[],
       0,
+      Str\length($this->documentText),
     );
     $this->nodes = vec[$node];
     $this->current = $node;
@@ -42,13 +44,15 @@ final class Document {
     $parent_id = $this->current->getId();
 
     $node = new Node(
-      node_id_from_int(C\count($this->nodes) + 1),
+      node_id_from_int(C\count($this->nodes)),
       $parent_id,
       $arg['tag_name'],
+      $arg['attributes'],
       Str\length($this->documentText),
     );
 
     $this->nodes[] = $node;
+    $this->current = $node;
     $this->children[$parent_id] ??= vec[];
     $this->children[$parent_id][] = $node;
 
@@ -57,7 +61,9 @@ final class Document {
 
   public function closeNode()[write_props]: void {
     $this->ensureMutable(__METHOD__);
-    $this->current = $this->current->getParentx($this);
+    $current = $this->current;
+    $current->setEndByteRange(Str\length($this->documentText));
+    $this->current = $current->getParentx($this);
   }
 
   public function getByIdx(NodeId $id)[]: Node {
@@ -66,6 +72,14 @@ final class Document {
 
   public function getCurrentNode()[]: Node {
     return $this->current;
+  }
+
+  public function getChildren(NodeId $node_id)[]: vec<Node> {
+    return $this->children[$node_id] ?? vec[];
+  }
+
+  public function sliceBytes(int $start, int $end)[]: string {
+    return Str\slice($this->documentText, $start, $end - $start);
   }
 
   public function pushHtmlSource(string $bytes)[write_props]: void {

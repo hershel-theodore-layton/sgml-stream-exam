@@ -36,9 +36,9 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
 
   private bool $inComment = false;
   private bool $isComplete = false;
+  private bool $isFirstNode = true;
 
   private Document $document;
-  private string $documentText = '';
 
   public function __construct(
     private keyset<string> $void_elements = static::STANDARD_VOID_ELEMENTS,
@@ -47,7 +47,8 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   }
 
   public async function consumeAsync(string $bytes)[defaults]: Awaitable<void> {
-    if ($this->documentText === '') {
+    if ($this->isFirstNode) {
+      $this->isFirstNode = false;
       if ($bytes !== '<!DOCTYPE html>') {
         throw new NotAnHTML5DocumentException(
           Str\format(
@@ -60,7 +61,6 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
       }
 
       // We exit early, because the default Document already contains a DOCTYPE.
-      $this->documentText .= $bytes;
       return;
     }
 
@@ -98,13 +98,8 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
     return $this->document;
   }
 
-  private function getTextIndex()[]: int {
-    return Str\length($this->documentText);
-  }
-
   private function parseHtml(string $bytes)[defaults]: void {
     if ($this->inComment) {
-      $this->documentText .= $bytes;
       $this->document->pushHtmlSource($bytes);
       if (Str\ends_with($bytes, '-->')) {
         $this->document->closeNode();
@@ -114,6 +109,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
     }
 
     if (Str\starts_with($bytes, '<!--')) {
+      $this->inComment = true;
       $this->document->addNode(shape(
         'attributes' => dict[],
         'tag_name' => Node::COMMENT,
@@ -144,7 +140,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
 
     $this->document->addNode(shape(
       'attributes' => dict[],
-      'tag_name' => Node::TEXT,
+      'tag_name' => Node::TXTNODE,
       'text' => $bytes,
     ));
     $this->document->closeNode();
@@ -199,7 +195,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
       ));
     }
 
-    $this->documentText .= $expected_tag;
+    $this->document->pushHtmlSource($bytes);
     $this->document->closeNode();
   }
 }

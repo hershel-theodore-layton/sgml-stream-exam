@@ -184,7 +184,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   }
 
   private function parseClosingTag(string $bytes)[write_props]: void {
-    $expected_tag = '</'.$this->document->getCurrentNode()->getTagName().'>';
+    $expected_tag = '</'.$this->document->getCurrentNode()->getName().'>';
 
     if ($bytes !== $expected_tag) {
       throw new UnexpectedHTMLException(Str\format(

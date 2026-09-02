@@ -24,7 +24,7 @@ final class Node {
     do {
       $self = $self->getParent($doc);
       $ancestors[] = $self;
-    } while ($self->getTagName() !== Node::DOCTYPE);
+    } while ($self->getName() !== Node::DOCTYPE);
 
     return $ancestors;
   }
@@ -112,7 +112,7 @@ final class Node {
     return $this->id;
   }
 
-  public function getTagName()[]: string {
+  public function getName()[]: string {
     return $this->tagName;
   }
 

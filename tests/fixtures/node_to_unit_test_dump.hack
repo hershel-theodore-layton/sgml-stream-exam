@@ -10,7 +10,7 @@ function node_to_unit_test_dump(
 )[]: dict<string, mixed> {
   return dict[
     'outerHTML' => $node->getOuterHTML($doc),
-    'name' => $node->getTagName(),
+    'name' => $node->getName(),
     'attributes' => $node->getAttributes(),
     'children' => Vec\map(
       $node->getChildren($doc),

@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
-use namespace HTL\{SGMLStreamExam__, TestChain};
+use namespace HTL\{SGMLStreamExam, TestChain};
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
@@ -13,8 +13,9 @@ function get_name_test(TestChain\Chain $chain)[]: TestChain\Chain {
           <div id="div-elem"></div>
         </doctype>,
       );
+      $root = $doc->getCurrentNode();
 
-      $div = $doc->getElementByIdx('div-elem');
+      $div = $root->getElementByIdx($doc, 'div-elem');
       expect($div->getName())->toEqual('div');
     })
     ->testAsync(
@@ -28,14 +29,15 @@ function get_name_test(TestChain\Chain $chain)[]: TestChain\Chain {
             <p id="p-elem"></p>
           </doctype>,
         );
+        $root = $doc->getCurrentNode();
 
-        expect($doc->getElementByIdx('section-elem')->getName())
+        expect($root->getElementByIdx($doc, 'section-elem')->getName())
           ->toEqual('section');
-        expect($doc->getElementByIdx('article-elem')->getName())
+        expect($root->getElementByIdx($doc, 'article-elem')->getName())
           ->toEqual('article');
-        expect($doc->getElementByIdx('span-elem')->getName())
+        expect($root->getElementByIdx($doc, 'span-elem')->getName())
           ->toEqual('span');
-        expect($doc->getElementByIdx('p-elem')->getName())
+        expect($root->getElementByIdx($doc, 'p-elem')->getName())
           ->toEqual('p');
       },
     )
@@ -48,8 +50,8 @@ function get_name_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $root = $doc->getRootElement();
-        expect($root->getName())->toEqual(SGMLStreamExam__\Node::DOCTYPE_NAME);
+        $root = $doc->getCurrentNode();
+        expect($root->getName())->toEqual(SGMLStreamExam\Node::DOCTYPE);
       },
     )
     ->testAsync(
@@ -60,12 +62,13 @@ function get_name_test(TestChain\Chain $chain)[]: TestChain\Chain {
             <div id="parent">Some text content</div>
           </doctype>,
         );
+        $root = $doc->getCurrentNode();
 
-        $parent = $doc->getElementByIdx('parent');
-        $text_child = $parent->getFirstChildx();
+        $parent = $root->getElementByIdx($doc, 'parent');
+        $text_child = $parent->getFirstChildx($doc);
 
         expect($text_child->getName())
-          ->toEqual(SGMLStreamExam__\Node::TXTNODE_NAME);
+          ->toEqual(SGMLStreamExam\Node::TXTNODE);
       },
     );
 }

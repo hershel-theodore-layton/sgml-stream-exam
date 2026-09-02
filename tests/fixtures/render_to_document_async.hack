@@ -13,9 +13,9 @@ async function render_to_document_async(
     new SGMLStreamExam\PiecewiseStream(),
     $streamable,
     $consumer,
-    FlowFake::createEmpty(),
-    FlowFake::createEmpty(),
-    FlowFake::createEmpty(),
+    SGMLStream\ExclamationConstFlow::createEmpty(),
+    SGMLStream\ExclamationConstFlow::createEmpty(),
+    SGMLStream\ExclamationConstFlow::createEmpty(),
   );
 
   return $consumer->toDocument();

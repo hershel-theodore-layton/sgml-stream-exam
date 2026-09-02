@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
-use namespace HTL\{SGMLStreamExam__, TestChain};
+use namespace HTL\{SGMLStreamExam, TestChain};
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
@@ -34,7 +34,8 @@ function get_id_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($element, $id)[defaults] ==> {
         $doc = await render_to_document_async($element);
-        $node = $doc->getElementByIdx($id);
+        $root = $doc->getCurrentNode();
+        $node = $root->getElementByIdx($doc, $id);
 
         expect($node->getId())->toEqual($id);
         expect($node->getAttribute('id'))->toEqual($id);
@@ -62,9 +63,10 @@ function get_id_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($element, $expected_id)[defaults] ==> {
         $doc = await render_to_document_async($element);
-        $parent = $doc->getElementByIdx('parent');
+        $root = $doc->getCurrentNode();
+        $parent = $root->getElementByIdx($doc, 'parent');
 
-        $child = $parent->getFirstChildx();
+        $child = $parent->getFirstChildx($doc);
         expect($child->getId())->toEqual($expected_id);
       },
     )
@@ -77,9 +79,9 @@ function get_id_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $doctype = $doc->getRootElement();
+        $doctype = $doc->getCurrentNode();
         expect($doctype->getName())->toEqual(
-          SGMLStreamExam__\Node::DOCTYPE_NAME,
+          SGMLStreamExam\Node::DOCTYPE,
         );
         expect($doctype->getId())->toEqual('');
       },
@@ -95,10 +97,11 @@ function get_id_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $parent = $doc->getElementByIdx('parent');
-        $text = $parent->getFirstChildx();
+        $root = $doc->getCurrentNode();
+        $parent = $root->getElementByIdx($doc, 'parent');
+        $text = $parent->getFirstChildx($doc);
 
-        expect($text->getName())->toEqual(SGMLStreamExam__\Node::TXTNODE_NAME);
+        expect($text->getName())->toEqual(SGMLStreamExam\Node::TXTNODE);
         expect($text->getId())->toEqual('');
       },
     );

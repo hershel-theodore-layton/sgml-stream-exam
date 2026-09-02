@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HH\Lib\Vec;
 use namespace HTL\TestChain;
@@ -58,10 +58,11 @@ function get_children_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($element, $expected)[defaults] ==> {
         $doc = await render_to_document_async($element);
-        $parent = $doc->getElementByIdx('parent');
+        $root = $doc->getCurrentNode();
+        $parent = $root->getElementByIdx($doc, 'parent');
 
         $actual =
-          Vec\map($parent->getChildren(), $c ==> $c->getOuterHTML($doc));
+          Vec\map($parent->getChildren($doc), $c ==> $c->getOuterHTML($doc));
         expect($actual)->toEqual($expected);
       },
     );

@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
 use function HTL\Expect\expect;
@@ -46,6 +46,19 @@ function get_class_list_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
           keyset['class1', 'class2', 'class3'],
         ),
+        'handles_non_space_ascii_whitespace_between_classes' => tuple(
+          <doctype>
+            <div id="elem" class={"class1\tclass2\nclass3\r\nclass4\fclass5"}>
+            </div>
+          </doctype>,
+          keyset['class1', 'class2', 'class3', 'class4', 'class5'],
+        ),
+        'does_not_split_on_non_ascii_whitespace' => tuple(
+          <doctype>
+            <div id="elem" class={"class1\u{00a0}class2"}></div>
+          </doctype>,
+          keyset["class1\u{00a0}class2"],
+        ),
         'ordered_as_first_come_first_served' => tuple(
           <doctype>
             <div id="elem" class="active active disabled active"></div>
@@ -61,7 +74,9 @@ function get_class_list_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($element, $expected_classes)[defaults] ==> {
         $doc = await render_to_document_async($element);
-        $elem = $doc->getElementByIdx('elem');
+        $root = $doc->getCurrentNode();
+
+        $elem = $root->getElementByIdx($doc, 'elem');
 
         $actual_classes = $elem->getClassList();
         expect($actual_classes)->toEqual($expected_classes);

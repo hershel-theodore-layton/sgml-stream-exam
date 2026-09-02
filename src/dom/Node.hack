@@ -1,6 +1,8 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam;
 
+use namespace HH\Lib\{Keyset, Regex};
+
 final class Node {
   const string COMMENT = '!COMMENT';
   const string DOCTYPE = '!DOCTYPE';
@@ -25,6 +27,11 @@ final class Node {
 
   public function getChildren(Document $doc)[]: vec<Node> {
     return $doc->getChildren($this->id);
+  }
+
+  public function getClassList()[]: keyset<string> {
+    return Regex\split($this->getClassName(), re'/\s+/')
+      |> Keyset\filter($$, $c ==> $c !== '');
   }
 
   public function getClassName()[]: string {

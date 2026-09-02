@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
 use namespace HH\Lib\{C, Vec};
@@ -79,7 +79,8 @@ function get_elements_by_class_name_test(
       ],
       async ($element, $class_name, $count)[defaults] ==> {
         $doc = await render_to_document_async($element);
-        $elements = $doc->getElementsByClassName($class_name);
+        $root = $doc->getCurrentNode();
+        $elements = $root->getElementsByClassName($doc, $class_name);
 
         expect(C\count($elements))->toEqual($count);
         foreach ($elements as $e) {
@@ -104,11 +105,12 @@ function get_elements_by_class_name_test(
           </doctype>,
         );
 
-        $left = $doc->getElementByIdx('left');
-        $right = $doc->getElementByIdx('right');
+        $root = $doc->getCurrentNode();
+        $left = $root->getElementByIdx($doc, 'left');
+        $right = $root->getElementByIdx($doc, 'right');
 
-        $left_hits = $left->getElementsByClassName('target');
-        $right_hits = $right->getElementsByClassName('target');
+        $left_hits = $left->getElementsByClassName($doc, 'target');
+        $right_hits = $right->getElementsByClassName($doc, 'target');
 
         expect(Vec\map($left_hits, $n ==> $n->getId()))
           ->toEqual(vec['left_a', 'left_c']);
@@ -133,8 +135,9 @@ function get_elements_by_class_name_test(
           </doctype>,
         );
 
-        $scope = $doc->getElementByIdx('scope');
-        $hits = $scope->getElementsByClassName('x');
+        $root = $doc->getCurrentNode();
+        $scope = $root->getElementByIdx($doc, 'scope');
+        $hits = $scope->getElementsByClassName($doc, 'x');
 
         expect(Vec\map($hits, $n ==> $n->getId()))
           ->toEqual(vec['a', 'b', 'c', 'd']);
@@ -154,8 +157,9 @@ function get_elements_by_class_name_test(
           </doctype>,
         );
 
-        $scope = $doc->getElementByIdx('scope');
-        $hits = $scope->getElementsByClassName('missing');
+        $root = $doc->getCurrentNode();
+        $scope = $root->getElementByIdx($doc, 'scope');
+        $hits = $scope->getElementsByClassName($doc, 'missing');
 
         expect($hits)->toBeEmpty();
       },
@@ -176,8 +180,9 @@ function get_elements_by_class_name_test(
           </doctype>,
         );
 
-        $scope = $doc->getElementByIdx('scope');
-        $hits = $scope->getElementsByClassName('target');
+        $root = $doc->getCurrentNode();
+        $scope = $root->getElementByIdx($doc, 'scope');
+        $hits = $scope->getElementsByClassName($doc, 'target');
 
         expect(Vec\map($hits, $n ==> $n->getId()))
           ->toEqual(vec['a', 'b', 'd', 'e']);

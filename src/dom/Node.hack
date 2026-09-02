@@ -69,7 +69,7 @@ final class Node {
 
   public function getElementById(Document $doc, string $id)[]: ?Node {
     // Special case, `<div></div>`'s id is `""`, but getElementById("") should
-    // not return this element. 
+    // not return this element.
     if ($id === '') {
       return null;
     }
@@ -87,6 +87,31 @@ final class Node {
     $ret = $this->getElementById($doc, $id);
     invariant($ret is nonnull, 'Element with the id "%s" was not found.', $id);
     return $ret;
+  }
+
+  public function getElementsByClassName(
+    Document $doc,
+    string $class_name,
+  )[]: vec<Node> {
+    // Special case, `<div></div>`'s class is `""`, but getElementsByClassName("")
+    // should not return this element.
+    if ($class_name === '') {
+      return vec[];
+    }
+
+    $elements = vec[];
+    foreach ($this->getDescendants($doc) as $descendant) {
+      if (
+        // This method is rather commonly called in tests,
+        // so checking for the string-contains is a quick "skip this".
+        // Constructing the classList is rather expensive, so avoid if possible.
+        Str\contains($descendant->getClassName(), $class_name) &&
+        C\contains($descendant->getClassList(), $class_name)
+      ) {
+        $elements[] = $descendant;
+      }
+    }
+    return $elements;
   }
 
   public function getFirstChild(Document $doc)[]: ?Node {

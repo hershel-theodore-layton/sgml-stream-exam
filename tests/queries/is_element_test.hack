@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
 use function HTL\Expect\expect;
@@ -26,18 +26,18 @@ function is_element_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($xhp, $is_element)[defaults] ==> {
         $doc = await render_to_document_async($xhp);
-        $node = $doc->getRootElement()->getFirstChildx();
+        $node = $doc->getCurrentNode()->getFirstChildx($doc);
 
         expect($node->isElement())->toEqual($is_element);
       },
     )
     ->testAsync(
-      'isElement returns false for doctype',
+      'isElement returns true for doctype',
       async ()[defaults] ==> {
         $doc = await render_to_document_async(<doctype></doctype>);
 
-        $doctype = $doc->getRootElement();
-        expect($doctype->isElement())->toBeFalse();
+        $cur = $doc->getCurrentNode();
+        expect($cur->isElement())->toBeTrue();
       },
     );
 }

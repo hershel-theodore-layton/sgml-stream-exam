@@ -132,6 +132,11 @@ final class Node {
     return $doc->getByNodeIdx($this->parentId);
   }
 
+  public function isElement()[]: bool {
+    return $this->tagName !== static::COMMENT &&
+      $this->tagName !== static::TXTNODE;
+  }
+
   public function setEndByteRange(int $end_byte_range)[write_props]: void {
     $this->endByteRange = $end_byte_range;
   }

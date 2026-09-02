@@ -1,16 +1,16 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
-use namespace HTL\{SGMLStream, SGMLStreamExam__, SGMLStreamInterfaces};
+use namespace HTL\{SGMLStream, SGMLStreamExam, SGMLStreamInterfaces};
 
 async function render_to_document_async(
   SGMLStreamInterfaces\Streamable $streamable,
-)[defaults]: Awaitable<SGMLStreamExam__\Document__> {
+)[defaults]: Awaitable<SGMLStreamExam\Document> {
   $renderer = new SGMLStream\ConcurrentReusableRenderer();
-  $consumer = new SGMLStreamExam__\ToHTMLDocumentConsumer();
+  $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
 
   await $renderer->renderAsync(
-    new SGMLStreamExam__\PiecewiseStream(),
+    new SGMLStreamExam\PiecewiseStream(),
     $streamable,
     $consumer,
     FlowFake::createEmpty(),
@@ -18,5 +18,5 @@ async function render_to_document_async(
     FlowFake::createEmpty(),
   );
 
-  return $consumer->toDocument__();
+  return $consumer->toDocument();
 }

@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\{ExprDump, SGMLStreamInterfaces, TestChain};
 use function HTL\Expect\expect;
@@ -344,7 +344,11 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
       )[defaults] ==> {
         $doc = await render_to_document_async($streamable);
 
-        expect($dumper->dump($doc->getRootElement()->toUnitTestDump($doc)))
+        expect(
+          $doc->getCurrentNode()
+            |> node_to_unit_test_dump($doc, $$)
+            |> $dumper->dump($$),
+        )
           ->toEqual($dumper->dump($expected));
       },
     );

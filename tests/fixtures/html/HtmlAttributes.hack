@@ -1,12 +1,10 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\{SGMLStream, SGMLStreamInterfaces};
 
-final xhp class input extends SGMLStream\RootElement {
+abstract xhp class HtmlAttributes extends SGMLStream\RootElement {
   const ctx INITIALIZATION_CTX = [];
-
-  use SGMLStream\ElementWithOpenTagOnly;
 
   attribute
     enum {'', 'on', 'off'} autocorrect,
@@ -14,10 +12,6 @@ final xhp class input extends SGMLStream\RootElement {
     string class,
     SGMLStreamInterfaces\BooleanAttribute hidden,
     string id,
-    string name,
-    string placeholder,
     int tabindex,
-    string value;
-
-  const string TAG_NAME = 'input';
+    string title;
 }

@@ -7,6 +7,10 @@ final class Node {
   const string COMMENT = '!COMMENT';
   const string DOCTYPE = '!DOCTYPE';
   const string TXTNODE = '!TXTNODE';
+  const int ELEMENT_NODE = 1;
+  const int TEXT_NODE = 3;
+  const int COMMENT_NODE = 8;
+  const int DOCUMENT_TYPE_NODE = 10;
 
   public function __construct(
     private NodeId $id,
@@ -114,6 +118,19 @@ final class Node {
 
   public function getName()[]: string {
     return $this->tagName;
+  }
+
+  public function getNodeType()[]: int {
+    switch ($this->tagName) {
+      case self::TXTNODE:
+        return self::TEXT_NODE;
+      case self::COMMENT:
+        return self::COMMENT_NODE;
+      case self::DOCTYPE:
+        return self::DOCUMENT_TYPE_NODE;
+      default:
+        return self::ELEMENT_NODE;
+    }
   }
 
   public function getOuterHTML(Document $doc)[]: string {

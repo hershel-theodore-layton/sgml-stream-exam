@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
-use namespace HTL\{SGMLStreamExam__, TestChain};
+use namespace HTL\{SGMLStreamExam, TestChain};
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
@@ -15,13 +15,13 @@ function get_node_type_test(TestChain\Chain $chain)[]: TestChain\Chain {
           <doctype>
             <div id="elem"></div>
           </doctype>,
-          SGMLStreamExam__\Node::ELEMENT_NODE,
+          SGMLStreamExam\Node::ELEMENT_NODE,
         ),
         'void_element_has_type_1' => tuple(
           <doctype>
             <input id="elem" />
           </doctype>,
-          SGMLStreamExam__\Node::ELEMENT_NODE,
+          SGMLStreamExam\Node::ELEMENT_NODE,
         ),
         'nested_element_has_type_1' => tuple(
           <doctype>
@@ -29,12 +29,13 @@ function get_node_type_test(TestChain\Chain $chain)[]: TestChain\Chain {
               <span id="elem"></span>
             </div>
           </doctype>,
-          SGMLStreamExam__\Node::ELEMENT_NODE,
+          SGMLStreamExam\Node::ELEMENT_NODE,
         ),
       ],
       async ($xhp, $expected)[defaults] ==> {
         $doc = await render_to_document_async($xhp);
-        $elem = $doc->getElementByIdx('elem');
+        $root = $doc->getCurrentNode();
+        $elem = $root->getElementByIdx($doc, 'elem');
 
         expect($elem->getNodeType())->toEqual($expected);
       },
@@ -48,9 +49,9 @@ function get_node_type_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $doctype = $doc->getRootElement();
+        $doctype = $doc->getCurrentNode();
         expect($doctype->getNodeType())->toEqual(
-          SGMLStreamExam__\Node::DOCTYPE_NODE,
+          SGMLStreamExam\Node::DOCUMENT_TYPE_NODE,
         );
       },
     )
@@ -63,11 +64,12 @@ function get_node_type_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $parent = $doc->getElementByIdx('parent');
-        $text_node = $parent->getFirstChildx();
+        $root = $doc->getCurrentNode();
+        $parent = $root->getElementByIdx($doc, 'parent');
+        $text_node = $parent->getFirstChildx($doc);
 
         expect($text_node->getNodeType())->toEqual(
-          SGMLStreamExam__\Node::TEXT_NODE,
+          SGMLStreamExam\Node::TEXT_NODE,
         );
       },
     )
@@ -82,11 +84,11 @@ function get_node_type_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $doctype = $doc->getRootElement();
-        $comment = $doctype->getFirstChildx();
+        $doctype = $doc->getCurrentNode();
+        $comment = $doctype->getFirstChildx($doc);
 
         expect($comment->getNodeType())->toEqual(
-          SGMLStreamExam__\Node::COMMENT_NODE,
+          SGMLStreamExam\Node::COMMENT_NODE,
         );
       },
     );

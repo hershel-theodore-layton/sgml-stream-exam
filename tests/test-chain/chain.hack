@@ -11,5 +11,6 @@ async function tests_async(
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_attribute_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_attributes_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_children_test<>)
-    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_element_by_id_test<>);
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_element_by_id_test<>)
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_outer_html_test<>);
 }

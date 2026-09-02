@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HH\Lib\C;
 use namespace HTL\TestChain;
@@ -19,9 +19,10 @@ function get_outer_html_test(TestChain\Chain $chain)[]: TestChain\Chain {
             </div>
           </doctype>,
         );
+        $root = $doc->getCurrentNode();
 
-        $parent = $doc->getElementByIdx('parent');
-        $child = $doc->getElementByIdx('child');
+        $parent = $root->getElementByIdx($doc, 'parent');
+        $child = $root->getElementByIdx($doc, 'child');
 
         expect($child->getOuterHTML($doc))->toEqual('<span id="child"></span>');
         expect($parent->getOuterHTML($doc))
@@ -40,9 +41,10 @@ function get_outer_html_test(TestChain\Chain $chain)[]: TestChain\Chain {
             </div>
           </doctype>,
         );
+        $root = $doc->getCurrentNode();
 
-        $parent = $doc->getElementByIdx('parent');
-        $children = $parent->getChildren();
+        $parent = $root->getElementByIdx($doc, 'parent');
+        $children = $parent->getChildren($doc);
 
         expect(C\count($children))->toEqual(3);
 
@@ -68,8 +70,9 @@ function get_outer_html_test(TestChain\Chain $chain)[]: TestChain\Chain {
             </div>
           </doctype>,
         );
+        $root = $doc->getCurrentNode();
 
-        $elem = $doc->getElementByIdx('elem');
+        $elem = $root->getElementByIdx($doc, 'elem');
 
         expect($elem->getOuterHTML($doc))->toEqual(
           '<div id="elem" class="btn btn-primary" title="Button" aria-hidden="true" data-action="click"> X </div>',
@@ -86,8 +89,9 @@ function get_outer_html_test(TestChain\Chain $chain)[]: TestChain\Chain {
             </div>
           </doctype>,
         );
+        $root = $doc->getCurrentNode();
 
-        $x = $doc->getElementByIdx('x');
+        $x = $root->getElementByIdx($doc, 'x');
         expect($x->getOuterHTML($doc))->toEqual('<input id="x">');
       },
     );

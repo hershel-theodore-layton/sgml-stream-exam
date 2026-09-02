@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\TestChain;
 use function HTL\Expect\expect;
@@ -57,7 +57,8 @@ function get_attribute_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($element, $expected_attributes)[defaults] ==> {
         $doc = await render_to_document_async($element);
-        $elem = $doc->getElementByIdx('elem');
+        $root = $doc->getCurrentNode();
+        $elem = $root->getElementByIdx($doc, 'elem');
 
         foreach ($expected_attributes as $attr_name => $expected_value) {
           $actual_value = $elem->getAttribute($attr_name);

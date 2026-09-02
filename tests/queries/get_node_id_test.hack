@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
-use namespace HTL\TestChain;
+use namespace HTL\{SGMLStreamExam, TestChain};
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
@@ -23,12 +23,13 @@ function get_node_id_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
         );
 
-        $root = $doc->getRootElement();
-        $nodes = vec($root->traverse());
+        $root = $doc->getCurrentNode();
+        $nodes = $root->getDescendantsAndSelf($doc);
 
         foreach ($nodes as $i => $node) {
           expect($node->getNodeId())->toEqual($i);
-          expect($doc->getNodeByIdx($i))->toEqual($node);
+          expect($doc->getByNodeIdx(SGMLStreamExam\node_id_from_int($i)))
+            ->toEqual($node);
         }
       },
     );

@@ -92,6 +92,14 @@ final class Document {
         : Vec\slice($this->nodes, $start, node_id_to_int($$) - $start + 1);
   }
 
+  public function getDescendantsAndSelf(NodeId $node_id)[]: vec<Node> {
+    $start = node_id_to_int($node_id);
+    return $this->getLastDescendantId($node_id)
+      |> $$ is null
+        ? vec[]
+        : Vec\slice($this->nodes, $start, node_id_to_int($$) - $start + 1);
+  }
+
   public function sliceBytes(int $start, int $end)[]: string {
     return Str\slice($this->documentText, $start, $end - $start);
   }

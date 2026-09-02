@@ -1,5 +1,5 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
-namespace HTL\SGMLStreamExam__\Tests;
+namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HH\Lib\Vec;
 use namespace HTL\TestChain;
@@ -35,8 +35,9 @@ function get_ancestors_test(TestChain\Chain $chain)[]: TestChain\Chain {
       ],
       async ($xhp, $expected)[defaults] ==> {
         $doc = await render_to_document_async($xhp);
+        $root = $doc->getCurrentNode();
 
-        $node = $doc->getElementByIdx('target');
+        $node = $root->getElementByIdx($doc, 'target');
         expect(Vec\map($node->getAncestors($doc), $x ==> $x->getId()))
           ->toEqual($expected);
       },

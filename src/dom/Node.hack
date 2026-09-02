@@ -17,6 +17,18 @@ final class Node {
     private int $endByteRange = -1,
   )[] {}
 
+  public function getAncestors(Document $doc)[]: vec<Node> {
+    $ancestors = vec[];
+    $self = $this;
+
+    do {
+      $self = $self->getParentx($doc);
+      $ancestors[] = $self;
+    } while ($self->getTagName() !== Node::DOCTYPE);
+
+    return $ancestors;
+  }
+
   public function getAttribute(string $attr)[]: ?string {
     return $this->attributes[$attr] ?? null;
   }
@@ -82,8 +94,8 @@ final class Node {
     return $doc->sliceBytes($this->startByteRange, $this->endByteRange);
   }
 
-  public function getParentx(Document $document)[]: Node {
-    return $document->getByNodeIdx($this->parentId);
+  public function getParentx(Document $doc)[]: Node {
+    return $doc->getByNodeIdx($this->parentId);
   }
 
   public function setEndByteRange(int $end_byte_range)[write_props]: void {

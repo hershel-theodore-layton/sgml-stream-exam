@@ -10,7 +10,7 @@ function get_siblings_and_self_test(TestChain\Chain $chain)[]: TestChain\Chain {
   return $chain
     ->group(__FUNCTION__)
     ->testAsync(
-      'getSiblingsAndSelf returns all siblings (including self) in parent child order for element-only children',
+      'getSiblingsAndSelf returns all siblings (including self) in parent-child order for element-only children',
       async ()[defaults] ==> {
         $doc = await render_to_document_async(
           <doctype>

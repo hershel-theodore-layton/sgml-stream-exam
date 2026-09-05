@@ -8,7 +8,7 @@ use namespace HTL\SGMLStreamInterfaces;
  * This consumer parses the HTML that is being fed to it. It depends on
  * receiving its input piecewise. This is intended to be used in combination
  * with `PiecewiseStream`. It expects input to be in the format of html-stream
- * and does not parse general HTML. Results may be dissapointing if you depend
+ * and does not parse general HTML. Results may be disappointing if you depend
  * on ToSGMLStringAsync to inject valid HTML in otherwise html-stream trees.
  */
 final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {

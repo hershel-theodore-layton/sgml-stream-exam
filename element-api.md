@@ -12,11 +12,11 @@ _Converted to Markdown by an LLM_
 
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |
-| `Node.childNodes` | `See Also` | Yes | _`Element.children`, implemented with `->getChildren().`_ |
+| `Node.childNodes` | `See Also` | Yes | _`Element.children`, implemented with `->getChildren()`._ |
 | `Node.firstChild` | `Implemented` | Yes | _Implemented with `->getFirstChild()` and `->getFirstChildx()`._ |
 | `Node.lastChild` | `Implemented` | Yes | _Implemented with `->getLastChild()` and `->getLastChildx()`._ |
 | `Node.nextSibling` | `Implemented` | Yes | _Implemented with `->getNextSibling()`_ |
-| `Node.nodeName` | `See Also` | Yes | _`Element.tagName`, which implemented with `->getName()`._ |
+| `Node.nodeName` | `See Also` | Yes | _`Element.tagName`, which is implemented with `->getName()`._ |
 | `Node.nodeType` | `Implemented` | Yes | _Implemented as `->getNodeType()`_ |
 | `Node.nodeValue` | `Implemented` | No | _Implemented as `->getNodeValue($document)`_ |
 | `Node.parentElement` | `See Also` | Yes | _`Node.parentNode` does the same thing, since the parent of a non-element is always an element. This was done by making doctype the parent of doctype._ |
@@ -44,7 +44,7 @@ _Converted to Markdown by an LLM_
 | `Element.classList` | `Implemented` | Yes | _Implemented as `->getClassList()`._ |
 | `Element.className` | `Implemented` | No | _Implemented with `->getClassName()`._ |
 | `Element.firstElementChild` | `Missing` | Yes | Returns the first child element of this element. |
-| `Element.id` | `Implemented` | No | _Implemented with `->getId().`_ |
+| `Element.id` | `Implemented` | No | _Implemented with `->getId()`._ |
 | `Element.innerHTML` | `Implemented` | No | _Implemented at `->getInnerHTML($document)`._ |
 | `Element.lastElementChild` | `Missing` | Yes | Returns the last child element of this element. |
 | `Element.localName` | `See also` | Yes | _`Node.tagName` which is implemented with `->getName()`._ |
@@ -209,7 +209,7 @@ _Converted to Markdown by an LLM_
 | `HTMLElement.offsetWidth` | `Not Implemented` | Yes | _CSS._ |
 | `HTMLElement.outerText` | `Not Implemented` | No | _CSS._ |
 
-## Require a user
+## Requires a user
 
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |

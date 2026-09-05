@@ -4,9 +4,9 @@ namespace HTL\SGMLStreamExam;
 use namespace HH\Lib\{C, Str, Vec};
 
 /**
- * The pleasant to use methods can be found on Node. You can get a reference to
+ * The pleasant-to-use methods can be found on Node. You can get a reference to
  * the `<!DOCTYPE html>` node using `getCurrentNode()`. You can query this in
- * many of the ways that `document.*` works in Javascript.
+ * many of the ways that `document.*` works in JavaScript.
  *
  * If you insist on using the Document methods directly, a note of caution.
  * Methods annotated with `[write_props]` are meant to be used during parsing.

@@ -125,6 +125,6 @@ final class Document {
       $next_id = C\last($this->children[$last_id] ?? vec[])?->getNodeId();
     } while ($next_id is nonnull);
 
-    return $next_id !== $last_id ? $last_id : null;
+    return $node_id !== $last_id ? $last_id : null;
   }
 }

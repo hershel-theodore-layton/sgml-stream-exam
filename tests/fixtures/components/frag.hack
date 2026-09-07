@@ -1,9 +1,9 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam\Tests;
 
-use type XHPChild;
-use type HTL\SGMLStream\RootElement;
 use type HTL\SGMLStreamInterfaces\{Flow, FragElement, Init, SnippetStream};
+use type HTL\SGMLStream\RootElement;
+use type XHPChild;
 
 /**
  * @see sgml-stream/README.md

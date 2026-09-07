@@ -3,6 +3,7 @@ namespace HTL\SGMLStreamExam\_Private;
 
 use namespace HH\Lib\{Math, Str};
 use namespace HTL\SGMLStreamExam;
+use function htmlspecialchars_decode;
 
 function consume_until_space_exclusive(string $bytes)[]: (string, string) {
   $space = Str\search($bytes, ' ');
@@ -47,7 +48,7 @@ function consume_attribute_value(string $bytes)[defaults]: (string, string) {
   }
 
   return tuple(
-    \htmlspecialchars_decode(Str\slice($bytes, 1, $end - 1)),
+    htmlspecialchars_decode(Str\slice($bytes, 1, $end - 1)),
     Str\slice($bytes, Math\minva($end + 2, Str\length($bytes))),
   );
 }

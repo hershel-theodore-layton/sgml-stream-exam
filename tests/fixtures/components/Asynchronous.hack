@@ -1,8 +1,8 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam\Tests;
 
-use namespace HTL\{SGMLStream, SGMLStreamInterfaces};
 use namespace HH\Asio;
+use namespace HTL\{SGMLStream, SGMLStreamInterfaces};
 
 final xhp class Asynchronous extends SGMLStream\AsynchronousElement {
   use SGMLStream\IgnoreSuccessorFlow;

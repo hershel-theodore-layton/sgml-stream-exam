@@ -136,6 +136,24 @@ final class Node {
     return $elements;
   }
 
+  public function getElementsByTagName(
+    Document $doc,
+    string $tag_name,
+  )[]: vec<Node> {
+    $tag_name = Str\lowercase($tag_name);
+    $elements = vec[];
+    foreach ($this->getDescendants($doc) as $descendant) {
+      if (
+        $descendant->getNodeType() === self::ELEMENT_NODE &&
+        ($tag_name === '*' ||
+          Str\lowercase($descendant->getName()) === $tag_name)
+      ) {
+        $elements[] = $descendant;
+      }
+    }
+    return $elements;
+  }
+
   public function getFirstChild(Document $doc)[]: ?Node {
     return $this->getChildren($doc) |> C\first($$);
   }

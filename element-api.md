@@ -57,7 +57,7 @@ _Converted to Markdown by an LLM_
 
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |
-| `Element.closest()` | `Missing` | Yes | Returns the Element which is the closest ancestor of the current element (or the current element itself) which matches the selectors given in parameter. |
+| `Element.closest()` | `Implemented` | Yes | _Implemented as `->closest($document, $selectors)`. Returns the nearest matching element, starting with the receiver and then its ancestors, or null. Requires the owning document. See [selector syntax and limits](./docs/selectors.md)._ |
 | `Element.getAttribute()` | `Missing` | Yes | Retrieves the value of the named attribute from the current node and returns it as a string. |
 | `Element.getAttributeNames()` | `Implemented` | Yes | _Implemented as `->getAttributeNames()`._ |
 | `Element.getAttributeNode()` | `Implemented` | Yes | _Implemented as `->getAttributeNode($attr)`. Returns an immutable `Attr` name/value pair with `->getName()` and `->getValue()`, or `null` if absent. Attribute pairs have no owner or node identity._ |

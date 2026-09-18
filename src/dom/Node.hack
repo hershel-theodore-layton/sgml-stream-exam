@@ -368,6 +368,18 @@ final class Node {
       _Private\SelectorParser::parse($selectors)->matches($doc, $this, $this);
   }
 
+  public function closest(Document $doc, string $selectors)[]: ?Node {
+    $selector = _Private\SelectorParser::parse($selectors);
+    $candidate = $this;
+    while ($candidate->getNodeType() === self::ELEMENT_NODE) {
+      if ($selector->matches($doc, $candidate, $this)) {
+        return $candidate;
+      }
+      $candidate = $candidate->getParent($doc);
+    }
+    return null;
+  }
+
   public function querySelector(Document $doc, string $selectors)[]: ?Node {
     $selector = _Private\SelectorParser::parse($selectors);
     foreach ($this->getDescendants($doc) as $descendant) {

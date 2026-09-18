@@ -10,6 +10,21 @@ function get_descendants_and_self_test(
   TestChain\Chain $chain,
 )[]: TestChain\Chain {
   return $chain->group(__FUNCTION__)
+    ->testAsync('a leaf element includes itself', async ()[defaults] ==> {
+      $doc = await render_to_document_async(
+        <doctype><div id="leaf"></div></doctype>,
+      );
+      $leaf = $doc->getCurrentNode()->getElementByIdx($doc, 'leaf');
+      expect($leaf->getDescendants($doc))->toEqual(vec[]);
+      expect($leaf->getDescendantsAndSelf($doc))->toEqual(vec[$leaf]);
+    })
+    ->testAsync('a text node includes itself', async ()[defaults] ==> {
+      $doc = await render_to_document_async(
+        <doctype><div>text</div></doctype>,
+      );
+      $text = $doc->getCurrentNode()->getFirstChildx($doc)->getFirstChildx($doc);
+      expect($text->getDescendantsAndSelf($doc))->toEqual(vec[$text]);
+    })
     ->testAsync(
       'getDescendantsAndSelf yields nodes in pre-order, including text nodes',
       async ()[defaults] ==> {

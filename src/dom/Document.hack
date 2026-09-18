@@ -121,7 +121,7 @@ final class Document {
     $start = node_id_to_int($node_id);
     return $this->getLastDescendantId($node_id)
       |> $$ is null
-        ? vec[]
+        ? vec[$this->getByNodeIdx($node_id)]
         : Vec\slice($this->nodes, $start, node_id_to_int($$) - $start + 1);
   }
 

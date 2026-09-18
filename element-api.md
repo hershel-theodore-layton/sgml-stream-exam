@@ -28,7 +28,6 @@ _Converted to Markdown by an LLM_
 
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |
-| `Node.compareDocumentPosition()` | `Missing` | Yes | Compares the position of the current node against another node in any other document. |
 | `Node.contains()` | `Implemented` | Yes | _Implemented as `->contains($other)`._ |
 | `Node.hasChildNodes()` | `Implemented` | Yes | _Implemented as `->hasChildNodes($document)`._ |
 | `Node.isEqualNode()` | `Implemented` | Yes | _Implemented as `->isEqualNode($document, $other, $other_document = null)`. Compares names, attributes (ignoring attribute order), stored text/comment values, and ordered children recursively, including children of the library's doctype root. The other document defaults to the current document; a null node is unequal. Invariants require each document to own its supplied node. Node IDs, parents, and byte positions are ignored. Namespace-aware comparison is not supported._ |
@@ -201,7 +200,7 @@ _Converted to Markdown by an LLM_
 | `Element.scrollIntoViewIfNeeded()` | `Not Implemented` | No | _CSS._ |
 | `Element.scrollTo()` | `Not Implemented` | No | _CSS._ |
 | `HTMLElement.attributeStyleMap` | `Not Implemented` | Yes | _CSS._ |
-| `HTMLElement.innerText` | `Missing` | No | _CSS._ |
+| `HTMLElement.innerText` | `Not Implemented` | No | _CSS._ |
 | `HTMLElement.offsetHeight` | `Not Implemented` | Yes | _CSS._ |
 | `HTMLElement.offsetLeft` | `Not Implemented` | Yes | _CSS._ |
 | `HTMLElement.offsetParent` | `Not Implemented` | Yes | _CSS._ |
@@ -234,3 +233,4 @@ _Converted to Markdown by an LLM_
 | :--- | :--- | :--- | :--- |
 | `Node.ownerDocument` | `Not implemented` | Yes | _This would result in circular object references._ |
 | `Node.cloneNode()` | `Not Implemented` | Yes | _This is not needed if you cannot reinsert nodes. The Document is immutable._ |
+| `Node.compareDocumentPosition()` | `Not Implemented` | Yes | _Excluded to avoid a linear scan or eight additional bytes per node._ |

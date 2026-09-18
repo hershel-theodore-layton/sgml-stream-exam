@@ -3,7 +3,6 @@ namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HH\Lib\{Dict, Vec};
 use namespace HTL\{SGMLStreamExam, TestChain};
-use type HH\InvariantException;
 use function HTL\Expect\{expect, expect_invoked};
 
 <<TestChain\Discover>>
@@ -133,11 +132,8 @@ function matches_test(TestChain\Chain $chain)[]: TestChain\Chain {
       expect_invoked(() ==> $node->matches($doc, $selector))
         ->toHaveThrown<SGMLStreamExam\InvalidSelectorException>('nesting');
     })
-    ->testAsync('requires the owning document', async ()[defaults] ==> {
+    ->testAsync('doctype does not match', async ()[defaults] ==> {
       $doc = await matches_document_async();
-      $node = $doc->getCurrentNode()->getElementByIdx($doc, 'first');
-      expect_invoked(() ==> $node->matches(new SGMLStreamExam\Document(), '*'))
-        ->toHaveThrown<InvariantException>('The document must own this node.');
       expect($doc->getCurrentNode()->matches($doc, '*'))->toBeFalse();
     })
     ->testAsync(

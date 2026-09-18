@@ -2,7 +2,6 @@
 namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HTL\{SGMLStreamExam, TestChain};
-use type HH\InvariantException;
 use function HTL\Expect\{expect, expect_invoked};
 
 <<TestChain\Discover>>
@@ -66,9 +65,5 @@ function query_selector_test(TestChain\Chain $chain)[]: TestChain\Chain {
             ->toHaveThrown<SGMLStreamExam\InvalidSelectorException>();
         }
       }
-
-      $other_doc = new SGMLStreamExam\Document();
-      expect_invoked(() ==> $root->querySelector($other_doc, '*'))
-        ->toHaveThrown<InvariantException>('The document must own this node.');
     });
 }

@@ -76,6 +76,10 @@ final class Document {
     return $this->nodes[node_id_to_int($node_id)];
   }
 
+  public function owns(Node $node)[]: bool {
+    return ($this->nodes[node_id_to_int($node->getNodeId())] ?? null) === $node;
+  }
+
   public function getCurrentNode()[]: Node {
     return $this->current;
   }

@@ -31,7 +31,7 @@ _Converted to Markdown by an LLM_
 | `Node.compareDocumentPosition()` | `Missing` | Yes | Compares the position of the current node against another node in any other document. |
 | `Node.contains()` | `Implemented` | Yes | _Implemented as `->contains($other)`._ |
 | `Node.hasChildNodes()` | `Implemented` | Yes | _Implemented as `->hasChildNodes($document)`._ |
-| `Node.isEqualNode()` | `Missing` | Yes | Returns a boolean value which indicates whether or not two nodes are of the same type and all their defining data points match. |
+| `Node.isEqualNode()` | `Implemented` | Yes | _Implemented as `->isEqualNode($document, $other, $other_document = null)`. Compares names, attributes (ignoring attribute order), stored text/comment values, and ordered children recursively, including children of the library's doctype root. The other document defaults to the current document; a null node is unequal. Invariants require each document to own its supplied node. Node IDs, parents, and byte positions are ignored. Namespace-aware comparison is not supported._ |
 | `Node.isSameNode()` | `See Also` | Yes | _The operator `===`_ |
 
 ## Element Prototype: Instance Properties

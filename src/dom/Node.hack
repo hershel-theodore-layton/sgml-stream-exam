@@ -363,6 +363,50 @@ final class Node {
     return $doc->getByNodeIdx($this->parentId);
   }
 
+  public function isEqualNode(
+    Document $doc,
+    ?Node $other,
+    ?Document $other_doc = null,
+  )[]: bool {
+    invariant($doc->owns($this), 'The document must own this node.');
+    if ($other is null) {
+      return false;
+    }
+
+    $other_doc ??= $doc;
+    invariant(
+      $other_doc->owns($other),
+      'The other document must own the other node.',
+    );
+    if ($this->tagName !== $other->tagName) {
+      return false;
+    }
+
+    if (C\count($this->attributes) !== C\count($other->attributes)) {
+      return false;
+    }
+    foreach ($this->attributes as $name => $value) {
+      if ($other->getAttribute($name) !== $value) {
+        return false;
+      }
+    }
+    if ($this->getNodeValue($doc) !== $other->getNodeValue($other_doc)) {
+      return false;
+    }
+
+    $children = $this->getChildren($doc);
+    $other_children = $other->getChildren($other_doc);
+    if (C\count($children) !== C\count($other_children)) {
+      return false;
+    }
+    foreach ($children as $i => $child) {
+      if (!$child->isEqualNode($doc, $other_children[$i], $other_doc)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   public function isElement()[]: bool {
     return
       $this->tagName !== static::COMMENT && $this->tagName !== static::TXTNODE;

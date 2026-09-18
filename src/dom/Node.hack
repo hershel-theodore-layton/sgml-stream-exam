@@ -368,6 +368,19 @@ final class Node {
       _Private\SelectorParser::parse($selectors)->matches($doc, $this, $this);
   }
 
+  public function querySelector(Document $doc, string $selectors)[]: ?Node {
+    $selector = _Private\SelectorParser::parse($selectors);
+    foreach ($this->getDescendants($doc) as $descendant) {
+      // This is very inefficient, as we evaluate every node once,
+      // instead of doing something smarter. If this shows up in your
+      // CPU profile for your tests, a lot of improvement can be made.
+      if ($selector->matches($doc, $descendant, $this)) {
+        return $descendant;
+      }
+    }
+    return null;
+  }
+
   public function isEqualNode(
     Document $doc,
     ?Node $other,

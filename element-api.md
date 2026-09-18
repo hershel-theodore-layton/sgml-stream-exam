@@ -64,7 +64,7 @@ _Converted to Markdown by an LLM_
 | `Element.getElementById()` | `Implemented` | Yes | _Implemented with `->getElementById($id)` and `->getElementByidx($id)`._ |
 | `Element.getElementsByClassName()` | `Missing` | Yes | Returns a live HTMLCollection that contains all descendants of the current element that possess the list of classes given in the parameter. |
 | `Element.getElementsByTagName()` | `Missing` | Yes | Returns a live HTMLCollection containing all descendant elements, of a particular tag name, from the current element. |
-| `Element.hasAttribute()` | `Missing` | Yes | Returns a boolean value indicating if the element has the specified attribute or not. |
+| `Element.hasAttribute()` | `Implemented` | Yes | _Implemented as `->hasAttribute($attr)`._ |
 | `Element.hasAttributes()` | `Missing` | Yes | Returns a boolean value indicating if the element has one or more HTML attributes present. |
 | `Element.matches()` | `Missing` | Yes | Returns a boolean value indicating whether or not the element would be selected by the specified selector string. |
 | `Element.querySelector()` | `Missing` | Yes | Returns the first Node which matches the specified selector string relative to the element. |

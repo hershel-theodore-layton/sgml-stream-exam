@@ -45,6 +45,10 @@ final class Node {
     return $this->attributes;
   }
 
+  public function hasAttribute(string $attr)[]: bool {
+    return C\contains_key($this->attributes, $attr);
+  }
+
   public function getChildren(Document $doc)[]: vec<Node> {
     return $doc->getChildren($this->id);
   }

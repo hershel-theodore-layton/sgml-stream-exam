@@ -270,13 +270,13 @@ final class Node {
           break;
       }
 
-      return Str\replace_every_nonrecursive($source, dict[
-        '&amp;' => '&',
-        '&lt;' => '<',
-        '&gt;' => '>',
-        '&quot;' => '"',
-        '&#039;' => "'",
-      ]);
+      // Decode ampersands last so escaped references are not decoded twice.
+      // Str\replace_every_nonrecursive is not pure on supported HHVM 4 releases.
+      return Str\replace($source, '&lt;', '<')
+        |> Str\replace($$, '&gt;', '>')
+        |> Str\replace($$, '&quot;', '"')
+        |> Str\replace($$, '&#039;', "'")
+        |> Str\replace($$, '&amp;', '&');
     }
     if ($this->tagName === self::COMMENT) {
       return Str\strip_prefix($this->getOuterHTML($doc), '<!--')

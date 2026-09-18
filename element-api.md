@@ -30,7 +30,7 @@ _Converted to Markdown by an LLM_
 | :--- | :--- | :--- | :--- |
 | `Node.compareDocumentPosition()` | `Missing` | Yes | Compares the position of the current node against another node in any other document. |
 | `Node.contains()` | `Implemented` | Yes | _Implemented as `->contains($other)`._ |
-| `Node.hasChildNodes()` | `Missing` | Yes | Returns a boolean value indicating whether or not the element has any child nodes. |
+| `Node.hasChildNodes()` | `Implemented` | Yes | _Implemented as `->hasChildNodes($document)`._ |
 | `Node.isEqualNode()` | `Missing` | Yes | Returns a boolean value which indicates whether or not two nodes are of the same type and all their defining data points match. |
 | `Node.isSameNode()` | `See Also` | Yes | _The operator `===`_ |
 

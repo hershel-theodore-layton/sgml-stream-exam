@@ -57,6 +57,10 @@ final class Node {
     return $doc->getChildren($this->id);
   }
 
+  public function hasChildNodes(Document $doc)[]: bool {
+    return !C\is_empty($this->getChildren($doc));
+  }
+
   public function contains(Node $other)[]: bool {
     return $this->startByteRange <= $other->startByteRange &&
       $this->endByteRange >= $other->endByteRange ||

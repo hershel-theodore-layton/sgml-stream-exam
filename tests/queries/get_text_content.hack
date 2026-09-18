@@ -11,6 +11,10 @@ function get_text_content_test(TestChain\Chain $chain)[]: TestChain\Chain {
     ->testWith2ParamsAsync(
       'getTextContent',
       async () ==> dict[
+        'preserves_crlf_and_lone_carriage_returns' => tuple(
+          <doctype><div id="node">{"a\r\nb\rc"}</div></doctype>,
+          "a\r\nb\rc",
+        ),
         'element_with_only_text_child_returns_that_text' => tuple(
           <doctype>
             <div id="node">Hello, world!</div>

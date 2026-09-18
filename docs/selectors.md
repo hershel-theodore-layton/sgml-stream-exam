@@ -1,9 +1,9 @@
 # Selector matching
 
 `$node->matches($document, $selectors)` tests the node against a CSS selector
-list. The document must own the node; passing a different document raises an
-invariant violation. Valid selectors return `false` for text, comment, and
-doctype nodes.
+list. The caller must supply the owning document; this is unchecked, and
+passing a different document yield buggy results. Valid selectors return
+`false` for text, comment, and doctype nodes.
 
 ```hack
 $button->matches($document, 'div.toolbar > .button.primary');
@@ -53,6 +53,9 @@ cannot itself match `:scope`, since it is not an element.
 Type and attribute names use HTML case-insensitive matching. IDs and classes
 are case-sensitive. Attribute values follow HTML's default case rules unless
 overridden by `i` or `s`; custom `data-*` values are case-sensitive by default.
+Attribute-name matching also remains case-insensitive inside embedded SVG;
+only the first case-equivalent attribute is retained. See the
+[documented SVG limitation](./quirks-and-oddities.md#attribute-names-and-embedded-svg).
 
 `:scope` refers to the node receiving `matches()`, including inside logical
 pseudo-classes. Since this library uses a doctype node as the document root,
@@ -75,3 +78,5 @@ It does not model XML, SVG namespace rules, or quirks mode. Unterminated
 strings/comments and unbalanced delimiters are rejected. Logical selector
 nesting is limited to 64 levels; nth integers are limited to 10 characters,
 including any sign.
+Some valid placements of comments inside nth expressions are rejected; see
+the [selector comment quirk](./quirks-and-oddities.md#comments-in-nth-expressions).

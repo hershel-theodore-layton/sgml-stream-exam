@@ -60,6 +60,27 @@ final class Document {
     $this->pushHtmlSource($arg['text']);
   }
 
+  public function appendText(string $bytes)[write_props]: void {
+    $this->ensureMutable(__METHOD__);
+    if ($bytes === '') {
+      return;
+    }
+
+    $last_child = C\last($this->children[$this->current->getNodeId()] ?? vec[]);
+    if ($last_child is nonnull && $last_child->getName() === Node::TXTNODE) {
+      $this->pushHtmlSource($bytes);
+      $last_child->setEndByteRange(Str\length($this->documentText));
+      return;
+    }
+
+    $this->addNode(shape(
+      'attributes' => dict[],
+      'tag_name' => Node::TXTNODE,
+      'text' => $bytes,
+    ));
+    $this->closeNode();
+  }
+
   public function closeNode()[write_props]: void {
     $this->ensureMutable(__METHOD__);
     $current = $this->current;

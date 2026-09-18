@@ -79,10 +79,10 @@ function is_equal_node_test(TestChain\Chain $chain)[]: TestChain\Chain {
           vec['<div>', '<span>', 'b', '</span>', '</div>'],
           false,
         ),
-        'text_node_boundaries' => tuple(
+        'text_chunk_boundaries_do_not_affect_equality' => tuple(
           vec['<div>', 'ab', '</div>'],
           vec['<div>', 'a', 'b', '</div>'],
-          false,
+          true,
         ),
       ],
       async ($left_chunks, $right_chunks, $expected)[defaults] ==> {

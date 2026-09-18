@@ -137,12 +137,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
       return;
     }
 
-    $this->document->addNode(shape(
-      'attributes' => dict[],
-      'tag_name' => Node::TXTNODE,
-      'text' => $bytes,
-    ));
-    $this->document->closeNode();
+    $this->document->appendText($bytes);
   }
 
   private function parseOpeningTag(string $bytes)[defaults]: void {

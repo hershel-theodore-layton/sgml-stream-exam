@@ -159,12 +159,7 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
               'outerHTML' => '<div></div>',
               'name' => 'div',
               'attributes' => dict[],
-              'children' => vec[dict[
-                'outerHTML' => '',
-                'name' => '!TXTNODE',
-                'attributes' => dict[],
-                'children' => vec[],
-              ]],
+              'children' => vec[],
             ]],
           ],
         ),

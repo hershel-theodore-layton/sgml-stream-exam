@@ -108,13 +108,7 @@ final class Selector {
     SGMLStreamExam\Node $node,
   )[]: bool {
     $name = Str\lowercase($test['value']);
-    $actual = null;
-    foreach ($node->getAttributes() as $key => $value) {
-      if (Str\lowercase($key) === $name) {
-        $actual = $value;
-        break;
-      }
-    }
+    $actual = $node->getAttribute($name);
     if ($actual is null) {
       return false;
     }

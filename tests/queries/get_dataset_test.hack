@@ -7,6 +7,14 @@ use function HTL\Expect\expect;
 <<TestChain\Discover>>
 function get_dataset_test(TestChain\Chain $chain)[]: TestChain\Chain {
   return $chain->group(__FUNCTION__)
+    ->testAsync('rendered mixed-case data attributes appear in dataset', async ()[defaults] ==> {
+      $doc = await render_to_document_async(
+        <doctype><div data-userId="123"></div></doctype>,
+      );
+      $node = $doc->getCurrentNode()->getFirstChildx($doc);
+      expect($node->getAttribute('data-userid'))->toEqual('123');
+      expect($node->getDataset())->toEqual(dict['userid' => '123']);
+    })
     ->testWith2ParamsAsync(
       'getDataset',
       async () ==> dict[
@@ -43,9 +51,13 @@ function get_dataset_test(TestChain\Chain $chain)[]: TestChain\Chain {
           dict['data-' => 'empty name', 'data-123' => 'numeric name'],
           dict['' => 'empty name', '123' => 'numeric name'],
         ),
-        'excludes_ascii_uppercase_attribute_names' => tuple(
+        'normalizes_ascii_uppercase_attribute_names' => tuple(
           dict['data-fooBar' => 'a', 'DATA-foo' => 'b', 'data-foo-bar' => 'c'],
-          dict['fooBar' => 'c'],
+          dict['foobar' => 'a', 'foo' => 'b', 'fooBar' => 'c'],
+        ),
+        'first_case_equivalent_attribute_wins' => tuple(
+          dict['DATA-user-ID' => 'first', 'data-user-id' => 'second'],
+          dict['userId' => 'first'],
         ),
       ],
       async ($attributes, $expected)[defaults] ==> {

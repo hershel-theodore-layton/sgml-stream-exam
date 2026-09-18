@@ -10,6 +10,14 @@ function get_attribute_test(TestChain\Chain $chain)[]: TestChain\Chain {
     ->testWith2ParamsAsync(
       'getAttribute',
       async () ==> dict[
+        'html_attribute_names_are_ascii_case_insensitive' => tuple(
+          <doctype><div id="elem" data-value="hello"></div></doctype>,
+          dict[
+            'data-value' => 'hello',
+            'DATA-VALUE' => 'hello',
+            'DaTa-VaLuE' => 'hello',
+          ],
+        ),
         'can_find_attribute' => tuple(
           <doctype>
             <div id="elem" class="container" data-value="hello"></div>

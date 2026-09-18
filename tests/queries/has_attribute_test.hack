@@ -10,6 +10,10 @@ function has_attribute_test(TestChain\Chain $chain)[]: TestChain\Chain {
     ->testWith2ParamsAsync(
       'hasAttribute',
       async () ==> dict[
+        'html_attribute_names_are_ascii_case_insensitive' => tuple(
+          <doctype><div data-value="hello"></div></doctype>,
+          dict['data-value' => true, 'DATA-VALUE' => true, 'DaTa-VaLuE' => true],
+        ),
         'present_and_missing_attributes' => tuple(
           <doctype>
             <div id="elem" class="container" data-value="hello"></div>

@@ -9,6 +9,20 @@ use function HTL\Pragma\pragma;
 <<TestChain\Discover>>
 function is_equal_node_test(TestChain\Chain $chain)[]: TestChain\Chain {
   return $chain->group(__FUNCTION__)
+    ->testAsync('HTML attribute name casing does not affect equality', async ()[defaults] ==> {
+      $doc = await render_to_document_async(
+        <doctype>
+          <div data-userId="123"></div>
+          <div data-userid="123"></div>
+        </doctype>,
+      );
+      $nodes = $doc->getCurrentNode()->getChildren($doc);
+      $left = $nodes[0];
+      $right = $nodes[1];
+      expect($left->getDataset())->toEqual($right->getDataset());
+      expect($left->isEqualNode($doc, $right))->toBeTrue();
+      expect($right->isEqualNode($doc, $left))->toBeTrue();
+    })
     ->testWith3ParamsAsync(
       'isEqualNode across documents',
       async () ==> dict[

@@ -12,14 +12,27 @@ final class Node {
   const int COMMENT_NODE = 8;
   const int DOCUMENT_TYPE_NODE = 10;
 
+  private dict<string, _Private\AttributeValue> $attributes = dict[];
+
   public function __construct(
     private NodeId $id,
     private NodeId $parentId,
     private string $tagName,
-    private dict<string, string> $attributes,
+    dict<string, string> $attributes,
     private int $startByteRange,
     private int $endByteRange = -1,
-  )[] {}
+  )[] {
+    // Apply HTML attribute-name rules to the entire tree, including SVG.
+    // Keep the first case-equivalent attribute.
+    // See docs/quirks-and-oddities.md for this limit.
+    foreach ($attributes as $name => $value) {
+      $normalized_name = Str\lowercase($name);
+      $this->attributes[$normalized_name] ??= new _Private\AttributeValue(
+        $normalized_name === $name ? null : $name,
+        $value,
+      );
+    }
+  }
 
   public function getAncestors(Document $doc)[]: vec<Node> {
     $ancestors = vec[];
@@ -34,24 +47,35 @@ final class Node {
   }
 
   public function getAttribute(string $attr)[]: ?string {
-    return $this->attributes[$attr] ?? null;
+    return ($this->attributes[Str\lowercase($attr)] ?? null)?->getValue();
   }
 
   public function getAttributeNode(string $attr)[]: ?Attr {
-    $value = $this->getAttribute($attr);
-    return $value is null ? null : new Attr($attr, $value);
+    $normalized_name = Str\lowercase($attr);
+    $value = $this->attributes[$normalized_name] ?? null;
+    return $value is null
+      ? null
+      : new Attr($value->getName($normalized_name), $value->getValue());
   }
 
   public function getAttributeNames()[]: vec<string> {
-    return Vec\keys($this->attributes);
+    $names = vec[];
+    foreach ($this->attributes as $name => $value) {
+      $names[] = $value->getName($name);
+    }
+    return $names;
   }
 
   public function getAttributes()[]: dict<string, string> {
-    return $this->attributes;
+    $attributes = dict[];
+    foreach ($this->attributes as $name => $value) {
+      $attributes[$value->getName($name)] = $value->getValue();
+    }
+    return $attributes;
   }
 
   public function hasAttribute(string $attr)[]: bool {
-    return C\contains_key($this->attributes, $attr);
+    return C\contains_key($this->attributes, Str\lowercase($attr));
   }
 
   public function hasAttributes()[]: bool {
@@ -78,7 +102,7 @@ final class Node {
   }
 
   public function getClassName()[]: string {
-    return $this->attributes['class'] ?? '';
+    return $this->getAttribute('class') ?? '';
   }
 
   public function getChildElementCount(Document $doc)[]: int {
@@ -93,10 +117,7 @@ final class Node {
 
     $dataset = dict[];
     foreach ($this->attributes as $attribute => $value) {
-      if (
-        !Str\starts_with($attribute, 'data-') ||
-        Regex\first_match($attribute, re'/[A-Z]/') is nonnull
-      ) {
+      if (!Str\starts_with($attribute, 'data-')) {
         continue;
       }
 
@@ -114,7 +135,7 @@ final class Node {
           $name .= $char;
         }
       }
-      $dataset[$name] = $value;
+      $dataset[$name] = $value->getValue();
     }
     return $dataset;
   }
@@ -220,7 +241,7 @@ final class Node {
   }
 
   public function getId()[]: string {
-    return $this->attributes['id'] ?? '';
+    return $this->getAttribute('id') ?? '';
   }
 
   public function getInnerHTML(Document $doc)[]: string {
@@ -444,7 +465,11 @@ final class Node {
       return false;
     }
     foreach ($this->attributes as $name => $value) {
-      if ($other->getAttribute($name) !== $value) {
+      $other_value = $other->attributes[$name] ?? null;
+      if (
+        $other_value is null ||
+        $other_value->getValue() !== $value->getValue()
+      ) {
         return false;
       }
     }

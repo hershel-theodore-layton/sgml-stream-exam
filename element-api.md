@@ -68,7 +68,7 @@ _Converted to Markdown by an LLM_
 | `Element.hasAttributes()` | `Implemented` | Yes | _Implemented as `->hasAttributes()`._ |
 | `Element.matches()` | `Implemented` | Yes | _Implemented as `->matches($document, $selectors)`. Parses and matches CSS selector lists; see [supported selector syntax and limits](./docs/selectors.md). Invalid or unsupported selectors raise `InvalidSelectorException`. Requires the owning document._ |
 | `Element.querySelector()` | `Implemented` | Yes | _Implemented as `->querySelector($document, $selectors)`. Returns the first matching descendant element in document order, or null. See [selector syntax and limits](./docs/selectors.md)._ |
-| `Element.querySelectorAll()` | `Missing` | Yes | Returns a NodeList of nodes which match the specified selector string relative to the element. |
+| `Element.querySelectorAll()` | `Implemented` | Yes | _Implemented as `->querySelectorAll($document, $selectors)`. Returns a vector of matching descendant elements in document order, without duplicates. See [selector syntax and limits](./docs/selectors.md)._ |
 
 ## HTMLElement Prototype: Instance Properties
 

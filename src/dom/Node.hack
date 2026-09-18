@@ -381,6 +381,17 @@ final class Node {
     return null;
   }
 
+  public function querySelectorAll(
+    Document $doc,
+    string $selectors,
+  )[]: vec<Node> {
+    $selector = _Private\SelectorParser::parse($selectors);
+    return Vec\filter(
+      $this->getDescendants($doc),
+      $descendant ==> $selector->matches($doc, $descendant, $this),
+    );
+  }
+
   public function isEqualNode(
     Document $doc,
     ?Node $other,

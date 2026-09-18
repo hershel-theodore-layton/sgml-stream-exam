@@ -11,6 +11,27 @@ $button->matches($document, '[data-action="save"], #save');
 $button->matches($document, ':not(.disabled):nth-child(2n + 1)');
 ```
 
+## Querying descendants
+
+`$node->querySelectorAll($document, $selectors)` returns a `vec<Node>` of all
+matching descendant elements in document order. It excludes the receiver,
+text, and comments. An element appears only once even if multiple selectors
+in the list match it. No matches produces `vec[]`.
+
+`querySelector()` returns the first such match, or `null`, and stops matching
+after finding it. Both methods parse the selector once and reject invalid or
+unsupported syntax even when the receiver has no descendants.
+
+```hack
+$buttons = $toolbar->querySelectorAll($document, ':scope > .button');
+$first_button = $toolbar->querySelector($document, '.button');
+```
+
+For both query methods, `:scope` refers to the receiver. Ancestors above the
+receiver may participate in selector matching, but returned elements must be
+its descendants. The synthetic doctype root can search the whole tree but
+cannot itself match `:scope`, since it is not an element.
+
 ## Supported syntax
 
 - Type and universal selectors: `div`, `*`.

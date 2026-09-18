@@ -363,6 +363,11 @@ final class Node {
     return $doc->getByNodeIdx($this->parentId);
   }
 
+  public function matches(Document $doc, string $selectors)[]: bool {
+    return
+      _Private\SelectorParser::parse($selectors)->matches($doc, $this, $this);
+  }
+
   public function isEqualNode(
     Document $doc,
     ?Node $other,

@@ -66,7 +66,7 @@ _Converted to Markdown by an LLM_
 | `Element.getElementsByTagName()` | `Implemented` | Yes | _Implemented as `->getElementsByTagName($document, $tag_name)`. Returns a vector of descendant elements in document order, using case-insensitive HTML tag matching; `*` matches all elements. Namespace-aware matching is not supported._ |
 | `Element.hasAttribute()` | `Implemented` | Yes | _Implemented as `->hasAttribute($attr)`._ |
 | `Element.hasAttributes()` | `Implemented` | Yes | _Implemented as `->hasAttributes()`._ |
-| `Element.matches()` | `Missing` | Yes | Returns a boolean value indicating whether or not the element would be selected by the specified selector string. |
+| `Element.matches()` | `Implemented` | Yes | _Implemented as `->matches($document, $selectors)`. Parses and matches CSS selector lists; see [supported selector syntax and limits](./docs/selectors.md). Invalid or unsupported selectors raise `InvalidSelectorException`. Requires the owning document._ |
 | `Element.querySelector()` | `Missing` | Yes | Returns the first Node which matches the specified selector string relative to the element. |
 | `Element.querySelectorAll()` | `Missing` | Yes | Returns a NodeList of nodes which match the specified selector string relative to the element. |
 

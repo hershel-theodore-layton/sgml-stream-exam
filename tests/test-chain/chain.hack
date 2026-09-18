@@ -4,7 +4,7 @@ namespace HTL\Project_383YMK94uxFC\GeneratedTestChain;
 use namespace HTL\TestChain;
 use type HTL\Pragma\Pragmas;
 
-<<file: Pragmas(vec['PhaLinters', 'digest:abeb7fe0e8df3307d752'])>>
+<<file: Pragmas(vec['PhaLinters', 'digest:7a5524528380c5e56ae6'])>>
 
 async function tests_async(
   TestChain\ChainController<\HTL\TestChain\Chain> $controller,
@@ -14,6 +14,7 @@ async function tests_async(
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\document_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_ancestors_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_attribute_names_test<>)
+    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_attribute_node_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_attribute_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_attributes_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_child_element_count_test<>)

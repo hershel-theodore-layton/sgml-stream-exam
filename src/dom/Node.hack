@@ -37,6 +37,11 @@ final class Node {
     return $this->attributes[$attr] ?? null;
   }
 
+  public function getAttributeNode(string $attr)[]: ?Attr {
+    $value = $this->getAttribute($attr);
+    return $value is null ? null : new Attr($attr, $value);
+  }
+
   public function getAttributeNames()[]: vec<string> {
     return Vec\keys($this->attributes);
   }

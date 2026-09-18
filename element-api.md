@@ -60,7 +60,7 @@ _Converted to Markdown by an LLM_
 | `Element.closest()` | `Missing` | Yes | Returns the Element which is the closest ancestor of the current element (or the current element itself) which matches the selectors given in parameter. |
 | `Element.getAttribute()` | `Missing` | Yes | Retrieves the value of the named attribute from the current node and returns it as a string. |
 | `Element.getAttributeNames()` | `Implemented` | Yes | _Implemented as `->getAttributeNames()`._ |
-| `Element.getAttributeNode()` | `Missing` | Yes | Retrieves the node representation of the named attribute from the current node and returns it as an Attr. |
+| `Element.getAttributeNode()` | `Implemented` | Yes | _Implemented as `->getAttributeNode($attr)`. Returns an immutable `Attr` name/value pair with `->getName()` and `->getValue()`, or `null` if absent. Attribute pairs have no owner or node identity._ |
 | `Element.getElementById()` | `Implemented` | Yes | _Implemented with `->getElementById($id)` and `->getElementByidx($id)`._ |
 | `Element.getElementsByClassName()` | `Implemented` | Yes | _Implemented as `->getElementsByClassName($document, $class_names)`. Returns a vector of descendant elements in document order matching every ASCII-whitespace-separated class name. Matching is case-sensitive; empty or whitespace-only input returns an empty vector._ |
 | `Element.getElementsByTagName()` | `Implemented` | Yes | _Implemented as `->getElementsByTagName($document, $tag_name)`. Returns a vector of descendant elements in document order, using case-insensitive HTML tag matching; `*` matches all elements. Namespace-aware matching is not supported._ |

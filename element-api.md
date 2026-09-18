@@ -43,10 +43,10 @@ _Converted to Markdown by an LLM_
 | `Element.children` | `Implemented` | Yes | _Implemented as `->getChildren()`_ |
 | `Element.classList` | `Implemented` | Yes | _Implemented as `->getClassList()`._ |
 | `Element.className` | `Implemented` | No | _Implemented with `->getClassName()`._ |
-| `Element.firstElementChild` | `Missing` | Yes | Returns the first child element of this element. |
+| `Element.firstElementChild` | `Implemented` | Yes | _Implemented as `->getFirstElementChild($document)`._ |
 | `Element.id` | `Implemented` | No | _Implemented with `->getId()`._ |
 | `Element.innerHTML` | `Implemented` | No | _Implemented at `->getInnerHTML($document)`._ |
-| `Element.lastElementChild` | `Missing` | Yes | Returns the last child element of this element. |
+| `Element.lastElementChild` | `Implemented` | Yes | _Implemented as `->getLastElementChild($document)`._ |
 | `Element.localName` | `See also` | Yes | _`Node.tagName` which is implemented with `->getName()`._ |
 | `Element.nextElementSibling` | `Missing` | Yes | An Element, the element immediately following the given one in the tree, or null if there's no sibling node. |
 | `Element.outerHTML` | `Implemented` | No | _Implemented with `->getOuterHTML($document)`. Requires an explicit document for memory consumption reasons._ |

@@ -140,6 +140,15 @@ final class Node {
     return $this->getChildren($doc) |> C\first($$);
   }
 
+  public function getFirstElementChild(Document $doc)[]: ?Node {
+    foreach ($this->getChildren($doc) as $child) {
+      if ($child->getNodeType() === self::ELEMENT_NODE) {
+        return $child;
+      }
+    }
+    return null;
+  }
+
   public function getFirstChildx(Document $doc)[]: Node {
     $first = $this->getFirstChild($doc);
     invariant(
@@ -214,6 +223,17 @@ final class Node {
 
   public function getLastChild(Document $doc)[]: ?Node {
     return $this->getChildren($doc) |> C\last($$);
+  }
+
+  public function getLastElementChild(Document $doc)[]: ?Node {
+    $children = $this->getChildren($doc);
+    for ($i = C\count($children) - 1; $i >= 0; $i--) {
+      $child = $children[$i];
+      if ($child->getNodeType() === self::ELEMENT_NODE) {
+        return $child;
+      }
+    }
+    return null;
   }
 
   public function getLastChildx(Document $doc)[]: Node {

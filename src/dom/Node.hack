@@ -235,7 +235,27 @@ final class Node {
 
   public function getNodeValue(Document $doc)[]: ?string {
     if ($this->tagName === self::TXTNODE) {
-      return $this->getOuterHTML($doc);
+      $source = $this->getOuterHTML($doc);
+      switch ($this->getParent($doc)->getName()) {
+        case 'script':
+        case 'style':
+        case 'xmp':
+        case 'iframe':
+        case 'noembed':
+        case 'noframes':
+        case 'plaintext':
+          return $source;
+        default:
+          break;
+      }
+
+      return Str\replace_every_nonrecursive($source, dict[
+        '&amp;' => '&',
+        '&lt;' => '<',
+        '&gt;' => '>',
+        '&quot;' => '"',
+        '&#039;' => "'",
+      ]);
     }
     if ($this->tagName === self::COMMENT) {
       return Str\strip_prefix($this->getOuterHTML($doc), '<!--')
@@ -245,10 +265,7 @@ final class Node {
   }
 
   public function getTextContent(Document $doc)[]: string {
-    if ($this->tagName === self::TXTNODE) {
-      return $this->getOuterHTML($doc);
-    }
-    if ($this->tagName === self::COMMENT) {
+    if ($this->tagName === self::TXTNODE || $this->tagName === self::COMMENT) {
       return $this->getNodeValue($doc) ?? '';
     }
 

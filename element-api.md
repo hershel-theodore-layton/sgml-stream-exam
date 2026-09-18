@@ -62,7 +62,7 @@ _Converted to Markdown by an LLM_
 | `Element.getAttributeNames()` | `Implemented` | Yes | _Implemented as `->getAttributeNames()`._ |
 | `Element.getAttributeNode()` | `Missing` | Yes | Retrieves the node representation of the named attribute from the current node and returns it as an Attr. |
 | `Element.getElementById()` | `Implemented` | Yes | _Implemented with `->getElementById($id)` and `->getElementByidx($id)`._ |
-| `Element.getElementsByClassName()` | `Missing` | Yes | Returns a live HTMLCollection that contains all descendants of the current element that possess the list of classes given in the parameter. |
+| `Element.getElementsByClassName()` | `Implemented` | Yes | _Implemented as `->getElementsByClassName($document, $class_names)`. Returns a vector of descendant elements in document order matching every ASCII-whitespace-separated class name. Matching is case-sensitive; empty or whitespace-only input returns an empty vector._ |
 | `Element.getElementsByTagName()` | `Implemented` | Yes | _Implemented as `->getElementsByTagName($document, $tag_name)`. Returns a vector of descendant elements in document order, using case-insensitive HTML tag matching; `*` matches all elements. Namespace-aware matching is not supported._ |
 | `Element.hasAttribute()` | `Implemented` | Yes | _Implemented as `->hasAttribute($attr)`._ |
 | `Element.hasAttributes()` | `Implemented` | Yes | _Implemented as `->hasAttributes()`._ |

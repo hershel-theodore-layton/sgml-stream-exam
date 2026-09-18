@@ -88,6 +88,45 @@ function get_elements_by_class_name_test(
         }
       },
     )
+    ->testWith2ParamsAsync(
+      'getElementsByClassName matches all whitespace-separated classes',
+      async () ==> dict[
+        'multiple_classes' => tuple('foo bar', vec['a', 'b', 'c']),
+        'reversed_order' => tuple('bar foo', vec['a', 'b', 'c']),
+        'ascii_whitespace' => tuple(" \tfoo\n\r\fbar  ", vec['a', 'b', 'c']),
+        'duplicate_classes' => tuple('foo foo bar', vec['a', 'b', 'c']),
+        'three_classes' => tuple('baz foo bar', vec['b']),
+        'missing_class' => tuple('foo missing', vec[]),
+        'partial_class' => tuple('fo bar', vec[]),
+        'case_sensitive' => tuple('Foo bar', vec[]),
+        'empty' => tuple('', vec[]),
+        'only_whitespace' => tuple(" \t\n\r\f ", vec[]),
+        'non_ascii_whitespace' => tuple("foo\u{00a0}bar", vec['nbsp']),
+        'vertical_tab_is_not_a_separator' => tuple("foo\vbar", vec['vt']),
+      ],
+      async ($class_names, $expected_ids)[defaults] ==> {
+        $doc = await render_to_document_async(
+          <doctype>
+            <div id="scope" class="foo bar">
+              <span id="a" class="bar foo"></span>
+              <div id="b" class="foo baz bar">
+                <span id="c" class={"foo\tbar\n"}></span>
+              </div>
+              <span class="foo"></span>
+              <span class="bar"></span>
+              <span class="foobar bar"></span>
+              <span id="nbsp" class={"foo\u{00a0}bar"}></span>
+              <span id="vt" class={"foo\vbar"}></span>
+              <span></span>
+            </div>
+            <span class="foo bar"></span>
+          </doctype>,
+        );
+        $scope = $doc->getCurrentNode()->getElementByIdx($doc, 'scope');
+        $hits = $scope->getElementsByClassName($doc, $class_names);
+        expect(Vec\map($hits, $n ==> $n->getId()))->toEqual($expected_ids);
+      },
+    )
     ->testAsync(
       'getElementsByClassName searches within the receiver subtree (does not include nodes outside)',
       async ()[defaults] ==> {

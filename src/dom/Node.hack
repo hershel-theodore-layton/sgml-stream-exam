@@ -68,7 +68,7 @@ final class Node {
   }
 
   public function getClassList()[]: keyset<string> {
-    return Regex\split($this->getClassName(), re'/\s+/')
+    return Regex\split($this->getClassName(), re'/[ \t\n\r\f]+/')
       |> Keyset\filter($$, $c ==> $c !== '');
   }
 
@@ -148,21 +148,26 @@ final class Node {
     Document $doc,
     string $class_name,
   )[]: vec<Node> {
-    // Special case, `<div></div>`'s class is `""`, but getElementsByClassName("")
-    // should not return this element.
-    if ($class_name === '') {
+    $classes = Regex\split($class_name, re'/[ \t\n\r\f]+/')
+      |> Keyset\filter($$, $c ==> $c !== '');
+    if (C\is_empty($classes)) {
       return vec[];
     }
 
     $elements = vec[];
     foreach ($this->getDescendants($doc) as $descendant) {
-      if (
-        // This method is rather commonly called in tests,
-        // so checking for the string-contains is a quick "skip this".
-        // Constructing the classList is rather expensive, so avoid if possible.
-        Str\contains($descendant->getClassName(), $class_name) &&
-        C\contains($descendant->getClassList(), $class_name)
-      ) {
+      if ($descendant->getNodeType() !== self::ELEMENT_NODE) {
+        continue;
+      }
+
+      // Avoid constructing the class list for obvious non-matches.
+      $name = $descendant->getClassName();
+      if (!C\every($classes, $class ==> Str\contains($name, $class))) {
+        continue;
+      }
+
+      $class_list = $descendant->getClassList();
+      if (C\every($classes, $class ==> C\contains($class_list, $class))) {
         $elements[] = $descendant;
       }
     }

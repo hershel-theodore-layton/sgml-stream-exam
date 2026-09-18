@@ -81,6 +81,39 @@ final class Node {
       _Private\C\count_if($this->getChildren($doc), $c ==> $c->isElement());
   }
 
+  public function getDataset()[]: dict<string, string> {
+    if ($this->getNodeType() !== self::ELEMENT_NODE) {
+      return dict[];
+    }
+
+    $dataset = dict[];
+    foreach ($this->attributes as $attribute => $value) {
+      if (
+        !Str\starts_with($attribute, 'data-') ||
+        Regex\first_match($attribute, re'/[A-Z]/') is nonnull
+      ) {
+        continue;
+      }
+
+      $name = '';
+      $length = Str\length($attribute);
+      for ($i = 5; $i < $length; $i++) {
+        $char = $attribute[$i];
+        if (
+          $char === '-' && $i + 1 < $length &&
+          Str\contains('abcdefghijklmnopqrstuvwxyz', $attribute[$i + 1])
+        ) {
+          $i++;
+          $name .= Str\uppercase($attribute[$i]);
+        } else {
+          $name .= $char;
+        }
+      }
+      $dataset[$name] = $value;
+    }
+    return $dataset;
+  }
+
   public function getDescendants(Document $doc)[]: vec<Node> {
     return $doc->getDescendants($this->id);
   }

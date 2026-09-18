@@ -74,7 +74,7 @@ _Converted to Markdown by an LLM_
 
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |
-| `HTMLElement.dataset` | `Missing` | Yes | Returns a DOMStringMap with which script can read and write the element's custom data attributes (data-*). |
+| `HTMLElement.dataset` | `Implemented` | Yes | _Implemented as `->getDataset()`, returning a dictionary of `data-*` values with DOM dataset name conversion. Non-elements return an empty dictionary._ |
 
 # Intentionally Not Implemented
 

@@ -59,7 +59,7 @@ _Converted to Markdown by an LLM_
 | :--- | :--- | :--- | :--- |
 | `Element.closest()` | `Missing` | Yes | Returns the Element which is the closest ancestor of the current element (or the current element itself) which matches the selectors given in parameter. |
 | `Element.getAttribute()` | `Missing` | Yes | Retrieves the value of the named attribute from the current node and returns it as a string. |
-| `Element.getAttributeNames()` | `Missing` | Yes | Returns an array of attribute names from the current element. |
+| `Element.getAttributeNames()` | `Implemented` | Yes | _Implemented as `->getAttributeNames()`._ |
 | `Element.getAttributeNode()` | `Missing` | Yes | Retrieves the node representation of the named attribute from the current node and returns it as an Attr. |
 | `Element.getElementById()` | `Implemented` | Yes | _Implemented with `->getElementById($id)` and `->getElementByidx($id)`._ |
 | `Element.getElementsByClassName()` | `Missing` | Yes | Returns a live HTMLCollection that contains all descendants of the current element that possess the list of classes given in the parameter. |

@@ -37,6 +37,10 @@ final class Node {
     return $this->attributes[$attr] ?? null;
   }
 
+  public function getAttributeNames()[]: vec<string> {
+    return Vec\keys($this->attributes);
+  }
+
   public function getAttributes()[]: dict<string, string> {
     return $this->attributes;
   }

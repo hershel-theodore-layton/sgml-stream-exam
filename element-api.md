@@ -58,7 +58,7 @@ _Converted to Markdown by an LLM_
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |
 | `Element.closest()` | `Implemented` | Yes | _Implemented as `->closest($document, $selectors)`. Returns the nearest matching element, starting with the receiver and then its ancestors, or null. Requires the owning document. See [selector syntax and limits](./docs/selectors.md)._ |
-| `Element.getAttribute()` | `Missing` | Yes | Retrieves the value of the named attribute from the current node and returns it as a string. |
+| `Element.getAttribute()` | `Implemented` | Yes | _Implemented as `->getAttribute($attr)`. Returns the named attribute's value as a string, or `null` if absent._ |
 | `Element.getAttributeNames()` | `Implemented` | Yes | _Implemented as `->getAttributeNames()`._ |
 | `Element.getAttributeNode()` | `Implemented` | Yes | _Implemented as `->getAttributeNode($attr)`. Returns an immutable `Attr` name/value pair with `->getName()` and `->getValue()`, or `null` if absent. Attribute pairs have no owner or node identity._ |
 | `Element.getElementById()` | `Implemented` | Yes | _Implemented with `->getElementById($id)` and `->getElementByidx($id)`._ |

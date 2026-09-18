@@ -48,9 +48,9 @@ _Converted to Markdown by an LLM_
 | `Element.innerHTML` | `Implemented` | No | _Implemented at `->getInnerHTML($document)`._ |
 | `Element.lastElementChild` | `Implemented` | Yes | _Implemented as `->getLastElementChild($document)`._ |
 | `Element.localName` | `See also` | Yes | _`Node.tagName` which is implemented with `->getName()`._ |
-| `Element.nextElementSibling` | `Missing` | Yes | An Element, the element immediately following the given one in the tree, or null if there's no sibling node. |
+| `Element.nextElementSibling` | `Implemented` | Yes | _Implemented as `->getNextElementSibling($document)`._ |
 | `Element.outerHTML` | `Implemented` | No | _Implemented with `->getOuterHTML($document)`. Requires an explicit document for memory consumption reasons._ |
-| `Element.previousElementSibling` | `Missing` | Yes | An Element, the element immediately preceding the given one in the tree, or null if there is no sibling element. |
+| `Element.previousElementSibling` | `Implemented` | Yes | _Implemented as `->getPreviousElementSibling($document)`._ |
 | `Element.tagName` | `Implemented` | Yes | _Implemented with `->getName()` which returns the case-sensitive tagName or the special Node::...\_NAME constants._ |
 
 ## Element Prototype: Instance Methods

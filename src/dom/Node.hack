@@ -265,6 +265,32 @@ final class Node {
     return null;
   }
 
+  public function getPreviousElementSibling(Document $doc)[]: ?Node {
+    $previous = null;
+    foreach ($this->getSiblingsAndSelf($doc) as $sibling) {
+      if ($sibling->getNodeId() === $this->id) {
+        return $previous;
+      }
+      if ($sibling->getNodeType() === self::ELEMENT_NODE) {
+        $previous = $sibling;
+      }
+    }
+    return null;
+  }
+
+  public function getNextElementSibling(Document $doc)[]: ?Node {
+    $found_self = false;
+    foreach ($this->getSiblingsAndSelf($doc) as $sibling) {
+      if ($found_self && $sibling->getNodeType() === self::ELEMENT_NODE) {
+        return $sibling;
+      }
+      if ($sibling->getNodeId() === $this->id) {
+        $found_self = true;
+      }
+    }
+    return null;
+  }
+
   public function getSiblingsAndSelf(Document $doc)[]: vec<Node> {
     if ($this->getParent($doc)->getNodeId() === $this->id) {
       return vec[$this];

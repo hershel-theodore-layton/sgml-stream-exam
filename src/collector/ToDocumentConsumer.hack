@@ -10,6 +10,7 @@ use namespace HTL\SGMLStreamInterfaces;
  * with `PiecewiseStream`. It expects input to be in the format of html-stream
  * and does not parse general HTML. Results may be disappointing if you depend
  * on ToSGMLStringAsync to inject valid HTML in otherwise html-stream trees.
+ * ToHTMLDocumentConsumer is not reusable.
  */
 final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   /**

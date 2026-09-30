@@ -4,7 +4,7 @@ namespace HTL\Project_383YMK94uxFC\GeneratedTestChain;
 use namespace HTL\TestChain;
 use type HTL\Pragma\Pragmas;
 
-<<file: Pragmas(vec['PhaLinters', 'digest:f3c844b9f2d1b6873c0b'])>>
+<<file: Pragmas(vec['PhaLinters', 'digest:7e18bf5a5555cfd112f2'])>>
 
 async function tests_async(
   TestChain\ChainController<\HTL\TestChain\Chain> $controller,
@@ -29,12 +29,18 @@ async function tests_async(
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_elements_by_class_name_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_elements_by_tag_name_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_first_and_last_child_test<>)
-    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_first_and_last_element_child_test<>)
+    ->addTestGroup(
+      \HTL\SGMLStreamExam\Tests\get_first_and_last_element_child_test<>,
+    )
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_id_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_inner_html_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_name_test<>)
-    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_next_and_previous_element_sibling_test<>)
-    ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_next_and_previous_sibling_test<>)
+    ->addTestGroup(
+      \HTL\SGMLStreamExam\Tests\get_next_and_previous_element_sibling_test<>,
+    )
+    ->addTestGroup(
+      \HTL\SGMLStreamExam\Tests\get_next_and_previous_sibling_test<>,
+    )
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_node_id_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_node_type_test<>)
     ->addTestGroup(\HTL\SGMLStreamExam\Tests\get_node_value_test<>)

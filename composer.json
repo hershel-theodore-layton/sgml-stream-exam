@@ -11,6 +11,7 @@
     "hershel-theodore-layton/expect": "<1",
     "hershel-theodore-layton/portable-hack-ast-linters-server": ">=0.5.4 <1",
     "hershel-theodore-layton/sgml-stream": "^2",
-    "hershel-theodore-layton/expr-dump": "^1"
+    "hershel-theodore-layton/expr-dump": "^1",
+    "hershel-theodore-layton/pragma": "<1"
   }
 }

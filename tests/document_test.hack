@@ -356,7 +356,7 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
     )
     ->testWith2ParamsAsync(
       'empty_pieces_before_doctype',
-      () ==> vec[
+      async () ==> vec[
         tuple(vec[(string)false], '!DOCTYPE'),
         tuple(vec[''], '!DOCTYPE'),
         tuple(vec['', '', ''], '!DOCTYPE'),

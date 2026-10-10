@@ -1,7 +1,14 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam\Tests;
 
-use namespace HTL\{ExprDump, SGMLStreamInterfaces, TestChain};
+use namespace HH\Lib\C;
+use namespace HTL\{
+  ExprDump,
+  SGMLStream,
+  SGMLStreamExam,
+  SGMLStreamInterfaces,
+  TestChain,
+};
 use function HTL\Expect\expect;
 
 <<TestChain\Discover>>
@@ -345,6 +352,42 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
             |> $dumper->dump($$),
         )
           ->toEqual($dumper->dump($expected));
+      },
+    )
+    ->testAsync(
+      'piecewise stream collects only newly appended snippets',
+      async ()[defaults] ==> {
+        $stream = new SGMLStreamExam\PiecewiseStream();
+        expect($stream->collect())->toEqual(vec[]);
+
+        $snippet = new SGMLStreamExam\_Private\SGMLSnippet('b');
+        $stream->addSafeSGML('a');
+        $stream->addSnippet($snippet);
+        $first = $stream->collect();
+        expect(C\count($first))->toEqual(2);
+        expect($first[1] === $snippet)->toBeTrue();
+        expect($stream->collect())->toEqual(vec[]);
+
+        $stream->addSafeSGML('c');
+        $derived = $stream->streamOf(
+          <doctype />,
+          SGMLStream\ExclamationConstFlow::createEmpty(),
+        );
+        expect($derived === $stream)->toBeFalse();
+        expect(C\count($derived->collect()))->toEqual(1);
+        expect($derived->collect())->toEqual(vec[]);
+        $second = $stream->collect();
+        expect(C\count($second))->toEqual(1);
+        expect(C\count($first))->toEqual(2);
+        expect($stream->collect())->toEqual(vec[]);
+
+        $consumer = new SGMLStream\ToStringConsumer();
+        $flow = SGMLStream\ExclamationConstFlow::createEmpty();
+        await $first[0]->feedBytesToConsumerAsync($consumer, $flow);
+        await $first[1]->feedBytesToConsumerAsync($consumer, $flow);
+        await $second[0]->feedBytesToConsumerAsync($consumer, $flow);
+        await $consumer->theDocumentIsCompleteAsync();
+        expect($consumer->toString())->toEqual('abc');
       },
     );
 }

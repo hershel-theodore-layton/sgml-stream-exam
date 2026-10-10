@@ -17,7 +17,9 @@ final class PiecewiseStream implements SGMLStreamInterfaces\SnippetStream {
   }
 
   public function collect()[write_props]: vec<SGMLStreamInterfaces\Snippet> {
-    return $this->snippets;
+    $snippets = $this->snippets;
+    $this->snippets = vec[];
+    return $snippets;
   }
 
   public function streamOf(

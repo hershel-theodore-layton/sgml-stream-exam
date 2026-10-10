@@ -21,12 +21,11 @@ function query_selector_all_test(TestChain\Chain $chain)[]: TestChain\Chain {
         'scope_is_not_returned' => tuple(':scope', vec[]),
         'scoped_direct_children' => tuple(':scope > *', vec['wrapper', 'last']),
         'nested_scope' => tuple(':is(:scope) .item', vec['nested', 'last']),
-        'ancestor_outside_subtree' => tuple(
-          '#outer #scope .item',
-          vec['nested', 'last'],
-        ),
+        'ancestor_outside_subtree' =>
+          tuple('#outer #scope .item', vec['nested', 'last']),
         'sibling_combinator' => tuple('#wrapper + span', vec['last']),
-        'forgiving_list' => tuple(':is(:unknown, .item)', vec['nested', 'last']),
+        'forgiving_list' =>
+          tuple(':is(:unknown, .item)', vec['nested', 'last']),
       ],
       async ($selector, $expected_ids)[defaults] ==> {
         $doc = await render_to_document_async(

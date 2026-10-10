@@ -8,17 +8,20 @@ use function HTL\Expect\expect;
 function get_node_value_test(TestChain\Chain $chain)[]: TestChain\Chain {
   return $chain
     ->group(__FUNCTION__)
-    ->testAsync('preserves_crlf_and_lone_carriage_returns', async ()[defaults] ==> {
-      $doc = await render_to_document_async(
-        <doctype><div id="node">{"a\r\nb\rc"}</div></doctype>,
-      );
-      $node = $doc->getCurrentNode()->getElementByIdx($doc, 'node');
-      // Verify that the renderer actually emitted the input line endings.
-      expect($node->getOuterHTML($doc))
-        ->toEqual("<div id=\"node\">a\r\nb\rc</div>");
-      expect($node->getFirstChildx($doc)->getNodeValue($doc))
-        ->toEqual("a\r\nb\rc");
-    })
+    ->testAsync(
+      'preserves_crlf_and_lone_carriage_returns',
+      async ()[defaults] ==> {
+        $doc = await render_to_document_async(
+          <doctype><div id="node">{"a\r\nb\rc"}</div></doctype>,
+        );
+        $node = $doc->getCurrentNode()->getElementByIdx($doc, 'node');
+        // Verify that the renderer actually emitted the input line endings.
+        expect($node->getOuterHTML($doc))
+          ->toEqual("<div id=\"node\">a\r\nb\rc</div>");
+        expect($node->getFirstChildx($doc)->getNodeValue($doc))
+          ->toEqual("a\r\nb\rc");
+      },
+    )
     ->testWith2ParamsAsync(
       'getNodeValue',
       async () ==> dict[
@@ -75,9 +78,7 @@ function get_node_value_test(TestChain\Chain $chain)[]: TestChain\Chain {
         $parent = $doc->getCurrentNode()->getElementByIdx($doc, 'parent');
         $text_node = $parent->getFirstChildx($doc);
 
-        expect($text_node->getName())->toEqual(
-          SGMLStreamExam\Node::TXTNODE,
-        );
+        expect($text_node->getName())->toEqual(SGMLStreamExam\Node::TXTNODE);
         expect($text_node->getNodeValue($doc))->toEqual('Hello, world!');
       },
     )
@@ -133,9 +134,7 @@ function get_node_value_test(TestChain\Chain $chain)[]: TestChain\Chain {
 
         // Middle child is the " between " text node
         $text_node = $children[1];
-        expect($text_node->getName())->toEqual(
-          SGMLStreamExam\Node::TXTNODE,
-        );
+        expect($text_node->getName())->toEqual(SGMLStreamExam\Node::TXTNODE);
         expect($text_node->getNodeValue($doc))
           ->toEqual($text_node->getOuterHTML($doc));
       },

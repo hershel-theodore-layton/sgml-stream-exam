@@ -10,26 +10,15 @@ function has_child_nodes_test(TestChain\Chain $chain)[]: TestChain\Chain {
     ->testWith2ParamsAsync(
       'hasChildNodes',
       async () ==> dict[
-        'no_children' => tuple(
-          <doctype><div></div></doctype>,
-          false,
-        ),
+        'no_children' => tuple(<doctype><div></div></doctype>, false),
         'attributes_are_not_children' => tuple(
           <doctype><div id="elem" class="container"></div></doctype>,
           false,
         ),
-        'void_element' => tuple(
-          <doctype><input /></doctype>,
-          false,
-        ),
-        'element_child' => tuple(
-          <doctype><div><span></span></div></doctype>,
-          true,
-        ),
-        'text_child' => tuple(
-          <doctype><div>Only text</div></doctype>,
-          true,
-        ),
+        'void_element' => tuple(<doctype><input /></doctype>, false),
+        'element_child' =>
+          tuple(<doctype><div><span></span></div></doctype>, true),
+        'text_child' => tuple(<doctype><div>Only text</div></doctype>, true),
         'comment_child' => tuple(
           <doctype>
             <div>
@@ -38,14 +27,10 @@ function has_child_nodes_test(TestChain\Chain $chain)[]: TestChain\Chain {
           </doctype>,
           true,
         ),
-        'mixed_children' => tuple(
-          <doctype><div>Text<span></span>More text</div></doctype>,
-          true,
-        ),
-        'text_node_has_no_children' => tuple(
-          <doctype>Only text</doctype>,
-          false,
-        ),
+        'mixed_children' =>
+          tuple(<doctype><div>Text<span></span>More text</div></doctype>, true),
+        'text_node_has_no_children' =>
+          tuple(<doctype>Only text</doctype>, false),
         'comment_node_has_no_children' => tuple(
           <doctype>
             <conditional_comment if="IE">Comment</conditional_comment>

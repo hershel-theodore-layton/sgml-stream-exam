@@ -12,16 +12,9 @@ function get_first_and_last_element_child_test(
     ->testWith3ParamsAsync(
       'getFirstElementChild / getLastElementChild',
       async () ==> dict[
-        'no_children' => tuple(
-          <doctype><div></div></doctype>,
-          null,
-          null,
-        ),
-        'only_text' => tuple(
-          <doctype><div>Only text</div></doctype>,
-          null,
-          null,
-        ),
+        'no_children' => tuple(<doctype><div></div></doctype>, null, null),
+        'only_text' =>
+          tuple(<doctype><div>Only text</div></doctype>, null, null),
         'only_comments' => tuple(
           <doctype>
             <div>

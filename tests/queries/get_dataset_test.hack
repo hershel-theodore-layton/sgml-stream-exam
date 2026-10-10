@@ -7,14 +7,17 @@ use function HTL\Expect\expect;
 <<TestChain\Discover>>
 function get_dataset_test(TestChain\Chain $chain)[]: TestChain\Chain {
   return $chain->group(__FUNCTION__)
-    ->testAsync('rendered mixed-case data attributes appear in dataset', async ()[defaults] ==> {
-      $doc = await render_to_document_async(
-        <doctype><div data-userId="123"></div></doctype>,
-      );
-      $node = $doc->getCurrentNode()->getFirstChildx($doc);
-      expect($node->getAttribute('data-userid'))->toEqual('123');
-      expect($node->getDataset())->toEqual(dict['userid' => '123']);
-    })
+    ->testAsync(
+      'rendered mixed-case data attributes appear in dataset',
+      async ()[defaults] ==> {
+        $doc = await render_to_document_async(
+          <doctype><div data-userId="123"></div></doctype>,
+        );
+        $node = $doc->getCurrentNode()->getFirstChildx($doc);
+        expect($node->getAttribute('data-userid'))->toEqual('123');
+        expect($node->getDataset())->toEqual(dict['userid' => '123']);
+      },
+    )
     ->testWith2ParamsAsync(
       'getDataset',
       async () ==> dict[

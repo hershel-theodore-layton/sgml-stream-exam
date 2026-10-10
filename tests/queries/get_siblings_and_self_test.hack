@@ -84,9 +84,7 @@ function get_siblings_and_self_test(TestChain\Chain $chain)[]: TestChain\Chain {
         );
 
         $doctype = $doc->getCurrentNode();
-        expect($doctype->getName())->toEqual(
-          SGMLStreamExam\Node::DOCTYPE,
-        );
+        expect($doctype->getName())->toEqual(SGMLStreamExam\Node::DOCTYPE);
 
         $siblings_and_self = $doctype->getSiblingsAndSelf($doc);
         expect(Vec\map($siblings_and_self, $n ==> $n->getName()))

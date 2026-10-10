@@ -19,10 +19,9 @@ function get_descendants_and_self_test(
       expect($leaf->getDescendantsAndSelf($doc))->toEqual(vec[$leaf]);
     })
     ->testAsync('a text node includes itself', async ()[defaults] ==> {
-      $doc = await render_to_document_async(
-        <doctype><div>text</div></doctype>,
-      );
-      $text = $doc->getCurrentNode()->getFirstChildx($doc)->getFirstChildx($doc);
+      $doc = await render_to_document_async(<doctype><div>text</div></doctype>);
+      $text =
+        $doc->getCurrentNode()->getFirstChildx($doc)->getFirstChildx($doc);
       expect($text->getDescendantsAndSelf($doc))->toEqual(vec[$text]);
     })
     ->testAsync(

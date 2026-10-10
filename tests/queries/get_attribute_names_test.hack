@@ -10,10 +10,7 @@ function get_attribute_names_test(TestChain\Chain $chain)[]: TestChain\Chain {
     ->testWith2ParamsAsync(
       'getAttributeNames',
       async () ==> dict[
-        'no_attributes' => tuple(
-          <doctype><div></div></doctype>,
-          vec[],
-        ),
+        'no_attributes' => tuple(<doctype><div></div></doctype>, vec[]),
         'preserves_rendered_attribute_order' => tuple(
           <doctype>
             <div
@@ -30,10 +27,8 @@ function get_attribute_names_test(TestChain\Chain $chain)[]: TestChain\Chain {
           <doctype><div class="" data-empty=""></div></doctype>,
           vec['class', 'data-empty'],
         ),
-        'only_returns_own_attributes' => tuple(
-          <doctype><div><span id="child"></span></div></doctype>,
-          vec[],
-        ),
+        'only_returns_own_attributes' =>
+          tuple(<doctype><div><span id="child"></span></div></doctype>, vec[]),
       ],
       async ($element, $expected_names)[defaults] ==> {
         $doc = await render_to_document_async($element);

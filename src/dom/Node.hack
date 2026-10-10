@@ -126,7 +126,8 @@ final class Node {
       for ($i = 5; $i < $length; $i++) {
         $char = $attribute[$i];
         if (
-          $char === '-' && $i + 1 < $length &&
+          $char === '-' &&
+          $i + 1 < $length &&
           Str\contains('abcdefghijklmnopqrstuvwxyz', $attribute[$i + 1])
         ) {
           $i++;
@@ -209,8 +210,10 @@ final class Node {
     foreach ($this->getDescendants($doc) as $descendant) {
       if (
         $descendant->getNodeType() === self::ELEMENT_NODE &&
-        ($tag_name === '*' ||
-          Str\lowercase($descendant->getName()) === $tag_name)
+        (
+          $tag_name === '*' ||
+          Str\lowercase($descendant->getName()) === $tag_name
+        )
       ) {
         $elements[] = $descendant;
       }
@@ -467,8 +470,7 @@ final class Node {
     foreach ($this->attributes as $name => $value) {
       $other_value = $other->attributes[$name] ?? null;
       if (
-        $other_value is null ||
-        $other_value->getValue() !== $value->getValue()
+        $other_value is null || $other_value->getValue() !== $value->getValue()
       ) {
         return false;
       }

@@ -80,9 +80,7 @@ function get_id_test(TestChain\Chain $chain)[]: TestChain\Chain {
         );
 
         $doctype = $doc->getCurrentNode();
-        expect($doctype->getName())->toEqual(
-          SGMLStreamExam\Node::DOCTYPE,
-        );
+        expect($doctype->getName())->toEqual(SGMLStreamExam\Node::DOCTYPE);
         expect($doctype->getId())->toEqual('');
       },
     )

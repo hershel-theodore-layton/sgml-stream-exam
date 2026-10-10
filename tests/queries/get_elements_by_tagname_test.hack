@@ -13,10 +13,8 @@ function get_elements_by_tag_name_test(
     ->testWith2ParamsAsync(
       'getElementsByTagName',
       async () ==> dict[
-        'matches_nested_elements_in_document_order' => tuple(
-          'span',
-          vec['a', 'c', 'd'],
-        ),
+        'matches_nested_elements_in_document_order' =>
+          tuple('span', vec['a', 'c', 'd']),
         'uppercase_query' => tuple('SPAN', vec['a', 'c', 'd']),
         'mixed_case_query' => tuple('SpAn', vec['a', 'c', 'd']),
         'excludes_receiver_and_other_subtrees' => tuple('div', vec['b']),

@@ -35,11 +35,12 @@ function escaped_text_test(TestChain\Chain $chain)[]: TestChain\Chain {
         expect($actual)->toEqual($expected);
       },
     )
-    ->testAsync('rendered text is decoded exactly once', async ()[defaults] ==> {
+    ->testAsync('rendered text is decoded exactly once', async ()[
+      defaults,
+    ] ==> {
       $value = "<b>\"' &amp; &lt; &#169; &nbsp; ©😀</b>";
-      $doc = await render_to_document_async(
-        <doctype><div>{$value}</div></doctype>,
-      );
+      $doc =
+        await render_to_document_async(<doctype><div>{$value}</div></doctype>);
       $node = $doc->getCurrentNode()->getFirstChildx($doc);
       expect($node->getTextContent($doc))->toEqual($value);
       expect($node->getFirstChildx($doc)->getNodeValue($doc))->toEqual($value);

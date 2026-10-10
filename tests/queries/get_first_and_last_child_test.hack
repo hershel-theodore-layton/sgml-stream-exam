@@ -26,7 +26,9 @@ function get_first_and_last_child_test(
 
       $first_child = expect($first_child)->toBeNonnull()->getValue();
       expect($first_child->getId())->toEqual('first');
-      expect($parent->getFirstChildx($doc))->toEqual($parent->getFirstChild($doc));
+      expect($parent->getFirstChildx($doc))->toEqual(
+        $parent->getFirstChild($doc),
+      );
     })
     ->testAsync(
       'getFirstChild returns null for element with no children',
@@ -83,7 +85,9 @@ function get_first_and_last_child_test(
 
       $last_child = expect($last_child)->toBeNonnull()->getValue();
       expect($last_child->getId())->toEqual('last');
-      expect($parent->getLastChildx($doc))->toEqual($parent->getLastChild($doc));
+      expect($parent->getLastChildx($doc))->toEqual(
+        $parent->getLastChild($doc),
+      );
     })
     ->testAsync(
       'getLastChild returns null for element with no children',

@@ -8,7 +8,9 @@ use function HTL\Expect\expect;
 <<TestChain\Discover>>
 function get_children_test(TestChain\Chain $chain)[]: TestChain\Chain {
   return $chain->group(__FUNCTION__)
-    ->testAsync('merged text keeps tree boundaries and node IDs', async ()[defaults] ==> {
+    ->testAsync('merged text keeps tree boundaries and node IDs', async ()[
+      defaults,
+    ] ==> {
       $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
       await $consumer->consumeAsync('<!DOCTYPE html>');
       await $consumer->consumeAsync('<div>');
@@ -33,15 +35,21 @@ function get_children_test(TestChain\Chain $chain)[]: TestChain\Chain {
       $parent = $root->getFirstChildx($doc);
       $children = $parent->getChildren($doc);
       expect(Vec\map($children, $n ==> $n->getOuterHTML($doc)))
-        ->toEqual(vec['a&amp;b', '<!--comment-->', 'cd', '<span>ef</span>', 'gh']);
+        ->toEqual(
+          vec['a&amp;b', '<!--comment-->', 'cd', '<span>ef</span>', 'gh'],
+        );
       expect($parent->getTextContent($doc))->toEqual('a&bcdefgh');
       expect($parent->getFirstChildx($doc)->getNodeValue($doc))->toEqual('a&b');
       expect($parent->getLastChildx($doc)->getNodeValue($doc))->toEqual('gh');
       expect($children[0]->getNextSibling($doc))->toEqual($children[1]);
       expect($children[4]->getPreviousSibling($doc))->toEqual($children[3]);
-      expect($children[3]->getFirstChildx($doc)->getNodeValue($doc))->toEqual('ef');
+      expect($children[3]->getFirstChildx($doc)->getNodeValue($doc))->toEqual(
+        'ef',
+      );
       foreach ($root->getDescendantsAndSelf($doc) as $i => $node) {
-        expect($node->getNodeId())->toEqual(SGMLStreamExam\node_id_from_int($i));
+        expect($node->getNodeId())->toEqual(
+          SGMLStreamExam\node_id_from_int($i),
+        );
         expect($doc->getByNodeIdx($node->getNodeId()))->toEqual($node);
       }
     })

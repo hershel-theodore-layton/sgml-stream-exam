@@ -12,7 +12,11 @@ function has_attribute_test(TestChain\Chain $chain)[]: TestChain\Chain {
       async () ==> dict[
         'html_attribute_names_are_ascii_case_insensitive' => tuple(
           <doctype><div data-value="hello"></div></doctype>,
-          dict['data-value' => true, 'DATA-VALUE' => true, 'DaTa-VaLuE' => true],
+          dict[
+            'data-value' => true,
+            'DATA-VALUE' => true,
+            'DaTa-VaLuE' => true,
+          ],
         ),
         'present_and_missing_attributes' => tuple(
           <doctype>

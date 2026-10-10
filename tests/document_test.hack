@@ -354,6 +354,38 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
           ->toEqual($dumper->dump($expected));
       },
     )
+    ->testWith2ParamsAsync(
+      'empty_pieces_before_doctype',
+      () ==> vec[
+        tuple(vec[(string)false], '!DOCTYPE'),
+        tuple(vec[''], '!DOCTYPE'),
+        tuple(vec['', '', ''], '!DOCTYPE'),
+      ],
+      async ($children, $expected)[defaults] ==> {
+        $tree = new frag(dict[], vec[$children, new doctype(dict[], vec[])]);
+        $doc = await render_to_document_async($tree);
+        expect($doc->getCurrentNode()->getName())->toEqual($expected);
+      },
+    )
+    ->testAsync('empty_stream_has_no_doctype', async ()[defaults] ==> {
+      $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
+      await $consumer->consumeAsync('');
+      await $consumer->consumeAsync('');
+      try {
+        await $consumer->theDocumentIsCompleteAsync();
+        invariant_violation('Expected a missing-doctype exception');
+      } catch (SGMLStreamExam\NotAnHTML5DocumentException $_) {
+      }
+    })
+    ->testAsync('nonempty_content_before_doctype', async ()[defaults] ==> {
+      $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
+      await $consumer->consumeAsync('');
+      try {
+        await $consumer->consumeAsync('0');
+        invariant_violation('Expected a leading-content exception');
+      } catch (SGMLStreamExam\NotAnHTML5DocumentException $_) {
+      }
+    })
     ->testAsync(
       'piecewise stream collects only newly appended snippets',
       async ()[defaults] ==> {

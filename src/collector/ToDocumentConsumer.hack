@@ -47,6 +47,10 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   }
 
   public async function consumeAsync(string $bytes)[defaults]: Awaitable<void> {
+    if ($bytes === '') {
+      return;
+    }
+
     if ($this->isFirstNode) {
       $this->isFirstNode = false;
       if ($bytes !== '<!DOCTYPE html>') {
@@ -91,6 +95,13 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   public async function flushAsync()[defaults]: Awaitable<void> {}
   public async function theDocumentIsCompleteAsync(
   )[defaults]: Awaitable<void> {
+    if ($this->isFirstNode) {
+      throw new NotAnHTML5DocumentException(
+        'This consumer expects an HTML5 document starting with '.
+        static::DOCTYPE,
+      );
+    }
+
     $this->document->freeze();
   }
 

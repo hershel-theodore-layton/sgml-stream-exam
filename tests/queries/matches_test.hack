@@ -21,84 +21,86 @@ function matches_test(TestChain\Chain $chain)[]: TestChain\Chain {
         expect(Vec\map($hits, $n ==> $n->getId()))->toEqual($expected_ids);
       },
     )
-    ->testAsync(
+    ->testWith2ParamsAsync(
       'rejects invalid and unsupported selectors',
-      async ()[defaults] ==> {
-        $doc = await matches_document_async();
-        $node = $doc->getCurrentNode()->getElementByIdx($doc, 'first');
-        foreach (
-          vec[
-            '',
-            ' ',
-            ',',
-            'div,',
-            ',div',
-            'div,,span',
-            'div >',
-            '> div',
-            'div + ~ span',
-            'div..item',
-            '#',
-            '.123',
-            '#123',
-            'div*',
-            '#/**/first',
-            ':not/**/(.hot)',
-            ':nth-child(2/**/n)',
-            ':nth-child(1/**/2)',
-            'div|span',
-            '*|span',
-            '[ns|attr]',
-            '[*|attr]',
-            '[attr!=x]',
-            '[',
-            '[]',
-            '[data-code=]',
-            '[data-code=123]',
-            '[data-code="x" q]',
-            '[data-code i]',
-            '[data-code="x"',
-            '[data-code~ =x]',
-            'span::before',
-            'span:before',
-            ':hover',
-            ':focus',
-            ':checked',
-            ':has(span)',
-            ':lang(en)',
-            ':unknown',
-            ':first-child()',
-            ':not()',
-            ':not(.item, :unknown)',
-            ':not(.item,)',
-            ':is(.item',
-            ':nth-child()',
-            ':nth-child(2n +)',
-            ':nth-child(2 n)',
-            ':nth-child(\\32)',
-            ':nth-child(\\32 n)',
-            ':nth-child(\\2b n)',
-            ':nth-child(n 1)',
-            ':nth-child(1.5)',
-            ':nth-child("2n")',
-            ':nth-child(2 of .item)',
-            ':nth-child(99999999999999999999999)',
-            'span, [',
-            '*,:unknown',
-            'div/*',
-            "[title=\"line\nbreak\"]",
-            ".bad\\\n",
-            '.bad\\',
-          ] as $selector
-        ) {
-          expect_invoked(() ==> $node->matches($doc, $selector))
-            ->toHaveThrown<SGMLStreamExam\InvalidSelectorException>();
-          // Non-elements still validate the entire selector.
-          expect_invoked(
-            () ==> $doc->getCurrentNode()->matches($doc, $selector),
-          )
-            ->toHaveThrown<SGMLStreamExam\InvalidSelectorException>();
+      async () ==> {
+        $selectors = vec[
+          '',
+          ' ',
+          ',',
+          'div,',
+          ',div',
+          'div,,span',
+          'div >',
+          '> div',
+          'div + ~ span',
+          'div..item',
+          '#',
+          '.123',
+          '#123',
+          'div*',
+          '#/**/first',
+          ':not/**/(.hot)',
+          ':nth-child(2/**/n)',
+          ':nth-child(1/**/2)',
+          'div|span',
+          '*|span',
+          '[ns|attr]',
+          '[*|attr]',
+          '[attr!=x]',
+          '[',
+          '[]',
+          '[data-code=]',
+          '[data-code=123]',
+          '[data-code="x" q]',
+          '[data-code i]',
+          '[data-code="x"',
+          '[data-code~ =x]',
+          'span::before',
+          'span:before',
+          ':hover',
+          ':focus',
+          ':checked',
+          ':has(span)',
+          ':lang(en)',
+          ':unknown',
+          ':first-child()',
+          ':not()',
+          ':not(.item, :unknown)',
+          ':not(.item,)',
+          ':is(.item',
+          ':nth-child()',
+          ':nth-child(2n +)',
+          ':nth-child(2 n)',
+          ':nth-child(\\32)',
+          ':nth-child(\\32 n)',
+          ':nth-child(\\2b n)',
+          ':nth-child(n 1)',
+          ':nth-child(1.5)',
+          ':nth-child("2n")',
+          ':nth-child(2 of .item)',
+          ':nth-child(99999999999999999999999)',
+          'span, [',
+          '*,:unknown',
+          'div/*',
+          "[title=\"line\nbreak\"]",
+          ".bad\\\n",
+          '.bad\\',
+        ];
+        $cases = dict[];
+        foreach ($selectors as $selector) {
+          $cases[$selector.' element'] = tuple($selector, false);
+          $cases[$selector.' doctype'] = tuple($selector, true);
         }
+        return $cases;
+      },
+      async (string $selector, bool $doctype)[defaults] ==> {
+        $doc = await matches_document_async();
+        $node = $doctype
+          ? $doc->getCurrentNode()
+          : $doc->getCurrentNode()->getElementByIdx($doc, 'first');
+        expect_invoked(() ==> $node->matches($doc, $selector))
+          ->toHaveThrown<SGMLStreamExam\InvalidSelectorException>();
       },
     )
     ->testAsync(

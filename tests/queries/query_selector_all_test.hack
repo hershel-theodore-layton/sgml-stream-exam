@@ -49,28 +49,64 @@ function query_selector_all_test(TestChain\Chain $chain)[]: TestChain\Chain {
           ->toEqual($scope->querySelector($doc, $selector));
       },
     )
-    ->testAsync('root_leaf_and_non_element_queries', async ()[defaults] ==> {
-      $doc = await render_to_document_async(
-        <doctype>
-          Text
-          <conditional_comment if="IE">Comment</conditional_comment>
-          <span id="first"></span>
-          <span id="last"></span>
-        </doctype>,
-      );
+    ->testAsync('root_queries', async ()[defaults] ==> {
+      $doc = await query_selector_all_test_edge_document_async();
       $root = $doc->getCurrentNode();
       expect($root->querySelectorAll($doc, '*'))->toEqual(vec[
         $root->getElementByIdx($doc, 'first'),
         $root->getElementByIdx($doc, 'last'),
       ]);
-      foreach ($root->getChildren($doc) as $node) {
-        expect($node->querySelectorAll($doc, '*'))->toEqual(vec[]);
-      }
-      foreach ($root->getDescendantsAndSelf($doc) as $node) {
-        foreach (vec['', 'span, [', '*,:unknown'] as $selector) {
-          expect_invoked(() ==> $node->querySelectorAll($doc, $selector))
-            ->toHaveThrown<SGMLStreamExam\InvalidSelectorException>();
+    })
+    ->testWith2ParamsAsync(
+      'non_elements_and_leaves_return_empty_results',
+      async ()[defaults] ==> {
+        $doc = await query_selector_all_test_edge_document_async();
+        $nodes = $doc->getCurrentNode()->getChildren($doc);
+        $cases = dict[];
+        foreach ($nodes as $node) {
+          $cases[
+            'node '.(string)SGMLStreamExam\node_id_to_int($node->getNodeId())
+          ] = tuple($doc, $node);
         }
-      }
-    });
+        return $cases;
+      },
+      async ($doc, $node) ==> {
+        expect($node->querySelectorAll($doc, '*'))->toEqual(vec[]);
+      },
+    )
+    ->testWith3ParamsAsync(
+      'invalid_selectors_are_rejected_for_every_node',
+      async ()[defaults] ==> {
+        $doc = await query_selector_all_test_edge_document_async();
+        $nodes = $doc->getCurrentNode()->getDescendantsAndSelf($doc);
+        $cases = dict[];
+        foreach ($nodes as $node) {
+          foreach (vec['', 'span, [', '*,:unknown'] as $selector) {
+            $cases[
+              (string)SGMLStreamExam\node_id_to_int($node->getNodeId()).
+              ' '.
+              $selector
+            ] = tuple($doc, $node, $selector);
+          }
+        }
+        return $cases;
+      },
+      async ($doc, $node, string $selector) ==> {
+        expect_invoked(() ==> $node->querySelectorAll($doc, $selector))
+          ->toHaveThrown<SGMLStreamExam\InvalidSelectorException>();
+      },
+    );
+}
+
+async function query_selector_all_test_edge_document_async(
+)[defaults]: Awaitable<SGMLStreamExam\Document> {
+  return await render_to_document_async(
+    <doctype>
+      Text
+      <conditional_comment if="IE">Comment</conditional_comment>
+      <span id="first"></span>
+      <span id="last"></span>
+    </doctype>,
+  );
+
 }

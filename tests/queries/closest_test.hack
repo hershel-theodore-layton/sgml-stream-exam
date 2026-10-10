@@ -45,30 +45,58 @@ function closest_test(TestChain\Chain $chain)[]: TestChain\Chain {
         expect($leaf->closest($doc, $selector) === $expected)->toBeTrue();
       },
     )
-    ->testAsync(
-      'non-elements return null and selectors are fully validated',
+    ->testWith2ParamsAsync(
+      'non_elements_return_empty_results',
       async ()[defaults] ==> {
-        $doc = await render_to_document_async(
-          <doctype>
-            <div>Text<conditional_comment if="IE">Comment</conditional_comment>
-            </div>
-          </doctype>,
-        );
-        $root = $doc->getCurrentNode();
-        $element = $root->getFirstChildx($doc);
-        $nodes = vec[$root, $element];
-        foreach ($element->getChildren($doc) as $child) {
-          $nodes[] = $child;
-        }
+        $doc = await closest_test_edge_document_async();
+        $nodes =
+          $doc->getCurrentNode()->getFirstChildx($doc)->getChildren($doc);
+        $nodes[] = $doc->getCurrentNode();
+        $cases = dict[];
         foreach ($nodes as $node) {
-          if ($node->getNodeType() !== SGMLStreamExam\Node::ELEMENT_NODE) {
-            expect($node->closest($doc, '*'))->toBeNull();
-          }
+          $cases[
+            'node '.(string)SGMLStreamExam\node_id_to_int($node->getNodeId())
+          ] = tuple($doc, $node);
+        }
+        return $cases;
+      },
+      async ($doc, $node) ==> {
+        expect($node->closest($doc, '*'))->toBeNull();
+      },
+    )
+    ->testWith3ParamsAsync(
+      'invalid_selectors_are_rejected_for_every_node',
+      async ()[defaults] ==> {
+        $doc = await closest_test_edge_document_async();
+        $nodes =
+          $doc->getCurrentNode()->getFirstChildx($doc)->getChildren($doc);
+        $nodes[] = $doc->getCurrentNode();
+        $nodes[] = $doc->getCurrentNode()->getFirstChildx($doc);
+        $cases = dict[];
+        foreach ($nodes as $node) {
           foreach (vec['', '* , [', ':hover'] as $selector) {
-            expect_invoked(() ==> $node->closest($doc, $selector))
-              ->toHaveThrown<SGMLStreamExam\InvalidSelectorException>();
+            $cases[
+              (string)SGMLStreamExam\node_id_to_int($node->getNodeId()).
+              ' '.
+              $selector
+            ] = tuple($doc, $node, $selector);
           }
         }
+        return $cases;
+      },
+      async ($doc, $node, string $selector) ==> {
+        expect_invoked(() ==> $node->closest($doc, $selector))
+          ->toHaveThrown<SGMLStreamExam\InvalidSelectorException>();
       },
     );
+}
+
+async function closest_test_edge_document_async(
+)[defaults]: Awaitable<SGMLStreamExam\Document> {
+  return await render_to_document_async(
+    <doctype>
+      <div>Text<conditional_comment if="IE">Comment</conditional_comment></div>
+    </doctype>,
+  );
+
 }

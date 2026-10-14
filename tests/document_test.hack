@@ -383,6 +383,8 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
       async () ==> vec[
         tuple(vec['<div>'], 'unclosed tag: div'),
         tuple(vec['<div>', '<span>'], 'unclosed tag: span'),
+        tuple(vec['<!DOCTYPE html>'], 'unclosed tag: !DOCTYPE'),
+        tuple(vec['<div>', '<!DOCTYPE html>'], 'unclosed tag: !DOCTYPE'),
         tuple(vec['<!-- hello'], 'unfinished comment'),
         tuple(vec['<div>', '<!--', ' hello'], 'unfinished comment'),
       ],

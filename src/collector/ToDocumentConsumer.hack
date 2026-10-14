@@ -108,7 +108,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
         'Cannot complete document with an unfinished comment.',
       );
     }
-    if ($current->getName() !== Node::DOCTYPE) {
+    if ($current !== $this->document->getByNodeIdx(node_id_from_int(0))) {
       throw new UnexpectedHTMLException(
         'Cannot complete document with an unclosed tag: '.$current->getName(),
       );

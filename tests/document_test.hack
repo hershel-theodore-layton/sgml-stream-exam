@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam\Tests;
 
-use namespace HH\Lib\C;
+use namespace HH\Lib\{C, Str};
 use namespace HTL\{
   ExprDump,
   SGMLStream,
@@ -377,6 +377,52 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
       } catch (SGMLStreamExam\NotAnHTML5DocumentException $_) {
       }
     })
+    ->testWith2ParamsAsync(
+      'incomplete_documents_fail_at_completion',
+      async () ==> vec[
+        tuple(vec['<div>'], 'unclosed tag: div'),
+        tuple(vec['<div>', '<span>'], 'unclosed tag: span'),
+        tuple(vec['<!-- hello'], 'unfinished comment'),
+        tuple(vec['<div>', '<!--', ' hello'], 'unfinished comment'),
+      ],
+      async ($pieces, $context)[defaults] ==> {
+        $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
+        await $consumer->consumeAsync('<!DOCTYPE html>');
+        foreach ($pieces as $piece) {
+          await $consumer->consumeAsync($piece);
+        }
+        try {
+          await $consumer->theDocumentIsCompleteAsync();
+          invariant_violation('Expected an incomplete-document exception');
+        } catch (SGMLStreamExam\UnexpectedHTMLException $exception) {
+          expect(Str\contains($exception->getMessage(), $context))
+            ->toBeTrue();
+        }
+      },
+    )
+    ->testWith2ParamsAsync(
+      'complete_documents_preserve_source',
+      async () ==> vec[
+        tuple(vec[], ''),
+        tuple(vec['<input>', '<div>', 'ok', '</div>'], '<input><div>ok</div>'),
+        tuple(vec['<!--', ' hello', '-->'], '<!-- hello-->'),
+        tuple(
+          vec['<div>', '<span>', '</span>', '</div>'],
+          '<div><span></span></div>',
+        ),
+      ],
+      async ($pieces, $source)[defaults] ==> {
+        $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
+        await $consumer->consumeAsync('<!DOCTYPE html>');
+        foreach ($pieces as $piece) {
+          await $consumer->consumeAsync($piece);
+        }
+        await $consumer->theDocumentIsCompleteAsync();
+        $doc = $consumer->toDocument();
+        expect($doc->getCurrentNode()->getName())->toEqual('!DOCTYPE');
+        expect($doc->getCurrentNode()->getInnerHTML($doc))->toEqual($source);
+      },
+    )
     ->testAsync('nonempty_content_before_doctype', async ()[defaults] ==> {
       $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
       await $consumer->consumeAsync('');

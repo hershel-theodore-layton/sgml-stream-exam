@@ -10,6 +10,7 @@ use namespace HTL\{
   TestChain,
 };
 use function HTL\Expect\expect;
+use function HTL\Pragma\pragma;
 
 <<TestChain\Discover>>
 function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
@@ -389,6 +390,8 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
         $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
         await $consumer->consumeAsync('<!DOCTYPE html>');
         foreach ($pieces as $piece) {
+          // Each parser piece depends on the previous parser state.
+          pragma('PhaLinters', 'fixme:dont_await_in_a_loop');
           await $consumer->consumeAsync($piece);
         }
         try {
@@ -415,6 +418,8 @@ function document_test(TestChain\Chain $chain)[]: TestChain\Chain {
         $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
         await $consumer->consumeAsync('<!DOCTYPE html>');
         foreach ($pieces as $piece) {
+          // Each parser piece depends on the previous parser state.
+          pragma('PhaLinters', 'fixme:dont_await_in_a_loop');
           await $consumer->consumeAsync($piece);
         }
         await $consumer->theDocumentIsCompleteAsync();

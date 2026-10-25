@@ -1,7 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam;
 
-use namespace HH\Lib\{C, Str};
+use namespace HH\Lib\{C, Keyset, Str};
 use namespace HTL\SGMLStreamInterfaces;
 
 /**
@@ -43,6 +43,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   public function __construct(
     private keyset<string> $void_elements = static::STANDARD_VOID_ELEMENTS,
   )[write_props] {
+    $this->void_elements = Keyset\map($void_elements, Str\lowercase<>);
     $this->document = new Document();
   }
 
@@ -197,7 +198,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
       'text' => $bytes,
     ));
 
-    if (C\contains_key($this->void_elements, $tag_name)) {
+    if (C\contains_key($this->void_elements, Str\lowercase($tag_name))) {
       $this->document->closeNode();
     }
   }
@@ -205,7 +206,7 @@ final class ToHTMLDocumentConsumer implements SGMLStreamInterfaces\Consumer {
   private function parseClosingTag(string $bytes)[write_props]: void {
     $expected_tag = '</'.$this->document->getCurrentNode()->getName().'>';
 
-    if ($bytes !== $expected_tag) {
+    if (Str\lowercase($bytes) !== Str\lowercase($expected_tag)) {
       throw new UnexpectedHTMLException(Str\format(
         'Unexpected closing tag: %s, got: %s',
         $expected_tag,

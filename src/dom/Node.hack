@@ -282,7 +282,7 @@ final class Node {
     $this->assertOwnedBy($doc);
     if ($this->tagName === self::TXTNODE) {
       $source = $this->getOuterHTML($doc);
-      switch ($this->getParent($doc)->getName()) {
+      switch (Str\lowercase($this->getParent($doc)->getName())) {
         case 'script':
         case 'style':
         case 'xmp':

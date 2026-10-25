@@ -1,6 +1,7 @@
 /** sgml-stream-exam is MIT licensed, see /LICENSE. */
 namespace HTL\SGMLStreamExam\Tests;
 
+use namespace HH\Lib\{C, Str};
 use namespace HTL\{SGMLStreamExam, TestChain};
 use function HTL\Expect\expect;
 
@@ -56,13 +57,15 @@ function escaped_text_test(TestChain\Chain $chain)[]: TestChain\Chain {
         'title' => tuple('title', 'A &amp; B', 'A & B'),
         'script' => tuple('script', 'A &amp; B', 'A &amp; B'),
         'style' => tuple('style', 'A &amp; B', 'A &amp; B'),
+        'uppercase_script' => tuple('SCRIPT', 'A &amp; B', 'A &amp; B'),
+        'mixed_case_style' => tuple('StYlE', 'A &amp; B', 'A &amp; B'),
       ],
       async ($tag, $source, $expected)[defaults] ==> {
         $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
         await $consumer->consumeAsync('<!DOCTYPE html>');
         await $consumer->consumeAsync('<'.$tag.'>');
         await $consumer->consumeAsync($source);
-        await $consumer->consumeAsync('</'.$tag.'>');
+        await $consumer->consumeAsync('</'.Str\lowercase($tag).'>');
         await $consumer->theDocumentIsCompleteAsync();
         $doc = $consumer->toDocument();
         $node = $doc->getCurrentNode()->getFirstChildx($doc);
@@ -71,6 +74,36 @@ function escaped_text_test(TestChain\Chain $chain)[]: TestChain\Chain {
         expect($node->getTextContent($doc))->toEqual($expected);
         expect($text->getTextContent($doc))->toEqual($expected);
         expect($text->getNodeValue($doc))->toEqual($expected);
+      },
+    )
+    ->testWith2ParamsAsync(
+      'void names ignore case while source spelling is preserved',
+      async () ==> dict[
+        'br' => tuple(
+          'BR',
+          SGMLStreamExam\ToHTMLDocumentConsumer::STANDARD_VOID_ELEMENTS,
+        ),
+        'input' => tuple(
+          'InPuT',
+          SGMLStreamExam\ToHTMLDocumentConsumer::STANDARD_VOID_ELEMENTS,
+        ),
+        'custom' => tuple('Widget', keyset['WIDGET']),
+      ],
+      async ($tag, $void_elements)[defaults] ==> {
+        $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer($void_elements);
+        await $consumer->consumeAsync('<!DOCTYPE html>');
+        await $consumer->consumeAsync('<'.$tag.'>');
+        await $consumer->consumeAsync('<DiV>');
+        await $consumer->consumeAsync('sibling');
+        await $consumer->consumeAsync('</dIv>');
+        await $consumer->theDocumentIsCompleteAsync();
+        $doc = $consumer->toDocument();
+        $children = $doc->getCurrentNode()->getChildren($doc);
+        expect(C\count($children))->toEqual(2);
+        expect($children[0]->getName())->toEqual($tag);
+        expect($children[0]->getOuterHTML($doc))->toEqual('<'.$tag.'>');
+        expect($children[1]->getOuterHTML($doc))
+          ->toEqual('<DiV>sibling</dIv>');
       },
     )
     ->testAsync(

@@ -8,6 +8,15 @@ Sourced from: https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
 
 _Converted to Markdown by an LLM_
 
+All methods accepting a `Document` require it to own the receiving node and
+throw `HH\InvariantException` otherwise, even for empty lookups. Ownership
+compares the actual stored node, so a cloned or manually constructed node is
+not owned. `contains($document, $other)` requires the receiver's document and
+returns `false` if `$other` belongs to another document. This document argument
+is required; migrate calls from `contains($other)` to `contains($document, $other)`.
+`isEqualNode()` additionally validates the other node against its supplied
+other document (or the receiver's document when omitted).
+
 ## Node Prototype: Instance Properties
 
 | Name | State | Is Immutable | Description |
@@ -28,7 +37,7 @@ _Converted to Markdown by an LLM_
 
 | Name | State | Is Immutable | Description |
 | :--- | :--- | :--- | :--- |
-| `Node.contains()` | `Implemented` | Yes | _Implemented as `->contains($other)`._ |
+| `Node.contains()` | `Implemented` | Yes | _Implemented as `->contains($document, $other)`._ |
 | `Node.hasChildNodes()` | `Implemented` | Yes | _Implemented as `->hasChildNodes($document)`._ |
 | `Node.isEqualNode()` | `Implemented` | Yes | _Implemented as `->isEqualNode($document, $other, $other_document = null)`. Compares names, attributes (ignoring attribute order), stored text/comment values, and ordered children recursively, including children of the library's doctype root. The other document defaults to the current document; a null node is unequal. Invariants require each document to own its supplied node. Node IDs, parents, and byte positions are ignored. Namespace-aware comparison is not supported._ |
 | `Node.isSameNode()` | `See Also` | Yes | _The operator `===`_ |

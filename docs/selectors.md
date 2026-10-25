@@ -1,8 +1,10 @@
 # Selector matching
 
 `$node->matches($document, $selectors)` tests the node against a CSS selector
-list. The caller must supply the owning document; this is unchecked, and
-passing a different document yield buggy results. Valid selectors return
+list. The caller must supply the owning document. All document-taking Node
+methods throw `HH\InvariantException` if that document does not own the
+receiver, including calls that would otherwise return an empty result.
+Ownership is checked before selector parsing. Valid selectors return
 `false` for text, comment, and doctype nodes.
 
 ```hack

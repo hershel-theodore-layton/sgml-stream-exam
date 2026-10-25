@@ -2,8 +2,9 @@
 namespace HTL\SGMLStreamExam\Tests;
 
 use namespace HH\Lib\{C, Vec};
-use namespace HTL\TestChain;
+use namespace HTL\{SGMLStreamExam, TestChain};
 use function HTL\Expect\expect;
+use function HTL\Pragma\pragma;
 
 <<TestChain\Discover>>
 function contains_test(TestChain\Chain $chain)[]: TestChain\Chain {
@@ -97,7 +98,7 @@ function contains_test(TestChain\Chain $chain)[]: TestChain\Chain {
         $expected = $subject_id === $other_id ||
           C\contains($ancestor_ids, $subject->getNodeId());
 
-        expect($subject->contains($other))->toEqual($expected);
+        expect($subject->contains($doc, $other))->toEqual($expected);
       },
     )
     ->testAsync(
@@ -118,7 +119,7 @@ function contains_test(TestChain\Chain $chain)[]: TestChain\Chain {
         $doctype = $doc->getCurrentNode();
 
         foreach ($doctype->getDescendantsAndSelf($doc) as $node) {
-          expect($doctype->contains($node))->toBeTrue();
+          expect($doctype->contains($doc, $node))->toBeTrue();
         }
       },
     )
@@ -142,10 +143,10 @@ function contains_test(TestChain\Chain $chain)[]: TestChain\Chain {
         $left_child = $root->getElementByIdx($doc, 'left_child');
         $right_child = $root->getElementByIdx($doc, 'right_child');
 
-        expect($left->contains($right))->toBeFalse();
-        expect($left->contains($right_child))->toBeFalse();
-        expect($right->contains($left))->toBeFalse();
-        expect($right->contains($left_child))->toBeFalse();
+        expect($left->contains($doc, $right))->toBeFalse();
+        expect($left->contains($doc, $right_child))->toBeFalse();
+        expect($right->contains($doc, $left))->toBeFalse();
+        expect($right->contains($doc, $left_child))->toBeFalse();
       },
     )
     ->testAsync(
@@ -163,8 +164,47 @@ function contains_test(TestChain\Chain $chain)[]: TestChain\Chain {
         $root = $doc->getCurrentNode();
 
         foreach ($root->getDescendantsAndSelf($doc) as $node) {
-          expect($node->contains($node))->toBeTrue();
+          expect($node->contains($doc, $node))->toBeTrue();
         }
+      },
+    )
+    ->testAsync(
+      'separate documents cannot contain each other',
+      async ()[defaults] ==> {
+        await Vec\map_async(
+          vec[
+            vec['<div>', 'text', '<!--comment-->', '</div>'],
+            vec['<div>', '<span>', 'longer text', '</span>', '</div>'],
+          ],
+          async $markup ==> {
+            $documents = await Vec\map_async(
+              vec[vec['<div>', 'text', '<!--comment-->', '</div>'], $markup],
+              async $source ==> {
+                $consumer = new SGMLStreamExam\ToHTMLDocumentConsumer();
+                await $consumer->consumeAsync('<!DOCTYPE html>');
+                foreach ($source as $piece) {
+                  // Each piece depends on the preceding parser state.
+                  pragma('PhaLinters', 'fixme:dont_await_in_a_loop');
+                  await $consumer->consumeAsync($piece);
+                }
+                await $consumer->theDocumentIsCompleteAsync();
+                return $consumer->toDocument();
+              },
+            );
+            list($left, $right) = $documents;
+            foreach (
+              $left->getCurrentNode()->getDescendantsAndSelf($left) as $a
+            ) {
+              expect($a->contains($left, $a))->toBeTrue();
+              foreach (
+                $right->getCurrentNode()->getDescendantsAndSelf($right) as $b
+              ) {
+                expect($a->contains($left, $b))->toBeFalse();
+                expect($b->contains($right, $a))->toBeFalse();
+              }
+            }
+          },
+        );
       },
     )
     ->testAsync(
@@ -185,7 +225,7 @@ function contains_test(TestChain\Chain $chain)[]: TestChain\Chain {
         $target = $doc->getCurrentNode()->getElementByIdx($doc, 'target');
 
         foreach ($target->getAncestors($doc) as $ancestor) {
-          expect($target->contains($ancestor))->toBeFalse();
+          expect($target->contains($doc, $ancestor))->toBeFalse();
         }
       },
     );

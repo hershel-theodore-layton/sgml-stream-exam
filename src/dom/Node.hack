@@ -35,6 +35,7 @@ final class Node {
   }
 
   public function getAncestors(Document $doc)[]: vec<Node> {
+    $this->assertOwnedBy($doc);
     $ancestors = vec[];
     $self = $this;
 
@@ -83,16 +84,25 @@ final class Node {
   }
 
   public function getChildren(Document $doc)[]: vec<Node> {
+    $this->assertOwnedBy($doc);
     return $doc->getChildren($this->id);
   }
 
   public function hasChildNodes(Document $doc)[]: bool {
+    $this->assertOwnedBy($doc);
     return !C\is_empty($this->getChildren($doc));
   }
 
-  public function contains(Node $other)[]: bool {
-    return $this->startByteRange <= $other->startByteRange &&
-      $this->endByteRange >= $other->endByteRange ||
+  public function contains(Document $doc, Node $other)[]: bool {
+    $this->assertOwnedBy($doc);
+    if (!$doc->owns($other)) {
+      return false;
+    }
+    return $this === $other ||
+      (
+        $this->startByteRange <= $other->startByteRange &&
+        $this->endByteRange >= $other->endByteRange
+      ) ||
       $this->tagName === Node::DOCTYPE;
   }
 
@@ -106,6 +116,7 @@ final class Node {
   }
 
   public function getChildElementCount(Document $doc)[]: int {
+    $this->assertOwnedBy($doc);
     return
       _Private\C\count_if($this->getChildren($doc), $c ==> $c->isElement());
   }
@@ -142,14 +153,17 @@ final class Node {
   }
 
   public function getDescendants(Document $doc)[]: vec<Node> {
+    $this->assertOwnedBy($doc);
     return $doc->getDescendants($this->id);
   }
 
   public function getDescendantsAndSelf(Document $doc)[]: vec<Node> {
+    $this->assertOwnedBy($doc);
     return $doc->getDescendantsAndSelf($this->id);
   }
 
   public function getElementById(Document $doc, string $id)[]: ?Node {
+    $this->assertOwnedBy($doc);
     // Special case, `<div></div>`'s id is `""`, but getElementById("") should
     // not return this element.
     if ($id === '') {
@@ -166,6 +180,7 @@ final class Node {
   }
 
   public function getElementByIdx(Document $doc, string $id)[]: Node {
+    $this->assertOwnedBy($doc);
     $ret = $this->getElementById($doc, $id);
     invariant($ret is nonnull, 'Element with the id "%s" was not found.', $id);
     return $ret;
@@ -175,6 +190,7 @@ final class Node {
     Document $doc,
     string $class_name,
   )[]: vec<Node> {
+    $this->assertOwnedBy($doc);
     $classes = Regex\split($class_name, re'/[ \t\n\r\f]+/')
       |> Keyset\filter($$, $c ==> $c !== '');
     if (C\is_empty($classes)) {
@@ -205,6 +221,7 @@ final class Node {
     Document $doc,
     string $tag_name,
   )[]: vec<Node> {
+    $this->assertOwnedBy($doc);
     $tag_name = Str\lowercase($tag_name);
     $elements = vec[];
     foreach ($this->getDescendants($doc) as $descendant) {
@@ -222,10 +239,12 @@ final class Node {
   }
 
   public function getFirstChild(Document $doc)[]: ?Node {
+    $this->assertOwnedBy($doc);
     return $this->getChildren($doc) |> C\first($$);
   }
 
   public function getFirstElementChild(Document $doc)[]: ?Node {
+    $this->assertOwnedBy($doc);
     foreach ($this->getChildren($doc) as $child) {
       if ($child->getNodeType() === self::ELEMENT_NODE) {
         return $child;
@@ -235,6 +254,7 @@ final class Node {
   }
 
   public function getFirstChildx(Document $doc)[]: Node {
+    $this->assertOwnedBy($doc);
     $first = $this->getFirstChild($doc);
     invariant(
       $first is nonnull,
@@ -248,6 +268,7 @@ final class Node {
   }
 
   public function getInnerHTML(Document $doc)[]: string {
+    $this->assertOwnedBy($doc);
     return $this->getChildren($doc)
       |> Vec\map($$, $c ==> $c->getOuterHTML($doc))
       |> Str\join($$, '');
@@ -258,6 +279,7 @@ final class Node {
   }
 
   public function getNodeValue(Document $doc)[]: ?string {
+    $this->assertOwnedBy($doc);
     if ($this->tagName === self::TXTNODE) {
       $source = $this->getOuterHTML($doc);
       switch ($this->getParent($doc)->getName()) {
@@ -289,6 +311,7 @@ final class Node {
   }
 
   public function getTextContent(Document $doc)[]: string {
+    $this->assertOwnedBy($doc);
     if ($this->tagName === self::TXTNODE || $this->tagName === self::COMMENT) {
       return $this->getNodeValue($doc) ?? '';
     }
@@ -320,14 +343,17 @@ final class Node {
   }
 
   public function getOuterHTML(Document $doc)[]: string {
+    $this->assertOwnedBy($doc);
     return $doc->sliceBytes($this->startByteRange, $this->endByteRange);
   }
 
   public function getLastChild(Document $doc)[]: ?Node {
+    $this->assertOwnedBy($doc);
     return $this->getChildren($doc) |> C\last($$);
   }
 
   public function getLastElementChild(Document $doc)[]: ?Node {
+    $this->assertOwnedBy($doc);
     $children = $this->getChildren($doc);
     for ($i = C\count($children) - 1; $i >= 0; $i--) {
       $child = $children[$i];
@@ -339,6 +365,7 @@ final class Node {
   }
 
   public function getLastChildx(Document $doc)[]: Node {
+    $this->assertOwnedBy($doc);
     $last = $this->getLastChild($doc);
     invariant(
       $last is nonnull,
@@ -348,6 +375,7 @@ final class Node {
   }
 
   public function getPreviousSibling(Document $doc)[]: ?Node {
+    $this->assertOwnedBy($doc);
     $siblings = $this->getSiblingsAndSelf($doc);
     foreach ($siblings as $i => $sibling) {
       if ($sibling->getNodeId() === $this->id) {
@@ -358,6 +386,7 @@ final class Node {
   }
 
   public function getNextSibling(Document $doc)[]: ?Node {
+    $this->assertOwnedBy($doc);
     $siblings = $this->getSiblingsAndSelf($doc);
     foreach ($siblings as $i => $sibling) {
       if ($sibling->getNodeId() === $this->id) {
@@ -368,6 +397,7 @@ final class Node {
   }
 
   public function getPreviousElementSibling(Document $doc)[]: ?Node {
+    $this->assertOwnedBy($doc);
     $previous = null;
     foreach ($this->getSiblingsAndSelf($doc) as $sibling) {
       if ($sibling->getNodeId() === $this->id) {
@@ -381,6 +411,7 @@ final class Node {
   }
 
   public function getNextElementSibling(Document $doc)[]: ?Node {
+    $this->assertOwnedBy($doc);
     $found_self = false;
     foreach ($this->getSiblingsAndSelf($doc) as $sibling) {
       if ($found_self && $sibling->getNodeType() === self::ELEMENT_NODE) {
@@ -394,6 +425,7 @@ final class Node {
   }
 
   public function getSiblingsAndSelf(Document $doc)[]: vec<Node> {
+    $this->assertOwnedBy($doc);
     if ($this->getParent($doc)->getNodeId() === $this->id) {
       return vec[$this];
     }
@@ -401,15 +433,18 @@ final class Node {
   }
 
   public function getParent(Document $doc)[]: Node {
+    $this->assertOwnedBy($doc);
     return $doc->getByNodeIdx($this->parentId);
   }
 
   public function matches(Document $doc, string $selectors)[]: bool {
+    $this->assertOwnedBy($doc);
     return
       _Private\SelectorParser::parse($selectors)->matches($doc, $this, $this);
   }
 
   public function closest(Document $doc, string $selectors)[]: ?Node {
+    $this->assertOwnedBy($doc);
     $selector = _Private\SelectorParser::parse($selectors);
     $candidate = $this;
     while ($candidate->getNodeType() === self::ELEMENT_NODE) {
@@ -422,6 +457,7 @@ final class Node {
   }
 
   public function querySelector(Document $doc, string $selectors)[]: ?Node {
+    $this->assertOwnedBy($doc);
     $selector = _Private\SelectorParser::parse($selectors);
     foreach ($this->getDescendants($doc) as $descendant) {
       // This is very inefficient, as we evaluate every node once,
@@ -438,6 +474,7 @@ final class Node {
     Document $doc,
     string $selectors,
   )[]: vec<Node> {
+    $this->assertOwnedBy($doc);
     $selector = _Private\SelectorParser::parse($selectors);
     return Vec\filter(
       $this->getDescendants($doc),
@@ -450,7 +487,7 @@ final class Node {
     ?Node $other,
     ?Document $other_doc = null,
   )[]: bool {
-    invariant($doc->owns($this), 'The document must own this node.');
+    $this->assertOwnedBy($doc);
     if ($other is null) {
       return false;
     }
@@ -495,6 +532,10 @@ final class Node {
   public function isElement()[]: bool {
     return
       $this->tagName !== static::COMMENT && $this->tagName !== static::TXTNODE;
+  }
+
+  private function assertOwnedBy(Document $doc)[]: void {
+    invariant($doc->owns($this), 'The document must own this node.');
   }
 
   public function setEndByteRange(int $end_byte_range)[write_props]: void {
